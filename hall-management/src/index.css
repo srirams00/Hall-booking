@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Degular';
+    src: url('./assets/fonts/DegularDisplay-Medium.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Degular-regular';
+    src: url('./assets/fonts/DegularDisplay-Thin.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal; 
+}
