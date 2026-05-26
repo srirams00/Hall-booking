@@ -7,7 +7,7 @@
     position: sticky;
     z-index: 1000;
     top: 0;
-    border: 1px solid #d35400 ;
+    border: 1px solid #007fd3 ;
     border-radius: 100px;
     margin: 0 70px ;
 }
@@ -25,7 +25,7 @@
 .nav-title{
     font-family: 'Degular', serif;
     font-size: 2rem;
-    background: linear-gradient(to right,#F09410,#E65311 );
+    background: linear-gradient(to right, #12acf3, #007fd3);
     background-clip: text;
     color: transparent;
 }
@@ -42,7 +42,7 @@
 }
 
 .nav-links a:hover{
-    color: #d35400;
+    color: #007fd3;
 }
 
 .nav-links a{
@@ -52,15 +52,15 @@
 }
 
 .nav-signup {
-    border: 1px solid #d35400; 
+    border: 1px solid #007fd3; 
     padding: 5px 15px;
     border-radius: 8px;
-    color: #d35400 !important;
+    color: #007fd3 !important;
     transition: all 0.3s ease;
 }
 
 .nav-signup:hover {
-    background: linear-gradient(to right, #f39c12, #d35400);
+    background: linear-gradient(to right, #12acf3, #007fd3);
     color: white !important;
     border-color: transparent;
 }
