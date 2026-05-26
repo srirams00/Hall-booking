@@ -7,7 +7,7 @@
     position: sticky;
     z-index: 1000;
     top: 0;
-    border: 1px solid #007fd3 ;
+    border: 1px solid #007bff ;
     border-radius: 100px;
     margin: 0 70px ;
 }
@@ -22,12 +22,42 @@
     padding: 0 10px;
 }
 
-.nav-title{
+.nav-logo{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 500px;
+    gap: 5px;
+}
+
+.nav-name{
+    color: #007bff;
     font-family: 'Degular', serif;
-    font-size: 2rem;
-    background: linear-gradient(to right, #12acf3, #007fd3);
-    background-clip: text;
-    color: transparent;
+    display: flex;
+    flex-direction: column;
+    max-height: 75px;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+
+    letter-spacing: 1.2px;
+}
+
+.nav-title{
+    font-size: 1.15rem;
+    margin: 0;
+    padding:  2px 0;
+}
+
+.nav-subtitle{
+    margin: 0;
+    font-size: 0.7rem;
+}
+
+
+
+.nav-image{
+    height: 75px;
 }
 
 .nav-links{
@@ -42,12 +72,12 @@
 }
 
 .nav-links a:hover{
-    color: #007fd3;
+    color: #007bff;
 }
 
 .nav-links a{
     text-decoration: none;
-    color: rgb(31, 31, 31);
+    color: #111318;
     transition: all 0.2s ease;
 }
 
@@ -60,7 +90,7 @@
 }
 
 .nav-signup:hover {
-    background: linear-gradient(to right, #12acf3, #007fd3);
+    background: linear-gradient(135deg, #007bff 0%, #00bfff 100%);
     color: white !important;
     border-color: transparent;
 }

@@ -1,10 +1,18 @@
 import './Navbar.css';
+import logo from '../../assets/logo.png'
 
 const Navbar = () => {
     return (
          <nav className='navbar'>
                 <div className='nav-container'>
-                    <h3 className='nav-title'>VenueHub</h3>
+                    <div className='nav-logo'>
+                        <img src={logo} alt="" className='nav-image'/>
+                        <div className='nav-name'>
+                            <h4 className='nav-title'>St. Joseph's College (Autonomous)</h4>
+                            <h6 className='nav-subtitle'>Tiruchirapppalli, Tamil Nadu, India.</h6>
+                        </div>
+                    </div>
+                    
                     <ul className='nav-links'>
                         <li><a href="#">Home</a></li>
                         <li><a href="#">Browse Venues</a></li>
