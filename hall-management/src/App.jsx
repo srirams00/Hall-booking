@@ -4,8 +4,8 @@ import Home from "./pages/Home";
 function App() {
   return (
     <>
-      <Browse />
       <Home />
+      <Browse />
     </>
   )
 }
