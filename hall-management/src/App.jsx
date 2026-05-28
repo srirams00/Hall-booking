@@ -1,11 +1,10 @@
-import Home from "./pages/home/Home.jsx";
-import Browse from "./pages/browse/browse.jsx";
+
+import Home from "./pages/Home";
 
 function App() {
   return (
     <>
       <Home />
-      <Browse />
     </>
   )
 }
