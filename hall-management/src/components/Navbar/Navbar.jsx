@@ -1,15 +1,11 @@
 import './Navbar.css';
 import logo from '../../assets/logo.png'
 
-const Navbar = ({ currentView, onViewChange }) => {
+const Navbar = () => {
     return (
          <nav className='navbar'>
                 <div className='nav-container'>
-                    <div 
-                        className='nav-logo' 
-                        onClick={() => onViewChange && onViewChange("home")}
-                        style={{ cursor: 'pointer' }}
-                    >
+                    <div className='nav-logo'>
                         <img src={logo} alt="" className='nav-image'/>
                         <div className='nav-name'>
                             <h4 className='nav-title'>St. Joseph's College (Autonomous)</h4>
@@ -18,24 +14,8 @@ const Navbar = ({ currentView, onViewChange }) => {
                     </div>
                     
                     <ul className='nav-links'>
-                        <li>
-                            <a 
-                                href="#" 
-                                className={currentView === 'home' ? 'active' : ''} 
-                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("home"); }}
-                            >
-                                Home
-                            </a>
-                        </li>
-                        <li>
-                            <a 
-                                href="#" 
-                                className={currentView === 'browse' ? 'active' : ''} 
-                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("browse"); }}
-                            >
-                                Browse Venues
-                            </a>
-                        </li>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Browse Venues</a></li>
                         <li><a href="#">About us</a></li>
                         <li><a href="#">Contact</a></li>
                         <li><a href="#" className='nav-login'>Login</a></li>
