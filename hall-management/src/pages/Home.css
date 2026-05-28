@@ -114,35 +114,98 @@
     letter-spacing: 1.1px;
 }
 
-.hall{
-    display: flex;
-    width: 100%;
-}
-
-.hall-container{
-    display: flex;
-    align-items: flex-end;
-    background-color: #ffebeb;
-    padding: 30px;
-    justify-content: space-between;
-    width: 90%;
-    margin: 0 auto;
-}
-
-.hall-title{
+.hall {
     display: flex;
     flex-direction: column;
+    width: 90%;
+    margin: 60px auto 40px auto;
+}
+
+.hall-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 123, 255, 0.15);
+    margin-bottom: 30px;
+}
+
+.hall-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
     font-family: 'degular';
 }
 
-.hall-title h2{
+.hall-title h2 {
     font-size: 2.5rem;
     color: #007bff;
+    margin: 0;
 }
 
-.hall-title p{
+.hall-title p {
     font-family: 'regular';
     color: #575757;
+    margin: 0;
+    transition: color 0.25s ease;
+}
+
+.hall-title p:hover {
+    color: #00bfff;
+}
+
+
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.tab-item {
+    font-family: 'regular', sans-serif;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 123, 255, 0.2);
+    color: rgba(17, 19, 24, 0.7);
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.tab-item:hover {
+    background: linear-gradient(135deg, #007bff 0%, #00bfff 100%);
+    border-color: transparent;
+    color: #ffffff;
+}
+
+.tab-item.active {
+    background: linear-gradient(135deg, #007bff 0%, #00bfff 100%);
+    border-color: transparent;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
+}
+
+.venue-grid-home {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    width: 100%;
+}
+
+
+@media (max-width: 1100px) {
+    .venue-grid-home {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .venue-grid-home {
+        grid-template-columns: 1fr;
+    }
 }
 
 
