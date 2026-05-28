@@ -1,37 +1,33 @@
 .navbar {
-    height: 70px;
+    height: 80px;
     display: flex;
     align-items: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    position: sticky;
     z-index: 1000;
-    top: 15px; /* Adds a premium floating offset from the top */
-    border: 1px solid #007bff ;
-    border-radius: 100px;
-    margin: 15px 70px 0 70px; /* Restores the gorgeous 70px margin float */
-    background-color: #ffffff; /* Transparent white base so background items don't overlap when scrolling */
+    top: 0;
+    border-bottom: 1px solid #007bff ;
+    width: 100%;
+    background-color: #007bff;
 }
 
-.nav-container {
+.nav-container{
     display: flex;
     margin: 0 auto;
     justify-content: space-between;
     align-items: center;
-    width: 96%;
-    max-height: 70px;
+    width: 90%;
+    max-height: 60px;
     padding: 0 10px;
 }
 
-.nav-logo {
+.nav-logo{
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    max-width: 500px;
-    gap: 5px;
+    gap: 12px;
 }
 
-.nav-name {
-    color: #007bff;
+.nav-name{
+    color: #ffffff;
     font-family: 'Degular', serif;
     display: flex;
     flex-direction: column;
@@ -42,23 +38,22 @@
     letter-spacing: 1.2px;
 }
 
-.nav-title {
+.nav-title{
     font-size: 1.15rem;
     margin: 0;
-    padding: 2px 0;
+    padding:  2px 0;
 }
 
-.nav-subtitle {
+.nav-subtitle{
     margin: 0;
     font-size: 0.7rem;
-    color: #575757;
 }
 
-.nav-image {
+.nav-image{
     height: 75px;
 }
 
-.nav-links {
+.nav-links{
     font-family: 'Degular-regular', serif;
     display: flex;
     font-weight: bold;
@@ -66,28 +61,32 @@
     gap: 25px;
     align-items: center;
     letter-spacing: 0.7px;
+    transition: all 0.3s;
 }
 
-.nav-links a {
+.nav-links a{
     text-decoration: none;
-    color: #111318;
+    color: #ffffff;
     transition: all 0.2s ease;
 }
 
-.nav-links a:hover {
-    color: #007bff;
+.nav-links a:hover{
+    text-shadow: 0 0 0 rgb(108, 218, 255);
+    text-decoration: underline;
 }
 
 .nav-signup {
-    border: 1px solid #007fd3; 
+    border: 1px solid #ffffff; 
     padding: 5px 15px;
     border-radius: 8px;
-    color: #007fd3 !important;
+    color: #ffffff !important;
     transition: all 0.3s ease;
 }
 
 .nav-signup:hover {
-    background: linear-gradient(135deg, #007bff 0%, #00bfff 100%);
-    color: white !important;
-    border-color: transparent;
+    color: #007bff !important;
+    border: 1px solid white;
+    background-color: white;
+    text-decoration: none !important;
+    text-shadow: 0 0 0px rgb(108, 218, 255) !important;
 }
