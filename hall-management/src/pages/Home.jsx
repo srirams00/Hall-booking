@@ -51,7 +51,7 @@ const Home = ({ onViewChange }) => {
                 <div className="hall-container">
                     <div className="hall-title">
                         <h2>Campus Halls</h2>
-                        <p onClick={() => onViewChange && onViewChange("browse")} style={{ cursor: 'pointer', color: '#007bff', fontWeight: 'bold' }}>
+                        <p onClick={() => onViewChange && onViewChange("browse")} style={{ cursor: 'pointer', color: '#69b1ff', fontWeight: 'bold' }}>
                             Browse all available halls →
                         </p>
                     </div> 
@@ -63,7 +63,7 @@ const Home = ({ onViewChange }) => {
                     </div>
                 </div>
                 
-                {/* 4 featured cards grid */}
+                
                 <div className="venue-grid-home">
                     <Box
                       image={jubee}
@@ -131,7 +131,6 @@ const Home = ({ onViewChange }) => {
                 </div>
             </section>
 
-            {/* MODAL POPUP */}
             {selectedHall && (
                 <Availability
                   image={selectedHall.image}
