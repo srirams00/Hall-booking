@@ -1,5 +1,5 @@
-import Browse from "./browse-hall/browse";
-import Home from "./pages/Home";
+import Home from "./pages/home/Home.jsx";
+import Browse from "./pages/browse/browse.jsx";
 
 function App() {
   return (

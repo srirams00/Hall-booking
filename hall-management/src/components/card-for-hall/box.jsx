@@ -1,6 +1,6 @@
 import "./box.css";
 
-const Card = (props) => {
+const Box = (props) => {
   return (
     <div className="browse-card">
       <img src={props.image} alt={props.title} />
@@ -10,22 +10,16 @@ const Card = (props) => {
 
         <p className="location">{props.location}</p>
 
-        <p className="rating">⭐ {props.rating}</p>
-
-        <h2 className="price">
-          ₹{props.price}
-          <span>/day</span>
-        </h2>
-
+  
         <div className="tags">
           <span>{props.guests}</span>
-          <span>{props.parking}</span>
+        
         </div>
 
-        <button>View Availability</button>
+        <button  className="card-btn" onClick={props.onViewAvailability}   >View Availability</button>
       </div>
     </div>
   );
 };
 
-export default Card;
+export default Box;
