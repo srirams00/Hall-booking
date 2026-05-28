@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.browse-container {
   font-family: "Poppins", sans-serif;
 }
 
@@ -15,15 +18,12 @@ body {
   padding: 20px 0;
 }
 
-/* FILTER */
-
 .filter-container {
   margin-top: 25px;
   background: white;
   border-radius: 18px;
   padding: 20px;
   border: 1px solid #ddd;
-
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 15px;
@@ -33,11 +33,9 @@ body {
   border: 2px solid #87CEEB;
   border-radius: 12px;
   padding: 12px 15px;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   cursor: pointer;
   background: #E0F6FF;
 }
@@ -48,11 +46,8 @@ body {
   gap: 10px;
 }
 
-/* SEARCH */
-
 .search-section {
   margin: 25px 0;
-
   display: flex;
   align-items: center;
   gap: 20px;
@@ -66,13 +61,10 @@ body {
   background: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-
   padding: 10px 15px;
-
   display: flex;
   align-items: center;
   gap: 10px;
-
   width: 250px;
 }
 
@@ -82,15 +74,11 @@ body {
   width: 100%;
 }
 
-/* GRID */
-
 .venue-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 22px;
 }
-
-/* RESPONSIVE */
 
 @media (max-width: 1100px) {
   .venue-grid {
