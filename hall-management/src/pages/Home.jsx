@@ -1,10 +1,18 @@
-import Navbar from '../components/Navbar/Navbar';
+import { useState } from 'react';
 import './Home.css';
+import Box from '../components/card-for-hall/box';
+import Availability from '../components/avalibility/Availability';
 
-const Home = () => {
+import jubee from '../assets/halls/jubilee.JPG';
+import comAV from '../assets/halls/comAV.JPG';
+import lawley from '../assets/halls/lawley.JPG';
+import board_room from '../assets/halls/Board-Room.JPG';
+
+const Home = ({ onViewChange }) => {
+    const [selectedHall, setSelectedHall] = useState(null);
+
     return(
         <div className="home-page">
-            <Navbar />
             <section className="hero">
                 <div className="hero-content">
                     <span className="badge">St. Joseph's campus</span>
@@ -37,24 +45,104 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-        </section>
-        <section className='hall'>
-            <div className="hall-container">
-                <div className="hall-title">
-                    <h2 >Campus Halls</h2>
-                    <p>
-                        Browse all available halls
-                    </p>
-                </div> 
-                <div className="hall-filter">
-                    <div className="filter-tabs">
-                        <button className="tab-item">All</button>
-                        <button className="tab-item">Available</button>
+            </section>
+            
+            <section className='hall'>
+                <div className="hall-container">
+                    <div className="hall-title">
+                        <h2>Featured Venues</h2>
+                        <p onClick={() => onViewChange && onViewChange("browse")} style={{ cursor: 'pointer', color: '#007bff', fontWeight: 'bold' }}>
+                            Browse all available halls →
+                        </p>
+                    </div> 
+                    <div className="hall-filter">
+                        <div className="filter-tabs">
+                            <button className="tab-item active">Featured</button>
+                            <button className="tab-item" onClick={() => onViewChange && onViewChange("browse")}>View All</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    </div>
+                
+                {/* 4 featured cards grid */}
+                <div className="venue-grid-home">
+                    <Box
+                      image={jubee}
+                      title="JUBILEE BUILDING"
+                      location="Chennai, Tamil Nadu"
+                      guests="500 Guests"
+                      onViewAvailability={() =>
+                        setSelectedHall({
+                          image: jubee,
+                          title: "JUBILEE BUILDING",
+                          location: "Chennai, Tamil Nadu",
+                          guests: "500 Guests",
+                          isBooked: false,
+                        })
+                      }
+                    />
+
+                    <Box
+                      image={comAV}
+                      title="comAV"
+                      location="Near"
+                      guests="150 Guests"
+                      onViewAvailability={() =>
+                        setSelectedHall({
+                          image: comAV,
+                          title: "comAV",
+                          location: "Near",
+                          guests: "150 Guests",
+                          isBooked: false,
+                        })
+                      }
+                    />
+
+                    <Box
+                      image={lawley}
+                      title="LAWLEY HALL"
+                      location="Near"
+                      guests="1000 Guests"
+                      onViewAvailability={() =>
+                        setSelectedHall({
+                          image: lawley,
+                          title: "LAWLEY HALL",
+                          location: "Near",
+                          guests: "1000 Guests",
+                          isBooked: false,
+                        })
+                      }
+                    />
+
+                    <Box
+                      image={board_room}
+                      title="BOARD ROOM"
+                      location="Coimbatore, Tamil Nadu"
+                      guests="300 Guests"
+                      onViewAvailability={() =>
+                        setSelectedHall({
+                          image: board_room,
+                          title: "BOARD ROOM",
+                          location: "Coimbatore, Tamil Nadu",
+                          guests: "300 Guests",
+                          isBooked: true,
+                        })
+                      }
+                    />
+                </div>
+            </section>
+
+            {/* MODAL POPUP */}
+            {selectedHall && (
+                <Availability
+                  image={selectedHall.image}
+                  title={selectedHall.title}
+                  location={selectedHall.location}
+                  guests={selectedHall.guests}
+                  isBooked={selectedHall.isBooked}
+                  closeModal={() => setSelectedHall(null)}
+                />
+            )}
+        </div>
     );
 };
 
