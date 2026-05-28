@@ -1,0 +1,133 @@
+.browse-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+
+  transition: 0.3s;
+}
+
+.browse-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.browse-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 15px;
+
+  display: flex;
+  flex-direction: column;
+
+  flex-grow: 1;
+}
+
+.card-content h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+
+  min-height: 55px;
+
+  display: flex;
+  align-items: start;
+}
+
+.location {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+  min-height: 40px;
+}
+
+.tags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  min-height: 40px;
+
+  margin-bottom: 20px;
+}
+
+.tags span {
+  border: 1px solid #ddd;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.card-btn {
+  margin-top: auto;
+
+  width: 100%;
+  padding: 12px;
+
+  border: none;
+  border-radius: 6px;
+
+  
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+button {
+  width: 100%;
+  background:#007bff;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover{
+  background: #00bfff;
+}
+
+.browse-container {
+  width: 95%;
+  margin: auto;
+  padding: 20px 0;
+}
+
+.venue-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1200px) {
+  .venue-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+  .venue-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 500px) {
+  .venue-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
