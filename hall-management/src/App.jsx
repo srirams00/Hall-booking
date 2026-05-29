@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Browse from "./pages/browse/browse";
 
 function App() {
-  const [currentView, setCurrentView] = useState("home"); // 'home' or 'browse'
+  const [currentView, setCurrentView] = useState("home"); 
 
   return (
     <div className="app-container">

@@ -4,7 +4,6 @@ import { useState } from "react";
 
 import Availability from "../../components/avalibility/Availability.jsx";
 import Box from "../../components/card-for-hall/box";
-
 import jubee from "../../assets/halls/jubilee.JPG";
 import comAV from "../../assets/halls/comAV.JPG";
 import lawley from "../../assets/halls/lawley.JPG";
