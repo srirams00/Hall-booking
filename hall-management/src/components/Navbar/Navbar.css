@@ -57,7 +57,7 @@
 }
 
 .nav-links{
-    font-family: 'Degular-regular', sans-serif !important; /* Scoped fallback to sans-serif */
+    font-family: 'Degular-regular', sans-serif !important;
     display: flex;
     font-weight: bold;
     list-style: none;
