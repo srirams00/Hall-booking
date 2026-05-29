@@ -24,6 +24,7 @@ const Availability = ({ hallData, closeModal }) => {
       dates.push(date);
     }
     
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNextDates(dates);
     if (dates.length > 0) {
       setSelectedDate(dates[0].toISOString().split("T")[0]);
@@ -31,10 +32,7 @@ const Availability = ({ hallData, closeModal }) => {
   }, []);
 
   // Format date for display
-  const formatDate = (date) => {
-    const options = { weekday: "short", month: "short", day: "numeric" };
-    return date.toLocaleDateString("en-US", options);
-  };
+  
 
   // Check if a slot is booked
   const isSlotBooked = (date, slot) => {
