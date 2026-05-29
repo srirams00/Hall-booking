@@ -71,6 +71,9 @@ const Home = ({ onViewChange }) => {
     return(
         <div className="home-page">
             <section className="hero">
+                <div className="hero-bg-image" style={{ backgroundImage: `url(${jubee})` }}></div>
+                <div className="hero-bg-overlay"></div>
+                
                 <div className="hero-content">
                     <span className="badge">St. Joseph's campus</span>
                     <h1 className="hero-title">
