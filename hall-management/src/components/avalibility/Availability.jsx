@@ -13,10 +13,9 @@ const Availability = ({ hallData, closeModal }) => {
     "4:00 PM - 6:00 PM",
   ];
 
-  // Generate next 10 dates
   useEffect(() => {
     const dates = [];
-    const today = new Date(); // Automatically gets current date
+    const today = new Date(); 
     
     for (let i = 0; i < 10; i++) {
       const date = new Date(today);
@@ -31,10 +30,6 @@ const Availability = ({ hallData, closeModal }) => {
     }
   }, []);
 
-  // Format date for display
-  
-
-  // Check if a slot is booked
   const isSlotBooked = (date, slot) => {
     const bookedDate = hallData.bookedSlots.find(
       (b) => b.date === date
@@ -42,7 +37,6 @@ const Availability = ({ hallData, closeModal }) => {
     return bookedDate ? bookedDate.slots.includes(slot) : false;
   };
 
-  // Handle date selection
   const handleDateSelect = (date) => {
     const dateStr = date.toISOString().split("T")[0];
     setSelectedDate(dateStr);
@@ -115,7 +109,6 @@ const Availability = ({ hallData, closeModal }) => {
           </div>
         </div>
 
-        {/* Date Selection Section */}
         <div className="date-selection-section">
           <h4>Select Date</h4>
           <div className="dates-container">
@@ -138,7 +131,6 @@ const Availability = ({ hallData, closeModal }) => {
           </div>
         </div>
 
-        {/* Time Slot Selection Section */}
         <div className="time-slot-section">
           <h4>Select Time Slot(s)</h4>
           <div className="slots-container">
