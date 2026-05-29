@@ -37,7 +37,15 @@ const Navbar = ({ currentView, onViewChange }) => {
                             </a>
                         </li>
                         <li><a href="#">About us</a></li>
-                        <li><a href="#" className='nav-login'>Login</a></li>
+                        <li>
+                            <a 
+                                href="#" 
+                                className={`nav-login ${currentView === 'login' ? 'active' : ''}`}
+                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("login"); }}
+                            >
+                                Login
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
