@@ -1,0 +1,394 @@
+import React, { useState } from 'react';
+import './BookingForm.css';
+
+const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess }) => {
+  // Form State
+  const [formData, setFormData] = useState({
+    staffName: '',
+    staffId: '',
+    department: '',
+    emailId: '',
+    phoneNumber: '',
+    eventTitle: '',
+    expectedAudience: '',
+  });
+
+  const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+
+  // Email validation regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Phone validation - only numbers
+  const phoneRegex = /^[0-9]{10}$/;
+
+  // Validate individual field
+  const validateField = (name, value) => {
+    let error = '';
+
+    if (!value.trim()) {
+      error = 'This field is required';
+    } else if (name === 'emailId' && !emailRegex.test(value)) {
+      error = 'Please enter a valid email address';
+    } else if (name === 'phoneNumber' && !phoneRegex.test(value)) {
+      error = 'Phone number must be exactly 10 digits';
+    } else if (name === 'expectedAudience') {
+      const audience = parseInt(value);
+      if (isNaN(audience) || audience <= 0) {
+        error = 'Please enter a valid number';
+      }
+    }
+
+    return error;
+  };
+
+  // Handle input change
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    // Special handling for phone number - only allow digits
+    if (name === 'phoneNumber') {
+      if (value === '' || /^[0-9]*$/.test(value)) {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      }
+      return;
+    }
+
+    // Special handling for audience count - only allow numbers
+    if (name === 'expectedAudience') {
+      if (value === '' || /^[0-9]*$/.test(value)) {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      }
+      return;
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  // Handle input blur for validation
+  const handleInputBlur = (e) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+
+    if (error) {
+      setErrors((prev) => ({ ...prev, [name]: error }));
+    } else {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  // Validate all fields
+  const validateForm = () => {
+    const newErrors = {};
+
+    Object.keys(formData).forEach((key) => {
+      const error = validateField(key, formData[key]);
+      if (error) {
+        newErrors[key] = error;
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Check if form is complete
+  const isFormComplete = () => {
+    return (
+      formData.staffName.trim() !== '' &&
+      formData.staffId.trim() !== '' &&
+      formData.department.trim() !== '' &&
+      formData.emailId.trim() !== '' &&
+      formData.phoneNumber.trim() !== '' &&
+      formData.eventTitle.trim() !== '' &&
+      formData.expectedAudience.trim() !== '' &&
+      Object.values(errors).every((error) => error === '')
+    );
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      setSubmitted(true);
+      return;
+    }
+
+    // Create booking object
+    const bookingObject = {
+      hallName,
+      date: selectedDate,
+      timeSlots: selectedSlots,
+      staffInformation: {
+        name: formData.staffName,
+        staffId: formData.staffId,
+        department: formData.department,
+        emailId: formData.emailId,
+        phoneNumber: formData.phoneNumber,
+      },
+      eventInformation: {
+        title: formData.eventTitle,
+        expectedAudience: parseInt(formData.expectedAudience),
+      },
+      bookingDate: new Date().toISOString(),
+    };
+
+    // Console log the booking object
+    console.log('=== HALL BOOKING CONFIRMATION ===');
+    console.log(bookingObject);
+    console.log('================================');
+
+    // Success message
+    alert(
+      `✓ Booking submitted successfully!\n\nBooking ID: ${Math.random().toString(36).substr(2, 9).toUpperCase()}\n\nCheck console for booking details.`
+    );
+
+    // Reset form and close
+    setFormData({
+      staffName: '',
+      staffId: '',
+      department: '',
+      emailId: '',
+      phoneNumber: '',
+      eventTitle: '',
+      expectedAudience: '',
+    });
+    setErrors({});
+
+    if (onSuccess) {
+      onSuccess();
+    }
+  };
+
+  return (
+    <div className="booking-modal-overlay" onClick={onClose}>
+      <div className="booking-modal-container" onClick={(e) => e.stopPropagation()}>
+        {/* Close Button */}
+        <button className="booking-close-btn" onClick={onClose} title="Close">
+          ✖
+        </button>
+
+        {/* Header */}
+        <div className="booking-header">
+          <h2>Complete Your Booking</h2>
+          <p>Please provide the required information to finalize your hall booking</p>
+        </div>
+
+        {/* Main Content */}
+        <div className="booking-form-wrapper">
+          {/* Left Section - Booking Summary */}
+          <div className="booking-summary-section">
+            <div className="summary-card">
+              <h3>Booking Summary</h3>
+
+              <div className="summary-item-group">
+                <div className="summary-item">
+                  <span className="summary-icon">🏛️</span>
+                  <div>
+                    <p className="summary-label">Hall Name</p>
+                    <p className="summary-value">{hallName}</p>
+                  </div>
+                </div>
+
+                <div className="summary-item">
+                  <span className="summary-icon">📅</span>
+                  <div>
+                    <p className="summary-label">Selected Date</p>
+                    <p className="summary-value">
+                      {new Date(selectedDate).toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="summary-item">
+                  <span className="summary-icon">⏰</span>
+                  <div>
+                    <p className="summary-label">Time Slots</p>
+                    <div className="time-slots-summary">
+                      {selectedSlots.map((slot, index) => (
+                        <p key={index} className="summary-value">
+                          {slot}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="summary-divider"></div>
+
+              <div className="summary-info">
+                <p>
+                  <strong>Note:</strong> Please ensure all information is accurate before
+                  submitting.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Section - Booking Form */}
+          <form className="booking-form" onSubmit={handleSubmit}>
+            {/* Staff Information Section */}
+            <div className="form-section-booking">
+              <h3 className="section-title">Staff Information</h3>
+
+              <div className="form-group">
+                <label htmlFor="staffName" className="form-label-booking">
+                  <span className="required-asterisk">*</span> Staff Name
+                </label>
+                <input
+                  type="text"
+                  id="staffName"
+                  name="staffName"
+                  value={formData.staffName}
+                  onChange={handleInputChange}
+                  onBlur={handleInputBlur}
+                  placeholder="Enter your full name"
+                  className={`form-input-booking ${errors.staffName ? 'error' : ''}`}
+                />
+                {errors.staffName && <p className="error-message">{errors.staffName}</p>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="staffId" className="form-label-booking">
+                  <span className="required-asterisk">*</span> Staff ID
+                </label>
+                <input
+                  type="text"
+                  id="staffId"
+                  name="staffId"
+                  value={formData.staffId}
+                  onChange={handleInputChange}
+                  onBlur={handleInputBlur}
+                  placeholder="e.g., STF-2024-001"
+                  className={`form-input-booking ${errors.staffId ? 'error' : ''}`}
+                />
+                {errors.staffId && <p className="error-message">{errors.staffId}</p>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="department" className="form-label-booking">
+                  <span className="required-asterisk">*</span> Department
+                </label>
+                <input
+                  type="text"
+                  id="department"
+                  name="department"
+                  value={formData.department}
+                  onChange={handleInputChange}
+                  onBlur={handleInputBlur}
+                  placeholder="e.g., Computer Science"
+                  className={`form-input-booking ${errors.department ? 'error' : ''}`}
+                />
+                {errors.department && <p className="error-message">{errors.department}</p>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="emailId" className="form-label-booking">
+                  <span className="required-asterisk">*</span> Email ID
+                </label>
+                <input
+                  type="email"
+                  id="emailId"
+                  name="emailId"
+                  value={formData.emailId}
+                  onChange={handleInputChange}
+                  onBlur={handleInputBlur}
+                  placeholder="your.email@college.edu"
+                  className={`form-input-booking ${errors.emailId ? 'error' : ''}`}
+                />
+                {errors.emailId && <p className="error-message">{errors.emailId}</p>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="phoneNumber" className="form-label-booking">
+                  <span className="required-asterisk">*</span> Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleInputChange}
+                  onBlur={handleInputBlur}
+                  placeholder="10-digit phone number"
+                  maxLength="10"
+                  className={`form-input-booking ${errors.phoneNumber ? 'error' : ''}`}
+                />
+                {errors.phoneNumber && <p className="error-message">{errors.phoneNumber}</p>}
+              </div>
+            </div>
+
+            {/* Event Information Section */}
+            <div className="form-section-booking">
+              <h3 className="section-title">Event Information</h3>
+
+              <div className="form-group">
+                <label htmlFor="eventTitle" className="form-label-booking">
+                  <span className="required-asterisk">*</span> Event Title
+                </label>
+                <input
+                  type="text"
+                  id="eventTitle"
+                  name="eventTitle"
+                  value={formData.eventTitle}
+                  onChange={handleInputChange}
+                  onBlur={handleInputBlur}
+                  placeholder="e.g., Annual Conference, Workshop"
+                  className={`form-input-booking ${errors.eventTitle ? 'error' : ''}`}
+                />
+                {errors.eventTitle && <p className="error-message">{errors.eventTitle}</p>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="expectedAudience" className="form-label-booking">
+                  <span className="required-asterisk">*</span> Expected Audience Count
+                </label>
+                <input
+                  type="number"
+                  id="expectedAudience"
+                  name="expectedAudience"
+                  value={formData.expectedAudience}
+                  onChange={handleInputChange}
+                  onBlur={handleInputBlur}
+                  placeholder="Number of expected attendees"
+                  className={`form-input-booking ${errors.expectedAudience ? 'error' : ''}`}
+                />
+                {errors.expectedAudience && (
+                  <p className="error-message">{errors.expectedAudience}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Buttons Section */}
+            <div className="form-buttons">
+              <button type="button" className="cancel-btn" onClick={onClose}>
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className={`submit-btn ${!isFormComplete() ? 'disabled' : ''}`}
+                disabled={!isFormComplete()}
+              >
+                Submit Booking
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BookingForm;
