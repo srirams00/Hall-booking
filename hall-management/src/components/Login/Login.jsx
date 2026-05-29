@@ -17,12 +17,10 @@ const LoginPage = () => {
     <div className="login-page-container">
       <div className="login-content-wrapper">
         
-        {/* Left Branding Content Column */}
         <div className="branding-section">
           <img src={logo} alt="St. Joseph's College" className="branding-image" />
         </div>
 
-        {/* Right Modular Input Card Layout */}
         <div className="login-card-section">
           <div className="login-card">
             <h2>Welcome Back</h2>
