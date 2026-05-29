@@ -158,6 +158,19 @@ const hallsData = [
       { date: "2026-06-02", slots: ["4:00 PM - 6:00 PM"] },
     ],
   },
+  {
+    id: 12,
+    image: sail,
+    title: "KPJ Hall",
+    capacity: "300 Guests",
+    ac: true,
+    description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
+    amenities: ["Projector",  "Sound System", "AC", "Display Boards"],
+    bookedSlots: [
+      { date: "2026-05-31", slots: ["11:00 AM - 12:30 PM"] },
+      { date: "2026-06-02", slots: ["4:00 PM - 6:00 PM"] },
+    ],
+  },
 ];
 
 const Browse = () => {
