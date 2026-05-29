@@ -1,10 +1,12 @@
 import "./Availability.css";
 import { useState, useEffect } from "react";
+import BookingForm from "../BookingForm/BookingForm";
 
 const Availability = ({ hallData, closeModal }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [nextDates, setNextDates] = useState([]);
+  const [showBookingForm, setShowBookingForm] = useState(false);
 
   const timeSlots = [
     "11:00 AM - 12:30 PM",
@@ -61,23 +63,26 @@ const Availability = ({ hallData, closeModal }) => {
   // Handle continue booking
   const handleContinueBooking = () => {
     if (selectedSlots.length === 0) return;
+    setShowBookingForm(true);
+  };
 
-    const bookingData = {
-      hall: hallData.title,
-      date: selectedDate,
-      slots: selectedSlots,
-    };
+  // Handle close booking form
+  const handleCloseBookingForm = () => {
+    setShowBookingForm(false);
+  };
 
-    console.log("Booking Data:", bookingData);
-    alert(
-      `Booking confirmed!\nHall: ${bookingData.hall}\nDate: ${bookingData.date}\nSlots: ${bookingData.slots.join(", ")}`
-    );
+  // Handle booking success
+  const handleBookingSuccess = () => {
+    setShowBookingForm(false);
+    setSelectedDate(null);
+    setSelectedSlots([]);
     closeModal();
   };
 
   return (
-    <div className="modal-overlay" onClick={closeModal}>
-      <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+    <>
+      <div className="modal-overlay" onClick={closeModal}>
+        <div className="modal-box" onClick={(e) => e.stopPropagation()}>
         {/* Close Button */}
         <button className="close-btn" onClick={closeModal} title="Close">
           ✖
@@ -181,6 +186,18 @@ const Availability = ({ hallData, closeModal }) => {
         </div>
       </div>
     </div>
+
+      {/* Booking Form Modal */}
+      {showBookingForm && (
+        <BookingForm
+          hallName={hallData.title}
+          selectedDate={selectedDate}
+          selectedSlots={selectedSlots}
+          onClose={handleCloseBookingForm}
+          onSuccess={handleBookingSuccess}
+        />
+      )}
+    </>
   );
 };
 
