@@ -2,11 +2,68 @@ import { useState } from 'react';
 import './Home.css';
 import Box from '../components/card-for-hall/box';
 import Availability from '../components/avalibility/Availability';
+import '../components/avalibility/Availability.css';
 
 import jubee from '../assets/halls/jubilee.JPG';
 import comAV from '../assets/halls/comAV.JPG';
 import lawley from '../assets/halls/lawley.JPG';
 import board_room from '../assets/halls/Board-Room.JPG';
+
+const featuredHalls = [
+    {
+        id: 1,
+        image: jubee,
+        title: "JUBILEE Building",
+        capacity: "500 Guests",
+        ac: true,
+        description: "A magnificent grand hall perfect for large college events, conferences, and celebrations with modern infrastructure.",
+        amenities: [ "Projector",  "Sound System", "AC", "chair Access"],
+        bookedSlots: [
+            { date: "2026-05-30", slots: ["11:00 AM - 12:30 PM"] },
+            { date: "2026-05-31", slots: ["2:00 PM - 4:00 PM", "4:00 PM - 6:00 PM"] },
+            { date: "2026-06-02", slots: ["12:30 PM - 2:00 PM"] },
+        ],
+    },
+    {
+        id: 2,
+        image: comAV,
+        title: "COMAV AUDITORIUM",
+        capacity: "150 Guests",
+        ac: true,
+        description: "Intimate auditorium suitable for seminars, workshops, and small-scale events with excellent acoustics.",
+        amenities: [ "Projector", "Sound System", "AC", "Stage"],
+        bookedSlots: [
+            { date: "2026-05-30", slots: ["4:00 PM - 6:00 PM"] },
+        ],
+    },
+    {
+        id: 3,
+        image: lawley,
+        title: "LAWLEY HALL",
+        capacity: "1000 Guests",
+        ac: false,
+        description: "Spacious open-air venue ideal for outdoor festivals, cultural events, and large gatherings.",
+        amenities: [ "Sound System", "Stage", "Open-Air"],
+        bookedSlots: [
+            { date: "2026-05-29", slots: ["11:00 AM - 12:30 PM", "12:30 PM - 2:00 PM"] },
+            { date: "2026-06-01", slots: ["2:00 PM - 4:00 PM"] },
+        ],
+    },
+    {
+        id: 4,
+        image: board_room,
+        title: "BOARD ROOM",
+        capacity: "300 Guests",
+        ac: true,
+        description: "Executive meeting space with conference facilities, perfect for corporate events and formal gatherings.",
+        amenities: ["WiFi", "Projector", "Sound System", "AC", "Conference Table"],
+        bookedSlots: [
+            { date: "2026-05-29", slots: ["11:00 AM - 12:30 PM", "12:30 PM - 2:00 PM", "2:00 PM - 4:00 PM", "4:00 PM - 6:00 PM"] },
+            { date: "2026-05-30", slots: ["11:00 AM - 12:30 PM", "12:30 PM - 2:00 PM", "2:00 PM - 4:00 PM"] },
+            { date: "2026-05-31", slots: ["11:00 AM - 12:30 PM", "2:00 PM - 4:00 PM", "4:00 PM - 6:00 PM"] },
+        ],
+    },
+];
 
 const Home = ({ onViewChange }) => {
     const [selectedHall, setSelectedHall] = useState(null);
@@ -59,81 +116,23 @@ const Home = ({ onViewChange }) => {
                     </div>
                 </div>
                 
-                
                 <div className="venue-grid-home">
-                    <Box
-                      image={jubee}
-                      title="JUBILEE BUILDING"
-                      location="Chennai, Tamil Nadu"
-                      guests="500 Guests"
-                      onViewAvailability={() =>
-                        setSelectedHall({
-                          image: jubee,
-                          title: "JUBILEE BUILDING",
-                          location: "Chennai, Tamil Nadu",
-                          guests: "500 Guests",
-                          isBooked: false,
-                        })
-                      }
-                    />
-
-                    <Box
-                      image={comAV}
-                      title="comAV"
-                      location="Near"
-                      guests="150 Guests"
-                      onViewAvailability={() =>
-                        setSelectedHall({
-                          image: comAV,
-                          title: "comAV",
-                          location: "Near",
-                          guests: "150 Guests",
-                          isBooked: false,
-                        })
-                      }
-                    />
-
-                    <Box
-                      image={lawley}
-                      title="LAWLEY HALL"
-                      location="Near"
-                      guests="1000 Guests"
-                      onViewAvailability={() =>
-                        setSelectedHall({
-                          image: lawley,
-                          title: "LAWLEY HALL",
-                          location: "Near",
-                          guests: "1000 Guests",
-                          isBooked: false,
-                        })
-                      }
-                    />
-
-                    <Box
-                      image={board_room}
-                      title="BOARD ROOM"
-                      location="Coimbatore, Tamil Nadu"
-                      guests="300 Guests"
-                      onViewAvailability={() =>
-                        setSelectedHall({
-                          image: board_room,
-                          title: "BOARD ROOM",
-                          location: "Coimbatore, Tamil Nadu",
-                          guests: "300 Guests",
-                          isBooked: true,
-                        })
-                      }
-                    />
+                    {featuredHalls.map((hall) => (
+                        <Box
+                          key={hall.id}
+                          image={hall.image}
+                          title={hall.title}
+                          capacity={hall.capacity}
+                          ac={hall.ac}
+                          onViewAvailability={() => setSelectedHall(hall)}
+                        />
+                    ))}
                 </div>
             </section>
 
             {selectedHall && (
                 <Availability
-                  image={selectedHall.image}
-                  title={selectedHall.title}
-                  location={selectedHall.location}
-                  guests={selectedHall.guests}
-                  isBooked={selectedHall.isBooked}
+                  hallData={selectedHall}
                   closeModal={() => setSelectedHall(null)}
                 />
             )}

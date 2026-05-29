@@ -25,35 +25,26 @@
 }
 
 .card-content {
-  padding: 15px;
-font-family: "regular", sans-serif;
+  padding: 22px;
+  font-family: "regular", sans-serif;
   display: flex;
   flex-direction: column;
-
   flex-grow: 1;
 }
 
 .card-content h3 {
   font-size: 20px;
   margin-bottom: 10px;
-font-family: "regular", sans-serif;
+font-family: "regular";
   min-height: 55px;
 
   display: flex;
   align-items: start;
 }
 
-.location {
-  font-family: "regular", sans-serif;
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 8px;
-  min-height: 40px;
-}
-
 .tags {
   display: flex;
-  
+  gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
@@ -64,6 +55,7 @@ font-family: "regular", sans-serif;
   border-radius: 6px;
   font-size: 12px;
   padding: 4px 8px;
+  font-weight: 600;
 }
 
 .card-btn {
@@ -71,26 +63,20 @@ font-family: "regular", sans-serif;
   margin-top: auto;
   width: 100%;
   padding: 12px;
-  border: none;
+  border: 1px solid #007bff;
   border-radius: 6px;
   color: white;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-size: 1rem;
   cursor: pointer;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  transition: all 0.3s ease;
 }
 
-button {
-  width: 100%;
-  background:#007bff;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-button:hover{
-  background: #00bfff;
+
+.card-btn:hover{
+  transform: translateY(-5px);
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.404);
 }
 
 .browse-container {
