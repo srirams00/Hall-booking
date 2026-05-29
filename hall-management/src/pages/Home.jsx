@@ -39,10 +39,6 @@ const Home = ({ onViewChange }) => {
                             <h3>12</h3>
                             <p>Venues</p>
                         </div>
-                        <div className="stat-card">
-                            <h3>24/7</h3>
-                            <p>Access</p>
-                        </div>
                     </div>
                 </div>
             </section>

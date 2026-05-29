@@ -80,7 +80,7 @@
     text-decoration: underline;
 }
 
-.nav-signup {
+.nav-login {
     font-family: 'Degular-regular', sans-serif !important;
     letter-spacing: 0.7px;
     border: 1px solid #ffffff; 
@@ -90,7 +90,7 @@
     transition: all 0.3s ease;
 }
 
-.nav-signup:hover {
+.nav-login:hover {
     color: #007bff !important;
     border: 1px solid white;
     background-color: white;
