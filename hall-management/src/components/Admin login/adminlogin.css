@@ -1,0 +1,161 @@
+.login-page-container * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.login-page-container {
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #007BFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 24px;
+  overflow-y: auto;
+}
+
+.login-content-wrapper {
+  display: flex;
+  width: 100%;
+  max-width: 860px;
+  align-items: center;
+  justify-content: center;
+  gap: 70px;
+}
+
+.branding-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.branding-image {
+  width: 100%;
+  max-width: 210px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.login-card-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  background-color: #FFFFFF;
+  width: 100%;
+  max-width: 330px;
+  height: auto;
+  padding: 45px 28px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-card h2 {
+  font-family: sans-serif;
+  color: #007bff;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-field-group {
+  position: relative;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.input-field-group .field-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #A0A0A5;
+  font-size: 15px;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.input-field-group input {
+  width: 100%;
+  height: 46px;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding-left: 44px;
+  padding-right: 16px;
+  font-size: 14px;
+  color: #1A1A1A;
+  outline: none;
+  transition: all 0.15s ease-in-out;
+}
+
+.input-field-group input:hover {
+  border-color: #CBD5E1;
+}
+
+.input-field-group input:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.input-field-group input:focus ~ .field-icon {
+  color: #007BFF;
+}
+
+.input-field-group input::placeholder {
+  color: #94A3B8;
+}
+
+.login-submit-btn {
+  font-family: sans-serif;
+  width: 100%;
+  height: 46px;
+  background-color: #007BFF;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.login-submit-btn:hover {
+  background-color: #0066CC;
+}
+
+.login-submit-btn:active {
+  transform: scale(0.985);
+}
+
+@media (max-width: 800px) {
+  .login-content-wrapper {
+    flex-direction: column;
+    gap: 35px;
+  }
+  
+  .branding-image {
+    max-width: 170px;
+  }
+}
