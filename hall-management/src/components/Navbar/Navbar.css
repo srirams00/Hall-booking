@@ -6,7 +6,8 @@
     top: 0;
     border-bottom: 1px solid #007bff ;
     width: 100%;
-    background-color: #007bff;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    position: sticky;
 }
 
 .nav-container{
@@ -28,7 +29,7 @@
 
 .nav-name{
     color: #ffffff;
-    font-family: 'Degular', sans-serif !important; /* Scoped fallback to sans-serif */
+    font-family: 'Degular', sans-serif !important; 
     display: flex;
     flex-direction: column;
     max-height: 75px;
@@ -79,7 +80,7 @@
     text-decoration: underline;
 }
 
-.nav-signup {
+.nav-login {
     font-family: 'Degular-regular', sans-serif !important;
     letter-spacing: 0.7px;
     border: 1px solid #ffffff; 
@@ -89,7 +90,7 @@
     transition: all 0.3s ease;
 }
 
-.nav-signup:hover {
+.nav-login:hover {
     color: #007bff !important;
     border: 1px solid white;
     background-color: white;
