@@ -37,9 +37,7 @@ const Navbar = ({ currentView, onViewChange }) => {
                             </a>
                         </li>
                         <li><a href="#">About us</a></li>
-                        <li><a href="#">Contact</a></li>
                         <li><a href="#" className='nav-login'>Login</a></li>
-                        <li><a href="#" className='nav-signup'>Sign up</a></li>
                     </ul>
                 </div>
             </nav>
