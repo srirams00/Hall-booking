@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './BookingForm.css';
 
 const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess }) => {
@@ -189,7 +189,6 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
 
               <div className="summary-item-group">
                 <div className="summary-item">
-                  <span className="summary-icon">🏛️</span>
                   <div>
                     <p className="summary-label">Hall Name</p>
                     <p className="summary-value">{hallName}</p>
@@ -197,7 +196,6 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
                 </div>
 
                 <div className="summary-item">
-                  <span className="summary-icon">📅</span>
                   <div>
                     <p className="summary-label">Selected Date</p>
                     <p className="summary-value">
@@ -212,7 +210,6 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
                 </div>
 
                 <div className="summary-item">
-                  <span className="summary-icon">⏰</span>
                   <div>
                     <p className="summary-label">Time Slots</p>
                     <div className="time-slots-summary">

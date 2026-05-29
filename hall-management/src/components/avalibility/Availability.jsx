@@ -77,107 +77,107 @@ const Availability = ({ hallData, closeModal }) => {
     <>
       <div className="modal-overlay" onClick={closeModal}>
         <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-        {/* Close Button */}
-        <button className="close-btn" onClick={closeModal} title="Close">
-          ✖
-        </button>
+          {/* Close Button */}
+          <button className="close-btn" onClick={closeModal} title="Close">
+            ✖
+          </button>
 
-        {/* Hall Image */}
-        <div className="modal-image-container">
-          <img src={hallData.image} alt={hallData.title} className="modal-hall-image" />
-        </div>
-
-        {/* Hall Information Section */}
-        <div className="hall-info-section">
-          <h2 className="hall-title">{hallData.title}</h2>
-
-          <div className="capacity-info">
-            <span className="info-item">
-              <strong> Capacity:</strong> {hallData.capacity}
-            </span>
-            <span className="info-item" style={{ fontWeight: 600 }}>
-              {hallData.ac ? "AC" : "Non-AC"}
-            </span>
+          {/* Hall Image */}
+          <div className="modal-image-container">
+            <img src={hallData.image} alt={hallData.title} className="modal-hall-image" />
           </div>
 
-          <p className="hall-description">{hallData.description}</p>
+          {/* Hall Information Section */}
+          <div className="hall-info-section">
+            <h2 className="hall-title">{hallData.title}</h2>
 
-          <div className="amenities-section">
-            <h4>Amenities</h4>
-            <div className="amenities-list">
-              {hallData.amenities.map((amenity, index) => (
-                <span key={index} className="amenity-badge">
-                  {amenity}
-                </span>
-              ))}
+            <div className="capacity-info">
+              <span className="info-item">
+                <strong> Capacity:</strong> {hallData.capacity}
+              </span>
+              <span className="info-item" style={{ fontWeight: 600 }}>
+                {hallData.ac ? "AC" : "Non-AC"}
+              </span>
+            </div>
+
+            <p className="hall-description">{hallData.description}</p>
+
+            <div className="amenities-section">
+              <h4>Amenities</h4>
+              <div className="amenities-list">
+                {hallData.amenities.map((amenity, index) => (
+                  <span key={index} className="amenity-badge">
+                    {amenity}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="date-selection-section">
-          <h4>Select Date</h4>
-          <div className="dates-container">
-            {nextDates.map((date, index) => {
-              const dateStr = date.toISOString().split("T")[0];
-              const isSelected = selectedDate === dateStr;
+          <div className="date-selection-section">
+            <h4>Select Date</h4>
+            <div className="dates-container">
+              {nextDates.map((date, index) => {
+                const dateStr = date.toISOString().split("T")[0];
+                const isSelected = selectedDate === dateStr;
 
-              return (
-                <button
-                  key={index}
-                  className={`date-btn ${isSelected ? "selected" : ""}`}
-                  onClick={() => handleDateSelect(date)}
-                >
-                  <span className="date-day">{date.getDate()}</span>
-                  <span className="date-month">{date.toLocaleDateString("en-US", { month: "short" })}</span>
-                  <span className="date-weekday">{date.toLocaleDateString("en-US", { weekday: "short" })}</span>
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    key={index}
+                    className={`date-btn ${isSelected ? "selected" : ""}`}
+                    onClick={() => handleDateSelect(date)}
+                  >
+                    <span className="date-day">{date.getDate()}</span>
+                    <span className="date-month">{date.toLocaleDateString("en-US", { month: "short" })}</span>
+                    <span className="date-weekday">{date.toLocaleDateString("en-US", { weekday: "short" })}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        <div className="time-slot-section">
-          <h4>Select Time Slot(s)</h4>
-          <div className="slots-container">
-            {timeSlots.map((slot, index) => {
-              const booked = isSlotBooked(selectedDate, slot);
-              const selected = selectedSlots.includes(slot);
+          <div className="time-slot-section">
+            <h4>Select Time Slot(s)</h4>
+            <div className="slots-container">
+              {timeSlots.map((slot, index) => {
+                const booked = isSlotBooked(selectedDate, slot);
+                const selected = selectedSlots.includes(slot);
 
-              return (
-                <button
-                  key={index}
-                  className={`slot-btn ${booked ? "booked" : ""} ${selected ? "selected" : ""}`}
-                  onClick={() => handleSlotSelect(slot)}
-                  disabled={booked}
-                >
-                  <span className="slot-time">{slot}</span>
-                  {booked && <span className="booked-label">Booked</span>}
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    key={index}
+                    className={`slot-btn ${booked ? "booked" : ""} ${selected ? "selected" : ""}`}
+                    onClick={() => handleSlotSelect(slot)}
+                    disabled={booked}
+                  >
+                    <span className="slot-time">{slot}</span>
+                    {booked && <span className="booked-label">Booked</span>}
+                  </button>
+                );
+              })}
+            </div>
+            {selectedSlots.length > 0 && (
+              <p className="selected-slots-info">
+                ✓ Selected: {selectedSlots.length} slot(s)
+              </p>
+            )}
           </div>
-          {selectedSlots.length > 0 && (
-            <p className="selected-slots-info">
-              ✓ Selected: {selectedSlots.length} slot(s)
-            </p>
-          )}
-        </div>
 
-        {/* Buttons Section */}
-        <div className="modal-buttons">
-          <button className="close-button" onClick={closeModal}>
-            Close
-          </button>
-          <button
-            className={`continue-button ${selectedSlots.length === 0 ? "disabled" : ""}`}
-            onClick={handleContinueBooking}
-            disabled={selectedSlots.length === 0}
-          >
-            Continue Booking
-          </button>
+          {/* Buttons Section */}
+          <div className="modal-buttons">
+            <button className="close-button" onClick={closeModal}>
+              Close
+            </button>
+            <button
+              className={`continue-button ${selectedSlots.length === 0 ? "disabled" : ""}`}
+              onClick={handleContinueBooking}
+              disabled={selectedSlots.length === 0}
+            >
+              Continue Booking
+            </button>
+          </div>
         </div>
       </div>
-    </div>
 
       {/* Booking Form Modal */}
       {showBookingForm && (

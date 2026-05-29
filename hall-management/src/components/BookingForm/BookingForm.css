@@ -60,7 +60,7 @@
   width: 36px;
   height: 36px;
   background: linear-gradient(135deg, #e8f0ff 0%, #d4e4ff 100%);
-  border: 1px solid #c5d9ff;
+  border: 1px solid #007bff;
   border-radius: 50%;
   font-size: 20px;
   color: #003366;
@@ -74,14 +74,13 @@
 
 .booking-close-btn:hover {
   background: linear-gradient(135deg, #c5d9ff 0%, #a8c8ff 100%);
-  transform: rotate(90deg);
   box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
 }
 
 /* Header */
 .booking-header {
   padding: 30px 40px 20px;
-  background: linear-gradient(135deg, #003366 0%, #0052a3 100%);
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
   border-radius: 16px 16px 0 0;
   color: white;
   text-align: center;
@@ -112,6 +111,7 @@
 /* Summary Section */
 .booking-summary-section {
   display: flex;
+  color: #007bff;
 }
 
 .summary-card {
@@ -128,23 +128,41 @@
 .summary-card h3 {
   font-size: 18px;
   font-weight: 700;
-  color: #003366;
+  color: #007bff;
   margin: 0 0 20px 0;
   display: flex;
   align-items: center;
   gap: 10px;
+  display: block;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 123, 255, 0.200);
 }
+
+/* .summary-card h3::after{
+  content: '';
+  display: block;
+  width: 100px;
+  justify-self: start;
+  height: 5px;
+  background-color: #0071eb;
+  margin-top: 10px;
+  border-radius: 3px;
+} */
 
 .summary-item-group {
   display: flex;
   flex-direction: column;
   gap: 18px;
+  margin-left: 25px;
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .summary-item {
   display: flex;
   gap: 12px;
   padding: 12px 0;
+  
 }
 
 .summary-icon {
@@ -163,7 +181,7 @@
 
 .summary-value {
   font-size: 14px;
-  color: #003366;
+  color: #007bff;
   margin: 4px 0 0 0;
   font-weight: 600;
 }
@@ -188,7 +206,7 @@
 }
 
 .summary-info {
-  background: linear-gradient(135deg, #fffbf0 0%, #ffe8d6 100%);
+  background: linear-gradient(135deg, #fffbf0 0%, #fffbf8 100%);
   border-left: 3px solid #ff9800;
   padding: 12px;
   border-radius: 6px;
@@ -220,7 +238,7 @@
 .section-title {
   font-size: 16px;
   font-weight: 700;
-  color: #003366;
+  color: #007bff;
   margin: 0 0 18px 0;
   display: flex;
   align-items: center;
@@ -233,7 +251,7 @@
   content: '';
   width: 4px;
   height: 4px;
-  background: #0052a3;
+  background: #007bff;
   border-radius: 50%;
 }
 
@@ -245,6 +263,7 @@
   margin-bottom: 18px;
 }
 
+
 .form-group:last-child {
   margin-bottom: 0;
 }
@@ -253,7 +272,7 @@
 .form-label-booking {
   font-size: 14px;
   font-weight: 600;
-  color: #003366;
+  color: #007bff;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -283,7 +302,7 @@
 
 .form-input-booking:focus {
   outline: none;
-  border-color: #0052a3;
+  border-color: #007bff;
   background: white;
   box-shadow: 0 0 0 3px rgba(0, 82, 163, 0.1);
 }
@@ -294,7 +313,7 @@
 
 .form-input-booking.error {
   border-color: #d32f2f;
-  background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
+  background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
 }
 
 .form-input-booking.error:focus {
@@ -313,12 +332,12 @@
 }
 
 .error-message::before {
-  content: '⚠';
   font-size: 12px;
 }
 
 /* Form Buttons */
 .form-buttons {
+  font-family: 'degular';
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
@@ -328,13 +347,14 @@
 }
 
 .cancel-btn {
+  font-family: 'regular';
   padding: 12px 24px;
-  background: linear-gradient(135deg, #f0f4ff 0%, #e0e8ff 100%);
+  background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
   border: 2px solid #c5d9ff;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: #003366;
+  color: #007bff;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -351,12 +371,12 @@
 }
 
 .submit-btn {
+  font-family: 'regular';
   padding: 12px 24px;
-  background: linear-gradient(135deg, #003366 0%, #0052a3 100%);
+ background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
   border: none;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: 600;
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -364,7 +384,7 @@
 }
 
 .submit-btn:hover:not(.disabled) {
-  background: linear-gradient(135deg, #0052a3 0%, #003d7a 100%);
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 51, 102, 0.3);
 }
