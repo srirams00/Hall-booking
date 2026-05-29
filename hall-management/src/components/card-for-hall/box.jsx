@@ -7,14 +7,13 @@ const Box = (props) => {
 
       <div className="card-content">
         <h3>{props.title}</h3>
-        <p className="location">{props.location}</p>
 
         <div className="tags">
           <span className="capacity-tag">
-            <strong>👥 {props.capacity}</strong>
+            <strong> {props.capacity}</strong>
           </span>
           <span className={`ac-tag ${props.ac ? "ac" : "non-ac"}`}>
-            {props.ac ? "🌬️ AC" : "No AC"}
+            {props.ac ? " AC" : "No AC"}
           </span>
         </div>
 

@@ -11,13 +11,12 @@ import board_room from "../../assets/halls/Board-Room.JPG";
 import sail from "../../assets/halls/sail.JPG";
 import toulouse from "../../assets/halls/toulouse.JPG";
 
-// Hall data with complete information
+
 const hallsData = [
   {
     id: 1,
     image: jubee,
-    title: "JUBILEE BUILDING",
-    location: "Chennai, Tamil Nadu",
+    title: "Jubilee Building",
     capacity: "500 Guests",
     ac: true,
     description: "A magnificent grand hall perfect for large college events, conferences, and celebrations with modern infrastructure.",
@@ -31,8 +30,7 @@ const hallsData = [
   {
     id: 2,
     image: comAV,
-    title: "COMAV AUDITORIUM",
-    location: "Chennai, Tamil Nadu",
+    title: "ComAV Auditorium",
     capacity: "150 Guests",
     ac: true,
     description: "Intimate auditorium suitable for seminars, workshops, and small-scale events with excellent acoustics.",
@@ -44,8 +42,7 @@ const hallsData = [
   {
     id: 3,
     image: lawley,
-    title: "LAWLEY HALL",
-    location: "Chennai, Tamil Nadu",
+    title: "Lawley Hall",
     capacity: "1000 Guests",
     ac: false,
     description: "Spacious open-air venue ideal for outdoor festivals, cultural events, and large gatherings.",
@@ -58,8 +55,7 @@ const hallsData = [
   {
     id: 4,
     image: board_room,
-    title: "BOARD ROOM",
-    location: "Coimbatore, Tamil Nadu",
+    title: "Board Room",
     capacity: "300 Guests",
     ac: true,
     description: "Executive meeting space with conference facilities, perfect for corporate events and formal gatherings.",
@@ -73,8 +69,7 @@ const hallsData = [
   {
     id: 5,
     image: sail,
-    title: "SAIL",
-    location: "Coimbatore, Tamil Nadu",
+    title: "Sail Auditorium",
     capacity: "300 Guests",
     ac: true,
     description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
@@ -87,9 +82,8 @@ const hallsData = [
   {
     id: 6,
     image: toulouse,
-    title: "TOULOUSE ARENA",
-    location: "Coimbatore, Tamil Nadu",
-    capacity: "20000 Guests",
+    title: "Toulouse Arena",
+    capacity: "2000 Guests",
     ac: false,
     description: "Massive outdoor arena designed for mega events, concerts, and large-scale sports events.",
     amenities: [ "Sound System", "Stage", "Open-Air", "Seating"],
@@ -102,8 +96,7 @@ const hallsData = [
   {
     id: 7,
     image: sail,
-    title: "BALAM",
-    location: "Coimbatore, Tamil Nadu",
+    title: "Balam",
     capacity: "300 Guests",
     ac: true,
     description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
@@ -116,8 +109,7 @@ const hallsData = [
    {
     id: 8,
     image: sail,
-    title: "Marian",
-    location: "Coimbatore, Tamil Nadu",
+    title: "Marian Hall",
     capacity: "300 Guests",
     ac: true,
     description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
@@ -131,7 +123,6 @@ const hallsData = [
     id: 9,
     image: sail,
     title: "MCA AV",
-    location: "Coimbatore, Tamil Nadu",
     capacity: "300 Guests",
     ac: true,
     description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
@@ -144,8 +135,7 @@ const hallsData = [
    {
     id: 10,
     image: sail,
-    title: "SEQUIRERA",
-    location: "Coimbatore, Tamil Nadu",
+    title: "Sequirera",
     capacity: "300 Guests",
     ac: true,
     description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
@@ -159,7 +149,6 @@ const hallsData = [
     id: 11,
     image: sail,
     title: "TV.AV Hall",
-    location: "Coimbatore, Tamil Nadu",
     capacity: "300 Guests",
     ac: true,
     description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
@@ -182,7 +171,6 @@ const Browse = () => {
             key={hall.id}
             image={hall.image}
             title={hall.title}
-            location={hall.location}
             capacity={hall.capacity}
             ac={hall.ac}
             onViewAvailability={() => setSelectedHall(hall)}

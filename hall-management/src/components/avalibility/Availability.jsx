@@ -6,7 +6,6 @@ const Availability = ({ hallData, closeModal }) => {
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [nextDates, setNextDates] = useState([]);
 
-  // Fixed time slots
   const timeSlots = [
     "11:00 AM - 12:30 PM",
     "12:30 PM - 2:00 PM",
@@ -94,30 +93,24 @@ const Availability = ({ hallData, closeModal }) => {
         {/* Hall Information Section */}
         <div className="hall-info-section">
           <h2 className="hall-title">{hallData.title}</h2>
-          
-          <div className="location-info">
-            <span className="icon">📍</span>
-            <p>{hallData.location}</p>
-          </div>
 
           <div className="capacity-info">
             <span className="info-item">
-              <strong>👥 Capacity:</strong> {hallData.capacity}
+              <strong> Capacity:</strong> {hallData.capacity}
             </span>
-            <span className="info-item">
-              <strong>{hallData.ac ? "🌬️" : "🌤️"}</strong> {hallData.ac ? "AC" : "Non-AC"}
+            <span className="info-item" style={{ fontWeight: 600 }}>
+              {hallData.ac ? "AC" : "Non-AC"}
             </span>
           </div>
 
           <p className="hall-description">{hallData.description}</p>
 
-          {/* Amenities Section */}
           <div className="amenities-section">
             <h4>Amenities</h4>
             <div className="amenities-list">
               {hallData.amenities.map((amenity, index) => (
                 <span key={index} className="amenity-badge">
-                  ✓ {amenity}
+                  {amenity}
                 </span>
               ))}
             </div>

@@ -20,7 +20,7 @@
 }
 
 .hero-title{
-    background: linear-gradient(180deg, #00438a 0%, #00abe4 100%);
+    background: linear-gradient(180deg, #007bff 0%, #0056b3 100%);
     background-clip: text;
     margin: 0 auto;
     font-family: 'Degular', serif;
@@ -71,7 +71,7 @@
     border: 1px solid transparent;
     font-size: 0.9rem;
     padding: 0 25px;
-    background-color: #007bff;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
     border-radius: 20px;
     color: white;
     cursor: pointer;
@@ -81,7 +81,7 @@
 .search-button:hover{
     color: #007bff;
     border: 1px solid #007bff;
-    background-color: #ffffff;
+    background: linear-gradient(135deg, #f1f8ff 0%, #f1f8ff 100%);
     transform: translateY(-1px);
 }
 
@@ -149,6 +149,7 @@
     font-family: 'regular';
     color: #575757;
     margin: 0;
+    font-size: 1.1rem;
     transition: color 0.25s ease;
 }
 
@@ -165,8 +166,8 @@
 .tab-item {
     font-family: 'regular', sans-serif;
     background-color: #ffffff;
-    border: 1px solid rgba(0, 123, 255, 0.2);
-    color: rgba(17, 19, 24, 0.7);
+    border: 1px solid #007bff;
+    color: #007bff;
     padding: 8px 18px;
     border-radius: 8px;
     font-size: 0.9rem;
@@ -176,14 +177,14 @@
 }
 
 .tab-item:hover {
-    background: linear-gradient(135deg, #007bff 0%, #00bfff 100%);
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
     border-color: transparent;
     color: #ffffff;
 }
 
 .tab-item.active {
-    background: linear-gradient(135deg, #007bff 0%, #00bfff 100%);
-    border-color: transparent;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border-color: #007bff;
     color: #ffffff;
     box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
 }
