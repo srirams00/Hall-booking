@@ -4,7 +4,7 @@ import { FiLock } from 'react-icons/fi';
 import logo from '../../assets/sjcbanner.png';
 import './Login.css';
 
-const LoginPage = () => {
+const LoginPage = ({ onBackHome }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
@@ -15,6 +15,27 @@ const LoginPage = () => {
 
   return (
     <div className="login-page-container">
+      {/* Back button */}
+      <button 
+        onClick={onBackHome} 
+        style={{
+          position: "absolute",
+          top: "30px",
+          left: "30px",
+          background: "transparent",
+          border: "none",
+          color: "white",
+          fontSize: "1.1rem",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          fontFamily: "'regular', sans-serif"
+        }}
+      >
+        ← Back to Home
+      </button>
+
       <div className="login-content-wrapper">
         
         {/* Left Branding Content Column */}
