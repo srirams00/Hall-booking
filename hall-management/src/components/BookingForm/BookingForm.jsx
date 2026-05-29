@@ -14,7 +14,6 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
   });
 
   const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
 
   // Email validation regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -116,7 +115,6 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
     e.preventDefault();
 
     if (!validateForm()) {
-      setSubmitted(true);
       return;
     }
 
