@@ -13,7 +13,7 @@ const featuredHalls = [
     {
         id: 1,
         image: jubee,
-        title: "JUBILEE Building",
+        title: "Jubilee Building",
         capacity: "500 Guests",
         ac: true,
         description: "A magnificent grand hall perfect for large college events, conferences, and celebrations with modern infrastructure.",
@@ -27,7 +27,7 @@ const featuredHalls = [
     {
         id: 2,
         image: comAV,
-        title: "COMAV AUDITORIUM",
+        title: "ComAV Auditorium",
         capacity: "150 Guests",
         ac: true,
         description: "Intimate auditorium suitable for seminars, workshops, and small-scale events with excellent acoustics.",
@@ -39,7 +39,7 @@ const featuredHalls = [
     {
         id: 3,
         image: lawley,
-        title: "LAWLEY HALL",
+        title: "Lawley Hall",
         capacity: "1000 Guests",
         ac: false,
         description: "Spacious open-air venue ideal for outdoor festivals, cultural events, and large gatherings.",
@@ -52,7 +52,7 @@ const featuredHalls = [
     {
         id: 4,
         image: board_room,
-        title: "BOARD ROOM",
+        title: "Board Room",
         capacity: "300 Guests",
         ac: true,
         description: "Executive meeting space with conference facilities, perfect for corporate events and formal gatherings.",
