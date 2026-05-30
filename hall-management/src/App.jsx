@@ -6,8 +6,8 @@ import Home from "./pages/Home";
 function App() {
   return (
     <>
-      <LoginPage />
       <Adminlogin />
+      <LoginPage />
     </>
   )
 }
