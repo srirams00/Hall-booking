@@ -10,7 +10,9 @@ import lawley from "../../assets/halls/lawley.JPG";
 import board_room from "../../assets/halls/Board-Room.JPG";
 import sail from "../../assets/halls/sail.JPG";
 import toulouse from "../../assets/halls/toulouse.JPG";
-
+import marian from "../../assets/halls/marian-hall.JPG";
+import MCA from "../../assets/halls/MCA.JPG";
+import TV from "../../assets/halls/Tv-Av.JPG";
 
 const hallsData = [
   {
@@ -108,7 +110,7 @@ const hallsData = [
   },
    {
     id: 8,
-    image: sail,
+    image: marian,
     title: "Marian Hall",
     capacity: "300 Guests",
     ac: true,
@@ -121,7 +123,7 @@ const hallsData = [
   },
    {
     id: 9,
-    image: sail,
+    image: MCA,
     title: "MCA AV",
     capacity: "300 Guests",
     ac: true,
@@ -147,7 +149,7 @@ const hallsData = [
   },
   {
     id: 11,
-    image: sail,
+    image: TV,
     title: "TV.AV Hall",
     capacity: "300 Guests",
     ac: true,
