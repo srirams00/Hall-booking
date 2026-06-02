@@ -2,7 +2,7 @@ import "./Availability.css";
 import { useState, useEffect } from "react";
 import BookingForm from "../BookingForm/BookingForm";
 
-const Availability = ({ hallData, closeModal }) => {
+const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onViewChange }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [nextDates, setNextDates] = useState([]);
@@ -57,6 +57,16 @@ const Availability = ({ hallData, closeModal }) => {
   // Handle continue booking
   const handleContinueBooking = () => {
     if (selectedSlots.length === 0) return;
+    
+    if (!currentUser) {
+      alert("⚠️ Only logged-in faculty and staff members can request hall bookings. Please log in to proceed.");
+      if (onViewChange) {
+        onViewChange("login");
+      }
+      closeModal();
+      return;
+    }
+    
     setShowBookingForm(true);
   };
 
@@ -66,11 +76,14 @@ const Availability = ({ hallData, closeModal }) => {
   };
 
   // Handle booking success
-  const handleBookingSuccess = () => {
+  const handleBookingSuccess = (bookingObject) => {
     setShowBookingForm(false);
     setSelectedDate(null);
     setSelectedSlots([]);
     closeModal();
+    if (onSubmitBooking) {
+      onSubmitBooking(bookingObject);
+    }
   };
 
   return (
@@ -173,7 +186,7 @@ const Availability = ({ hallData, closeModal }) => {
               onClick={handleContinueBooking}
               disabled={selectedSlots.length === 0}
             >
-              Continue Booking
+              {currentUser ? "Continue Booking" : "Login to Book"}
             </button>
           </div>
         </div>

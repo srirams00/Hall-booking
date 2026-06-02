@@ -1,16 +1,34 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
 import { FiLock } from 'react-icons/fi';
 import logo from '../../assets/sjcbanner.png';
 import './adminlogin.css';
 
-const Adminlogin = ({ onBackHome }) => {
+const Adminlogin = ({ onBackHome, onAdminLoginSuccess }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const validAdmins = [
+    { username: 'principal', password: 'Adminsjc123', displayName: 'Fr. Principal' },
+    { username: 'deputy', password: 'Adminsjc123', displayName: 'Deputy Principal' }
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ userId, password });
+    setError('');
+
+    const matched = validAdmins.find(
+      a => a.username.toLowerCase() === userId.trim().toLowerCase() && a.password === password
+    );
+
+    if (matched) {
+      if (onAdminLoginSuccess) {
+        onAdminLoginSuccess(matched.displayName);
+      }
+    } else {
+      setError('Invalid Administrator Credentials. Access denied.');
+    }
   };
 
   return (
@@ -24,7 +42,7 @@ const Adminlogin = ({ onBackHome }) => {
           left: "30px",
           background: "transparent",
           border: "none",
-          color: "white",
+          color: "#007BFF",
           fontSize: "1.1rem",
           cursor: "pointer",
           display: "flex",
@@ -47,6 +65,7 @@ const Adminlogin = ({ onBackHome }) => {
         <div className="login-card-section">
           <div className="login-card">
             <h2>Administrator Login</h2>
+            {error && <div className="login-error-message">{error}</div>}
     
             <form onSubmit={handleSubmit} className="login-form">
               <div className="input-field-group">
