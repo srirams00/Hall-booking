@@ -1,8 +1,8 @@
 import "./Availability.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import BookingForm from "../BookingForm/BookingForm";
 
-const Availability = ({ hallData, closeModal }) => {
+const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onViewChange, bookings = [] }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [nextDates, setNextDates] = useState([]);
@@ -36,7 +36,18 @@ const Availability = ({ hallData, closeModal }) => {
     const bookedDate = hallData.bookedSlots.find(
       (b) => b.date === date
     );
-    return bookedDate ? bookedDate.slots.includes(slot) : false;
+    if (bookedDate && bookedDate.slots.includes(slot)) {
+      return true;
+    }
+
+    return bookings.some(
+      (b) =>
+        b.hallName.toLowerCase() === hallData.title.toLowerCase() &&
+        b.date === date &&
+        b.status === "Approved" &&
+        b.timeSlots &&
+        b.timeSlots.includes(slot)
+    );
   };
 
   const handleDateSelect = (date) => {
@@ -57,6 +68,16 @@ const Availability = ({ hallData, closeModal }) => {
   // Handle continue booking
   const handleContinueBooking = () => {
     if (selectedSlots.length === 0) return;
+    
+    if (!currentUser) {
+      alert("⚠️ Only logged-in faculty and staff members can request hall bookings. Please log in to proceed.");
+      if (onViewChange) {
+        onViewChange("login");
+      }
+      closeModal();
+      return;
+    }
+    
     setShowBookingForm(true);
   };
 
@@ -66,11 +87,14 @@ const Availability = ({ hallData, closeModal }) => {
   };
 
   // Handle booking success
-  const handleBookingSuccess = () => {
+  const handleBookingSuccess = (bookingObject) => {
     setShowBookingForm(false);
     setSelectedDate(null);
     setSelectedSlots([]);
     closeModal();
+    if (onSubmitBooking) {
+      onSubmitBooking(bookingObject);
+    }
   };
 
   return (
@@ -173,7 +197,7 @@ const Availability = ({ hallData, closeModal }) => {
               onClick={handleContinueBooking}
               disabled={selectedSlots.length === 0}
             >
-              Continue Booking
+              {currentUser ? "Continue Booking" : "Login to Book"}
             </button>
           </div>
         </div>
@@ -187,10 +211,11 @@ const Availability = ({ hallData, closeModal }) => {
           selectedSlots={selectedSlots}
           onClose={handleCloseBookingForm}
           onSuccess={handleBookingSuccess}
+          currentUser={currentUser}
         />
       )}
     </>
   );
 };
 
-export default Availability;
+export default React.memo(Availability);

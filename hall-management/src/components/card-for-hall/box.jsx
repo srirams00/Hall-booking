@@ -1,9 +1,10 @@
+import React from "react";
 import "./box.css";
 
 const Box = (props) => {
   return (
     <div className="browse-card">
-      <img src={props.image} alt={props.title} />
+      <img src={props.image} alt={props.title} loading="lazy" />
 
       <div className="card-content">
         <h3>{props.title}</h3>
@@ -25,4 +26,4 @@ const Box = (props) => {
   );
 };
 
-export default Box;
+export default React.memo(Box);

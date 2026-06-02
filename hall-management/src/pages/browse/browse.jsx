@@ -175,7 +175,7 @@ const hallsData = [
   },
 ];
 
-const Browse = () => {
+const Browse = ({ currentUser, onSubmitBooking, onViewChange, bookings }) => {
   const [selectedHall, setSelectedHall] = useState(null);
 
   return (
@@ -198,6 +198,10 @@ const Browse = () => {
         <Availability
           hallData={selectedHall}
           closeModal={() => setSelectedHall(null)}
+          onSubmitBooking={onSubmitBooking}
+          currentUser={currentUser}
+          onViewChange={onViewChange}
+          bookings={bookings}
         />
       )}
     </div>

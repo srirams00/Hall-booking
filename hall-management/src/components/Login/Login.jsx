@@ -1,20 +1,40 @@
-import React, { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { FaRegUser } from 'react-icons/fa';
-import { FiLock } from 'react-icons/fi';
+import { FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import React from 'react';
 import logo from '../../assets/sjcbanner.png';
 import './Login.css';
 
-const LoginPage = ({ onBackHome }) => {
+const LoginPage = ({ onBackHome, onLoginSuccess }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+
+  const validUsers = [
+    { username: 'silvest7', password: 'sjcpass123' },
+    { username: 'sriram', password: 'sjcpass123' }
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ userId, password });
+    setError('');
+
+    const matched = validUsers.find(
+      u => u.username.toLowerCase() === userId.trim().toLowerCase() && u.password === password
+    );
+
+    if (matched) {
+      if (onLoginSuccess) {
+        onLoginSuccess(matched.username, matched.password);
+      }
+    } else {
+      setError('Invalid User ID or Password. Access denied.');
+    }
   };
 
   return (
-    <div className="login-page-container">
+    <div className="login-page-container" onContextMenu={(e) => e.preventDefault()}>
       {/* Back button */}
       <button 
         onClick={onBackHome} 
@@ -24,7 +44,7 @@ const LoginPage = ({ onBackHome }) => {
           left: "30px",
           background: "transparent",
           border: "none",
-          color: "white",
+          color: "#007BFF",
           fontSize: "1.1rem",
           cursor: "pointer",
           display: "flex",
@@ -38,15 +58,14 @@ const LoginPage = ({ onBackHome }) => {
 
       <div className="login-content-wrapper">
         
-        {/* Left Branding Content Column */}
         <div className="branding-section">
           <img src={logo} alt="St. Joseph's College" className="branding-image" />
         </div>
 
-        {/* Right Modular Input Card Layout */}
         <div className="login-card-section">
           <div className="login-card">
             <h2>Welcome Back</h2>
+            {error && <div className="login-error-message">{error}</div>}
     
             <form onSubmit={handleSubmit} className="login-form">
               <div className="input-field-group">
@@ -60,15 +79,23 @@ const LoginPage = ({ onBackHome }) => {
                 <FaRegUser className="field-icon" />
               </div>
 
-              <div className="input-field-group">
+              <div className="input-field-group password-field-group">
                 <input 
-                  type="password" 
+                  type={showPassword ? 'text' : 'password'} 
                   placeholder="Password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required 
                 />
                 <FiLock className="field-icon" />
+                <button
+                  type="button"
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <FiEyeOff /> : <FiEye />}
+                </button>
               </div>
 
               <button type="submit" className="login-submit-btn">Login</button>
@@ -81,4 +108,4 @@ const LoginPage = ({ onBackHome }) => {
   );
 };
 
-export default LoginPage;
+export default React.memo(LoginPage);
