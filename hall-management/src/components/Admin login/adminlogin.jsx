@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
 import { FiLock } from 'react-icons/fi';
 import logo from '../../assets/sjcbanner.png';
@@ -24,7 +24,7 @@ const Adminlogin = ({ onBackHome }) => {
           left: "30px",
           background: "transparent",
           border: "none",
-          color: "white",
+          color: "#007BFF",
           fontSize: "1.1rem",
           cursor: "pointer",
           display: "flex",
