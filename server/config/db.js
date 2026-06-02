@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI || 'mongodb://sriram8794134_db_user:SrIrAm224466@ac-8tedfrd-shard-00-00.ex7fdun.mongodb.net:27017,ac-8tedfrd-shard-00-01.ex7fdun.mongodb.net:27017,ac-8tedfrd-shard-00-02.ex7fdun.mongodb.net:27017/hall_db?ssl=true&replicaSet=atlas-jpwsff-shard-0&authSource=admin&retryWrites=true&w=majority');
+    if (!process.env.MONGO_URI) {
+      throw new Error('MONGO_URI is not defined in the environment variables');
+    }
+    const conn = await mongoose.connect(process.env.MONGO_URI);
     console.log(`✓ MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`✗ MongoDB Connection Error: ${error.message}`);
