@@ -231,7 +231,7 @@ const allHallsData = [
     },
 ];
 
-const Home = ({ onViewChange, onSubmitBooking, currentUser }) => {
+const Home = ({ onViewChange, onSubmitBooking, currentUser, bookings }) => {
     const [selectedHall, setSelectedHall] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
@@ -378,6 +378,7 @@ const Home = ({ onViewChange, onSubmitBooking, currentUser }) => {
                   onSubmitBooking={onSubmitBooking}
                   currentUser={currentUser}
                   onViewChange={onViewChange}
+                  bookings={bookings}
                 />
             )}
         </div>

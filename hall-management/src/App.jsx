@@ -109,19 +109,23 @@ function App() {
   };
 
   // Fetch initial data from Express API with fallback
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const bookingsRes = await fetch(`${API_URL}/bookings`);
-        if (bookingsRes.ok) {
-          const data = await bookingsRes.json();
-          setBookings(data);
-        } else {
-          loadBookingsFallback();
-        }
-      } catch (err) {
+  const fetchBookings = async () => {
+    try {
+      const bookingsRes = await fetch(`${API_URL}/bookings`);
+      if (bookingsRes.ok) {
+        const data = await bookingsRes.json();
+        setBookings(data);
+      } else {
         loadBookingsFallback();
       }
+    } catch (err) {
+      loadBookingsFallback();
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchBookings();
 
       try {
         const usersRes = await fetch(`${API_URL}/users`);
@@ -150,6 +154,13 @@ function App() {
 
     fetchData();
   }, []);
+
+  // Refetch bookings when view changes to keep dashboards/availability fresh
+  useEffect(() => {
+    if (currentView !== "login" && currentView !== "admin") {
+      fetchBookings();
+    }
+  }, [currentView]);
 
   useEffect(() => {
     const handleLocationChange = () => {
@@ -185,7 +196,8 @@ function App() {
       });
 
       if (res.ok) {
-        // Sync directory lists from DB
+        // Sync directory lists from DB and fetch bookings
+        await fetchBookings();
         const usersRes = await fetch(`${API_URL}/users`);
         const historyRes = await fetch(`${API_URL}/users/history`);
         if (usersRes.ok) setUsers(await usersRes.json());
@@ -377,6 +389,7 @@ function App() {
           onViewChange={setCurrentView} 
           onSubmitBooking={handleNewBooking} 
           currentUser={currentUser}
+          bookings={bookings}
         />
       )}
       
@@ -385,6 +398,7 @@ function App() {
           currentUser={currentUser}
           onSubmitBooking={handleNewBooking} 
           onViewChange={setCurrentView}
+          bookings={bookings}
         />
       )}
 

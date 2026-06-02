@@ -175,7 +175,7 @@ const hallsData = [
   },
 ];
 
-const Browse = ({ currentUser, onSubmitBooking, onViewChange }) => {
+const Browse = ({ currentUser, onSubmitBooking, onViewChange, bookings }) => {
   const [selectedHall, setSelectedHall] = useState(null);
 
   return (
@@ -201,6 +201,7 @@ const Browse = ({ currentUser, onSubmitBooking, onViewChange }) => {
           onSubmitBooking={onSubmitBooking}
           currentUser={currentUser}
           onViewChange={onViewChange}
+          bookings={bookings}
         />
       )}
     </div>

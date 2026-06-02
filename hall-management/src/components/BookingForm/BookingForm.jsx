@@ -1,16 +1,51 @@
 import { useState } from 'react';
 import './BookingForm.css';
 
-const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess }) => {
+const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess, currentUser }) => {
+  const userDefaults = {
+    silvest: {
+      staffName: 'Silvest',
+      staffId: 'STF-107',
+      department: 'Information Technology',
+      emailId: 'silvest7@sjc.edu',
+      phoneNumber: '9876543210'
+    },
+    sriram: {
+      staffName: 'Sriram',
+      staffId: 'STF-108',
+      department: 'Information Technology',
+      emailId: 'sriram@sjc.edu',
+      phoneNumber: '9876543211'
+    }
+  };
+
   // Form State
-  const [formData, setFormData] = useState({
-    staffName: '',
-    staffId: '',
-    department: '',
-    emailId: '',
-    phoneNumber: '',
-    eventTitle: '',
-    expectedAudience: '',
+  const [formData, setFormData] = useState(() => {
+    const defaultData = {
+      staffName: '',
+      staffId: '',
+      department: '',
+      emailId: '',
+      phoneNumber: '',
+      eventTitle: '',
+      expectedAudience: '',
+    };
+    if (currentUser) {
+      const key = currentUser.toLowerCase();
+      if (userDefaults[key]) {
+        return {
+          ...defaultData,
+          ...userDefaults[key]
+        };
+      } else {
+        return {
+          ...defaultData,
+          staffName: currentUser,
+          emailId: `${currentUser.toLowerCase().replace(/\s+/g, '')}@sjc.edu`
+        };
+      }
+    }
+    return defaultData;
   });
 
   const [errors, setErrors] = useState({});

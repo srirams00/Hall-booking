@@ -2,13 +2,28 @@ import { useState } from "react";
 import "./UserDashboard.css";
 
 const UserDashboard = ({ currentUser, bookings, onBackHome }) => {
-  // Filter bookings belonging to current user (case-insensitive check)
-  const myBookings = bookings.filter(
-    (b) =>
-      b.staffInformation &&
-      b.staffInformation.name &&
-      b.staffInformation.name.toLowerCase() === (currentUser || "").toLowerCase()
-  );
+  // Filter bookings belonging to current user (robust case-insensitive checks)
+  const myBookings = bookings.filter((b) => {
+    if (!b.staffInformation || !b.staffInformation.name) return false;
+    const staffName = b.staffInformation.name.toLowerCase();
+    const currUser = (currentUser || "").toLowerCase();
+    
+    // Exact match of display name
+    if (staffName === currUser) return true;
+    
+    // Mapping matches (e.g. silvest7 username for silvest display name)
+    if (currUser === "silvest" && (staffName === "silvest7" || staffName.includes("silvest"))) return true;
+    if (currUser === "sriram" && (staffName === "sriram" || staffName.includes("sriram"))) return true;
+    
+    // Match by email if exists
+    if (b.staffInformation.emailId && typeof b.staffInformation.emailId === 'string') {
+      const staffEmail = b.staffInformation.emailId.toLowerCase();
+      if (currUser === "silvest" && (staffEmail.includes("silvest7") || staffEmail.includes("silvest"))) return true;
+      if (currUser === "sriram" && staffEmail.includes("sriram")) return true;
+    }
+
+    return false;
+  });
 
   // Compute status statistics
   const total = myBookings.length;

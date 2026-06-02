@@ -2,7 +2,7 @@ import "./Availability.css";
 import { useState, useEffect } from "react";
 import BookingForm from "../BookingForm/BookingForm";
 
-const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onViewChange }) => {
+const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onViewChange, bookings = [] }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [nextDates, setNextDates] = useState([]);
@@ -36,7 +36,18 @@ const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onVi
     const bookedDate = hallData.bookedSlots.find(
       (b) => b.date === date
     );
-    return bookedDate ? bookedDate.slots.includes(slot) : false;
+    if (bookedDate && bookedDate.slots.includes(slot)) {
+      return true;
+    }
+
+    return bookings.some(
+      (b) =>
+        b.hallName.toLowerCase() === hallData.title.toLowerCase() &&
+        b.date === date &&
+        b.status === "Approved" &&
+        b.timeSlots &&
+        b.timeSlots.includes(slot)
+    );
   };
 
   const handleDateSelect = (date) => {
@@ -200,6 +211,7 @@ const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onVi
           selectedSlots={selectedSlots}
           onClose={handleCloseBookingForm}
           onSuccess={handleBookingSuccess}
+          currentUser={currentUser}
         />
       )}
     </>
