@@ -1,7 +1,21 @@
+import { useState, useRef, useEffect } from 'react';
 import './Navbar.css';
 import logo from '../../assets/logo.png'
 
-const Navbar = ({ currentView, onViewChange }) => {
+const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     return (
          <nav className='navbar'>
                 <div className='nav-container'>
@@ -37,15 +51,36 @@ const Navbar = ({ currentView, onViewChange }) => {
                             </a>
                         </li>
                         <li><a href="#">About us</a></li>
-                        <li>
-                            <a 
-                                href="#" 
-                                className={`nav-login ${currentView === 'login' ? 'active' : ''}`}
-                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("login"); }}
-                            >
-                                Login
-                            </a>
-                        </li>
+                        {currentUser ? (
+                            <li className="nav-user-menu" ref={dropdownRef}>
+                                <button 
+                                    className="nav-user-btn" 
+                                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                                >
+                                    <span className="user-icon-placeholder"></span> {currentUser} ▾
+                                </button>
+                                {dropdownOpen && (
+                                    <ul className="nav-dropdown-menu">
+                                        <li onClick={() => { onViewChange("dashboard"); setDropdownOpen(false); }}>
+                                            <a>Dashboard</a>
+                                        </li>
+                                        <li onClick={() => { onLogout(); setDropdownOpen(false); }} className="dropdown-logout">
+                                            <a>Logout</a>
+                                        </li>
+                                    </ul>
+                                )}
+                            </li>
+                        ) : (
+                            <li>
+                                <a 
+                                    href="#" 
+                                    className={`nav-login ${currentView === 'login' ? 'active' : ''}`}
+                                    onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("login"); }}
+                                >
+                                    Login
+                                </a>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </nav>
