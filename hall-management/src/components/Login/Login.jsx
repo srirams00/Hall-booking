@@ -4,13 +4,31 @@ import { FiLock } from 'react-icons/fi';
 import logo from '../../assets/sjcbanner.png';
 import './Login.css';
 
-const LoginPage = ({ onBackHome }) => {
+const LoginPage = ({ onBackHome, onLoginSuccess }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const validUsers = [
+    { username: 'silvest7', password: 'sjcpass123' },
+    { username: 'sriram', password: 'sjcpass123' }
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ userId, password });
+    setError('');
+
+    const matched = validUsers.find(
+      u => u.username.toLowerCase() === userId.trim().toLowerCase() && u.password === password
+    );
+
+    if (matched) {
+      if (onLoginSuccess) {
+        onLoginSuccess(matched.username, matched.password);
+      }
+    } else {
+      setError('Invalid User ID or Password. Access denied.');
+    }
   };
 
   return (
@@ -45,6 +63,7 @@ const LoginPage = ({ onBackHome }) => {
         <div className="login-card-section">
           <div className="login-card">
             <h2>Welcome Back</h2>
+            {error && <div className="login-error-message">{error}</div>}
     
             <form onSubmit={handleSubmit} className="login-form">
               <div className="input-field-group">

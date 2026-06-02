@@ -160,7 +160,7 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
     setErrors({});
 
     if (onSuccess) {
-      onSuccess();
+      onSuccess(bookingObject);
     }
   };
 
