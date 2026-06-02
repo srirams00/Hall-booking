@@ -1,11 +1,15 @@
 import './Navbar.css';
 import logo from '../../assets/logo.png'
 
-const Navbar = () => {
+const Navbar = ({ currentView, onViewChange }) => {
     return (
          <nav className='navbar'>
                 <div className='nav-container'>
-                    <div className='nav-logo'>
+                    <div 
+                        className='nav-logo' 
+                        onClick={() => onViewChange && onViewChange("home")}
+                        style={{ cursor: 'pointer' }}
+                    >
                         <img src={logo} alt="" className='nav-image'/>
                         <div className='nav-name'>
                             <h4 className='nav-title'>St. Joseph's College (Autonomous)</h4>
@@ -14,12 +18,34 @@ const Navbar = () => {
                     </div>
                     
                     <ul className='nav-links'>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Browse Venues</a></li>
+                        <li>
+                            <a 
+                                href="#" 
+                                className={currentView === 'home' ? 'active' : ''} 
+                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("home"); }}
+                            >
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a 
+                                href="#" 
+                                className={currentView === 'browse' ? 'active' : ''} 
+                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("browse"); }}
+                            >
+                                Browse Venues
+                            </a>
+                        </li>
                         <li><a href="#">About us</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#" className='nav-login'>Login</a></li>
-                        <li><a href="#" className='nav-signup'>Sign up</a></li>
+                        <li>
+                            <a 
+                                href="#" 
+                                className={`nav-login ${currentView === 'login' ? 'active' : ''}`}
+                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("login"); }}
+                            >
+                                Login
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
