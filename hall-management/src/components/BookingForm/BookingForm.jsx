@@ -2,43 +2,15 @@ import { useState } from 'react';
 import './BookingForm.css';
 
 const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess, currentUser }) => {
-  const userDefaults = {
-    moderator: {
-      staffName: 'Moderator',
-      staffId: 'STF-MOD-001',
-      department: 'Staff',
-      emailId: 'moderator@sjc.edu',
-      phoneNumber: '9876543212'
-    }
-  };
-
   // Form State
-  const [formData, setFormData] = useState(() => {
-    const defaultData = {
-      staffName: '',
-      staffId: '',
-      department: '',
-      emailId: '',
-      phoneNumber: '',
-      eventTitle: '',
-      expectedAudience: '',
-    };
-    if (currentUser) {
-      const key = currentUser.toLowerCase();
-      if (userDefaults[key]) {
-        return {
-          ...defaultData,
-          ...userDefaults[key]
-        };
-      } else {
-        return {
-          ...defaultData,
-          staffName: currentUser,
-          emailId: `${currentUser.toLowerCase().replace(/\s+/g, '')}@sjc.edu`
-        };
-      }
-    }
-    return defaultData;
+  const [formData, setFormData] = useState({
+    staffName: '',
+    staffId: '',
+    department: '',
+    emailId: '',
+    phoneNumber: '',
+    eventTitle: '',
+    expectedAudience: '',
   });
 
   const [errors, setErrors] = useState({});
