@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./AdminDashboard.css";
 import logo from "../assets/logo.png";
+import { jsPDF } from "jspdf";
 import jubee from "../assets/halls/jubilee.JPG";
 import comAV from "../assets/halls/comAV.JPG";
 import lawley from "../assets/halls/lawley.JPG";
@@ -29,6 +30,11 @@ const AdminDashboard = ({
   const [showRejectReasonFor, setShowRejectReasonFor] = useState(null); // bookingId
   const [rejectionReasonText, setRejectionReasonText] = useState("");
   const [selectedBookingDetails, setSelectedBookingDetails] = useState(null);
+
+  // Report States
+  const today = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(String(today.getMonth() + 1).padStart(2, "0"));
+  const [selectedYear, setSelectedYear] = useState(String(today.getFullYear()));
 
   // Add Hall States
   const [showAddHallModal, setShowAddHallModal] = useState(false);
@@ -131,6 +137,247 @@ const AdminDashboard = ({
     }
   };
 
+  // Monthly Report Calculations
+  const monthlyBookings = bookings.filter((b) => {
+    if (!b.date) return false;
+    const parts = b.date.split("-");
+    if (parts.length < 2) return false;
+    return parts[0] === selectedYear && parts[1] === selectedMonth;
+  });
+
+  const totalBookingsCount = monthlyBookings.length;
+  const approvedBookingsCount = monthlyBookings.filter((b) => b.status === "Approved").length;
+  const pendingBookingsCount = monthlyBookings.filter((b) => b.status === "Pending").length;
+  const rejectedBookingsCount = monthlyBookings.filter((b) => b.status === "Rejected").length;
+
+  // Most and Least Used Halls calculations
+  let mostUsedHallName = "N/A";
+  let leastUsedHallName = "N/A";
+  let maxCount = -1;
+  let minCount = Infinity;
+  const hallCounts = {};
+
+  // Pre-fill with dynamic halls list
+  halls.forEach((h) => {
+    hallCounts[h.title] = 0;
+  });
+
+  // Calculate approved counts
+  monthlyBookings
+    .filter((b) => b.status === "Approved")
+    .forEach((b) => {
+      hallCounts[b.hallName] = (hallCounts[b.hallName] || 0) + 1;
+    });
+
+  const hallKeys = Object.keys(hallCounts);
+  if (hallKeys.length > 0 && monthlyBookings.filter(b => b.status === "Approved").length > 0) {
+    hallKeys.forEach((name) => {
+      const count = hallCounts[name];
+      if (count > maxCount) {
+        maxCount = count;
+        mostUsedHallName = name;
+      }
+      if (count < minCount) {
+        minCount = count;
+        leastUsedHallName = name;
+      }
+    });
+  }
+
+  // Peak Booking Time Slots
+  let peakBookingTime = "N/A";
+  let maxSlotCount = 0;
+  const slotCounts = {};
+  monthlyBookings.forEach((b) => {
+    if (b.timeSlots) {
+      b.timeSlots.forEach((slot) => {
+        slotCounts[slot] = (slotCounts[slot] || 0) + 1;
+      });
+    }
+  });
+  Object.keys(slotCounts).forEach((slot) => {
+    if (slotCounts[slot] > maxSlotCount) {
+      maxSlotCount = slotCounts[slot];
+      peakBookingTime = slot;
+    }
+  });
+
+  const downloadPDFReport = () => {
+    const doc = new jsPDF();
+    
+    // Theme colors
+    const primaryColor = "#1e293b"; // Slate Dark
+    const accentColor = "#3b82f6"; // Blue
+    const textColor = "#0f172a";
+    const lightGrey = "#f8fafc";
+    const borderGrey = "#cbd5e1";
+    
+    const monthNames = {
+      "01": "January", "02": "February", "03": "March", "04": "April",
+      "05": "May", "06": "June", "07": "July", "08": "August",
+      "09": "September", "10": "October", "11": "November", "12": "December"
+    };
+    
+    const reportMonthName = monthNames[selectedMonth] || "Selected Month";
+    
+    // Header
+    doc.setFillColor(primaryColor);
+    doc.rect(0, 0, 210, 42, "F");
+    
+    doc.setTextColor("#ffffff");
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(20);
+    doc.text("St. Joseph's College (Autonomous)", 15, 18);
+    
+    doc.setFont("Helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor("#94a3b8");
+    doc.text("Administrative Resource & Venue Allocation Portal", 15, 26);
+    doc.text("CONFIDENTIAL REPORT", 15, 34);
+    
+    doc.setFontSize(11);
+    doc.setFont("Helvetica", "bold");
+    doc.setTextColor("#ffffff");
+    doc.text(`Monthly Bookings Analysis: ${reportMonthName} ${selectedYear}`, 195, 22, { align: "right" });
+    
+    // Statistics Section
+    doc.setTextColor(primaryColor);
+    doc.setFontSize(13);
+    doc.setFont("Helvetica", "bold");
+    doc.text("1. Monthly Allocation Performance Summary", 15, 54);
+    doc.setDrawColor(borderGrey);
+    doc.line(15, 56, 195, 56);
+    
+    doc.setFillColor(lightGrey);
+    doc.rect(15, 62, 180, 52, "F");
+    doc.rect(15, 62, 180, 52, "S");
+    
+    doc.setFontSize(10);
+    doc.setFont("Helvetica", "normal");
+    doc.setTextColor(textColor);
+    
+    // Stats Columns
+    doc.text(`Total Requested Events:    ${totalBookingsCount}`, 22, 74);
+    doc.text(`Approved Events:            ${approvedBookingsCount}`, 22, 82);
+    doc.text(`Pending Actions:            ${pendingBookingsCount}`, 22, 90);
+    doc.text(`Rejected Applications:       ${rejectedBookingsCount}`, 22, 98);
+    
+    doc.text(`Most Booked Venue:   ${mostUsedHallName} (${maxCount > 0 ? maxCount : 0} Allocations)`, 110, 74);
+    doc.text(`Least Booked Venue:  ${leastUsedHallName} (${minCount !== Infinity && minCount > 0 ? minCount : 0} Allocations)`, 110, 82);
+    doc.text(`Peak Usage Window:   ${peakBookingTime}`, 110, 90);
+    doc.text(`Generated Date:        ${new Date().toLocaleString()}`, 110, 98);
+    
+    // Table Section
+    doc.setTextColor(primaryColor);
+    doc.setFontSize(13);
+    doc.setFont("Helvetica", "bold");
+    doc.text("2. Event Allocation Logs", 15, 128);
+    doc.line(15, 130, 195, 130);
+    
+    const headers = ["ID", "Faculty Member", "Venue / Hall", "Date", "Booking Window", "Status"];
+    const widths = [22, 35, 42, 23, 40, 18];
+    const startX = 15;
+    let startY = 138;
+    
+    // Draw Header Row
+    doc.setFillColor(primaryColor);
+    doc.rect(startX, startY, 180, 8, "F");
+    doc.setTextColor("#ffffff");
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(8.5);
+    
+    let currentX = startX;
+    headers.forEach((h, i) => {
+      doc.text(h, currentX + 2, startY + 5.5);
+      currentX += widths[i];
+    });
+    
+    startY += 8;
+    
+    // Draw Data Rows
+    doc.setFont("Helvetica", "normal");
+    doc.setTextColor(textColor);
+    
+    if (monthlyBookings.length === 0) {
+      doc.setFillColor("#ffffff");
+      doc.rect(startX, startY, 180, 10, "F");
+      doc.rect(startX, startY, 180, 10, "S");
+      doc.setFont("Helvetica", "italic");
+      doc.text("No bookings found for the selected month.", 20, startY + 6.5);
+    } else {
+      monthlyBookings.forEach((b, index) => {
+        if (startY > 265) {
+          doc.addPage();
+          startY = 20;
+          
+          // Draw header row on new page
+          doc.setFillColor(primaryColor);
+          doc.rect(startX, startY, 180, 8, "F");
+          doc.setTextColor("#ffffff");
+          doc.setFont("Helvetica", "bold");
+          currentX = startX;
+          headers.forEach((h, i) => {
+            doc.text(h, currentX + 2, startY + 5.5);
+            currentX += widths[i];
+          });
+          startY += 8;
+          doc.setFont("Helvetica", "normal");
+          doc.setTextColor(textColor);
+        }
+        
+        if (index % 2 === 0) {
+          doc.setFillColor("#f1f5f9");
+          doc.rect(startX, startY, 180, 8, "F");
+        }
+        
+        const fName = b.staffInformation?.name || "N/A";
+        const truncatedFaculty = fName.length > 17 ? fName.substring(0, 15) + "..." : fName;
+        const truncatedHall = b.hallName.length > 22 ? b.hallName.substring(0, 20) + "..." : b.hallName;
+        
+        const row = [
+          b.id,
+          truncatedFaculty,
+          truncatedHall,
+          b.date,
+          b.timeSlots?.[0] || "N/A",
+          b.status
+        ];
+        
+        currentX = startX;
+        row.forEach((cellVal, colIdx) => {
+          if (colIdx === 5) {
+            if (cellVal === "Approved") doc.setTextColor("#047857"); // Green
+            else if (cellVal === "Rejected") doc.setTextColor("#b91c1c"); // Red
+            else doc.setTextColor("#b45309"); // Yellow
+            doc.setFont("Helvetica", "bold");
+          } else {
+            doc.setTextColor(textColor);
+            doc.setFont("Helvetica", "normal");
+          }
+          doc.text(String(cellVal), currentX + 2, startY + 5.5);
+          currentX += widths[colIdx];
+        });
+        
+        startY += 8;
+      });
+    }
+    
+    // Page Numbers Footer
+    const pages = doc.internal.getNumberOfPages();
+    for (let p = 1; p <= pages; p++) {
+      doc.setPage(p);
+      doc.setDrawColor(borderGrey);
+      doc.line(15, 280, 195, 280);
+      doc.setFontSize(8);
+      doc.setTextColor("#64748b");
+      doc.setFont("Helvetica", "normal");
+      doc.text("St. Joseph's College (Autonomous) - Confidential Booking Report", 15, 286);
+      doc.text(`Page ${p} of ${pages}`, 195, 286, { align: "right" });
+    }
+    
+    doc.save(`Hall_Allocation_Report_${reportMonthName}_${selectedYear}.pdf`);
+  };
+
   // Calculate statistics
   const pendingRequests = bookings.filter((b) => b.status === "Pending").length;
   const approvedBookings = bookings.filter((b) => b.status === "Approved").length;
@@ -222,6 +469,12 @@ const AdminDashboard = ({
             onClick={() => setActiveTab("halls")}
           >
              Manage Campus Venues ({halls.length})
+          </button>
+          <button
+            className={`tab-nav-btn ${activeTab === "reports" ? "active" : ""}`}
+            onClick={() => setActiveTab("reports")}
+          >
+             Analytics & Reports
           </button>
         </div>
 
@@ -488,6 +741,174 @@ const AdminDashboard = ({
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* TAB 4: ANALYTICS & REPORTS */}
+          {activeTab === "reports" && (
+            <div className="admin-tab-section animate-fade-in">
+              <div className="reports-tab-header">
+                <div className="header-left">
+                  <h3 className="section-title">Monthly Analytics & Booking Reports</h3>
+                  <p className="section-subtitle">Generate campus venue usage statistics and download PDF logs</p>
+                </div>
+                <div className="reports-filters">
+                  <div className="filter-group">
+                    <label htmlFor="report-month">Month:</label>
+                    <select
+                      id="report-month"
+                      value={selectedMonth}
+                      onChange={(e) => setSelectedMonth(e.target.value)}
+                    >
+                      <option value="01">January</option>
+                      <option value="02">February</option>
+                      <option value="03">March</option>
+                      <option value="04">April</option>
+                      <option value="05">May</option>
+                      <option value="06">June</option>
+                      <option value="07">July</option>
+                      <option value="08">August</option>
+                      <option value="09">September</option>
+                      <option value="10">October</option>
+                      <option value="11">November</option>
+                      <option value="12">December</option>
+                    </select>
+                  </div>
+                  <div className="filter-group">
+                    <label htmlFor="report-year">Year:</label>
+                    <select
+                      id="report-year"
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(e.target.value)}
+                    >
+                      <option value="2025">2025</option>
+                      <option value="2026">2026</option>
+                      <option value="2027">2027</option>
+                    </select>
+                  </div>
+                  <button className="download-report-btn" onClick={downloadPDFReport}>
+                    📥 Download PDF Report
+                  </button>
+                </div>
+              </div>
+
+              {/* Monthly Stats Summary Cards */}
+              <div className="reports-stats-grid">
+                <div className="report-stat-card total">
+                  <div className="stat-card-icon-bg">📊</div>
+                  <div className="stat-card-header">Total Bookings</div>
+                  <div className="stat-card-value">{totalBookingsCount}</div>
+                  <div className="stat-card-footer">
+                    <span>Approved: <strong>{approvedBookingsCount}</strong></span>
+                    <span>Pending: <strong>{pendingBookingsCount}</strong></span>
+                    <span>Rejected: <strong>{rejectedBookingsCount}</strong></span>
+                  </div>
+                </div>
+                <div className="report-stat-card most-used">
+                  <div className="stat-card-icon-bg">🔥</div>
+                  <div className="stat-card-header">Most Used Venue</div>
+                  <div className="stat-card-value">{mostUsedHallName}</div>
+                  <div className="stat-card-footer">
+                    <span>{maxCount > 0 ? `${maxCount} approved allocations` : "No bookings approved"}</span>
+                  </div>
+                </div>
+                <div className="report-stat-card least-used">
+                  <div className="stat-card-icon-bg">❄️</div>
+                  <div className="stat-card-header">Least Used Venue</div>
+                  <div className="stat-card-value">{leastUsedHallName}</div>
+                  <div className="stat-card-footer">
+                    <span>{minCount !== Infinity && minCount > 0 ? `${minCount} approved allocations` : "No bookings approved"}</span>
+                  </div>
+                </div>
+                <div className="report-stat-card peak-time">
+                  <div className="stat-card-icon-bg">⏰</div>
+                  <div className="stat-card-header">Peak Usage Slot</div>
+                  <div className="stat-card-value">{peakBookingTime}</div>
+                  <div className="stat-card-footer">
+                    <span>Most frequent booking timing</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Monthly Event List Table */}
+              <div className="reports-table-section">
+                <h4 className="sub-section-title">Event Allocation Records for Selected Month</h4>
+                {monthlyBookings.length === 0 ? (
+                  <div className="admin-empty-state">No bookings found for the selected period.</div>
+                ) : (
+                  <div className="table-responsive">
+                    <table className="admin-data-table">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Venue / Hall</th>
+                          <th>Applicant Details</th>
+                          <th>Event Description</th>
+                          <th>Date & Slots</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {monthlyBookings.map((b) => (
+                          <tr key={b.id} onClick={() => setSelectedBookingDetails(b)} className="clickable-row">
+                            <td>
+                              <span className="monospace-tag">{b.id}</span>
+                            </td>
+                            <td>
+                              <strong className="hall-name-label">{b.hallName}</strong>
+                            </td>
+                            <td>
+                              {b.staffInformation ? (
+                                <div className="details-col">
+                                  <span className="p-name"><strong>{b.staffInformation.name}</strong></span>
+                                  <span className="p-desc">ID: {b.staffInformation.staffId}</span>
+                                  <span className="p-desc">Dept: {b.staffInformation.department}</span>
+                                  <span className="p-desc">{b.staffInformation.emailId}</span>
+                                </div>
+                              ) : (
+                                "N/A"
+                              )}
+                            </td>
+                            <td>
+                              {b.eventInformation ? (
+                                <div className="details-col">
+                                  <span className="event-title-span">"{b.eventInformation.title}"</span>
+                                  <span className="p-desc">Audience: {b.eventInformation.expectedAudience}</span>
+                                </div>
+                              ) : (
+                                "N/A"
+                              )}
+                            </td>
+                            <td>
+                              <div className="date-slots-col">
+                                <span className="booking-date-value">
+                                  {new Date(b.date).toLocaleDateString("en-US", {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
+                                  })}
+                                </span>
+                                <div className="slots-wrapper-admin">
+                                  {b.timeSlots && b.timeSlots.map((slot, idx) => (
+                                    <span key={idx} className="slot-pill">
+                                      {slot}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <span className={`status-badge-admin ${b.status.toLowerCase()}`}>
+                                {b.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

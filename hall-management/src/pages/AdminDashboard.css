@@ -991,3 +991,215 @@
   border-color: #007bff;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
+
+/* Analytics & Reports Tab Styling */
+.reports-tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(0, 123, 255, 0.1);
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.reports-tab-header .header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.section-subtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.reports-filters {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.reports-filters .filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reports-filters label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.reports-filters select {
+  font-family: 'regular', sans-serif;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  background-color: #ffffff;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reports-filters select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.download-report-btn {
+  font-family: 'regular', sans-serif;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+.download-report-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+}
+
+.download-report-btn:active {
+  transform: translateY(0);
+}
+
+/* Reports Statistics Grid */
+.reports-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.report-stat-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  min-height: 120px;
+}
+
+.report-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.stat-card-icon-bg {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 2.2rem;
+  opacity: 0.15;
+  user-select: none;
+}
+
+.stat-card-header {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.stat-card-value {
+  font-family: 'degular', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 5px 0 12px 0;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.report-stat-card.total .stat-card-value {
+  font-size: 2rem;
+  color: #2563eb;
+}
+
+.stat-card-footer {
+  font-size: 0.75rem;
+  color: #64748b;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stat-card-footer span {
+  display: inline-block;
+}
+
+/* Reports Table Section */
+.reports-table-section {
+  margin-top: 35px;
+}
+
+.sub-section-title {
+  font-family: 'degular', sans-serif;
+  font-size: 1.1rem;
+  color: #1e293b;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* Animation */
+.animate-fade-in {
+  animation: fadeIn 0.35s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsiveness for Reports Tab */
+@media (max-width: 1200px) {
+  .reports-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .reports-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .reports-tab-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .reports-filters {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .download-report-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
