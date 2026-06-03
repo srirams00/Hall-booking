@@ -13,6 +13,7 @@ const AdminDashboard = ({
 }) => {
   const [activeTab, setActiveTab] = useState("bookings"); // "bookings" or "users"
   const [showRejectReasonFor, setShowRejectReasonFor] = useState(null); // bookingId
+  const [rejectionReasonText, setRejectionReasonText] = useState("");
 
   // Calculate statistics
   const pendingRequests = bookings.filter((b) => b.status === "Pending").length;
@@ -20,12 +21,19 @@ const AdminDashboard = ({
   const totalUsers = users.length;
 
   const handleRejectClick = (bookingId) => {
-    setShowRejectReasonFor(showRejectReasonFor === bookingId ? null : bookingId);
+    if (showRejectReasonFor === bookingId) {
+      setShowRejectReasonFor(null);
+      setRejectionReasonText("");
+    } else {
+      setShowRejectReasonFor(bookingId);
+      setRejectionReasonText("");
+    }
   };
 
   const submitRejection = (bookingId, reason) => {
     onUpdateBookingStatus(bookingId, "Rejected", reason);
     setShowRejectReasonFor(null);
+    setRejectionReasonText("");
   };
 
   const confirmUserDeletion = (userId, userName) => {
@@ -179,22 +187,34 @@ const AdminDashboard = ({
                                     ✗ Reject
                                   </button>
                                   {showRejectReasonFor === b.id && (
-                                    <div className="rejection-reasons-dropdown">
-                                      <p className="reject-dropdown-header">Select Rejection Reason:</p>
-                                      <button
-                                        onClick={() =>
-                                          submitRejection(b.id, "Hall Not Available / Conflict")
-                                        }
-                                      >
-                                         Hall Not Available
-                                      </button>
-                                      <button
-                                        onClick={() =>
-                                          submitRejection(b.id, "Requirements Not Met / Low Priority")
-                                        }
-                                      >
-                                         Requirements Not Met
-                                      </button>
+                                    <div className="rejection-reasons-dropdown custom-rejection-box">
+                                      <p className="reject-dropdown-header">Rejection Description:</p>
+                                      <textarea
+                                        className="reject-reason-input"
+                                        placeholder="Enter rejection reason..."
+                                        value={rejectionReasonText}
+                                        onChange={(e) => setRejectionReasonText(e.target.value)}
+                                        rows={3}
+                                      />
+                                      <div className="reject-dropdown-actions">
+                                        <button
+                                          className="confirm-reject-btn"
+                                          onClick={() =>
+                                            submitRejection(b.id, rejectionReasonText.trim() || "Rejected by Administrator")
+                                          }
+                                        >
+                                          Reject
+                                        </button>
+                                        <button
+                                          className="cancel-reject-btn"
+                                          onClick={() => {
+                                            setShowRejectReasonFor(null);
+                                            setRejectionReasonText("");
+                                          }}
+                                        >
+                                          Cancel
+                                        </button>
+                                      </div>
                                     </div>
                                   )}
                                 </div>

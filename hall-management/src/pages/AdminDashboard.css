@@ -440,3 +440,66 @@
     height: auto;
   }
 }
+
+.rejection-reasons-dropdown.custom-rejection-box {
+  min-width: 250px;
+  padding: 12px;
+}
+
+.reject-reason-input {
+  font-family: 'regular', sans-serif;
+  width: 90%;
+  padding: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-top: 4px;
+}
+
+.reject-reason-input:focus {
+  border-color: #ef4444;
+}
+
+.reject-dropdown-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+  width: 90%;
+}
+
+.confirm-reject-btn {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+  padding: 6px 12px !important;
+  font-size: 0.8rem !important;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.confirm-reject-btn:hover {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+.cancel-reject-btn {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  padding: 6px 12px !important;
+  font-size: 0.8rem !important;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.cancel-reject-btn:hover {
+  background-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
