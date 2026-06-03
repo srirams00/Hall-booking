@@ -235,6 +235,43 @@ const AdminDashboard = ({
     peakTime: peakBookingTime
   } = stats;
 
+  const reportCardsConfig = [
+    {
+      key: "total",
+      icon: "📊",
+      header: "Total Bookings",
+      value: totalBookingsCount,
+      footer: (
+        <>
+          <span>Approved: <strong>{approvedBookingsCount}</strong></span>
+          <span>Pending: <strong>{pendingBookingsCount}</strong></span>
+          <span>Rejected: <strong>{rejectedBookingsCount}</strong></span>
+        </>
+      )
+    },
+    {
+      key: "most-used",
+      icon: "🔥",
+      header: "Most Used Venue",
+      value: mostUsedHallName,
+      footer: <span>{maxCount > 0 ? `${maxCount} approved allocations` : "No bookings approved"}</span>
+    },
+    {
+      key: "least-used",
+      icon: "❄️",
+      header: "Least Used Venue",
+      value: leastUsedHallName,
+      footer: <span>{minCount !== Infinity && minCount > 0 ? `${minCount} approved allocations` : "No bookings approved"}</span>
+    },
+    {
+      key: "peak-time",
+      icon: "⏰",
+      header: "Peak Usage Slot",
+      value: peakBookingTime,
+      footer: <span>Most frequent booking timing</span>
+    }
+  ];
+
   const downloadPDFReport = () => {
     const doc = new jsPDF();
     
@@ -827,40 +864,14 @@ const AdminDashboard = ({
 
               {/* Monthly Stats Summary Cards */}
               <div className="reports-stats-grid">
-                <div className="report-stat-card total">
-                  <div className="stat-card-icon-bg">📊</div>
-                  <div className="stat-card-header">Total Bookings</div>
-                  <div className="stat-card-value">{totalBookingsCount}</div>
-                  <div className="stat-card-footer">
-                    <span>Approved: <strong>{approvedBookingsCount}</strong></span>
-                    <span>Pending: <strong>{pendingBookingsCount}</strong></span>
-                    <span>Rejected: <strong>{rejectedBookingsCount}</strong></span>
+                {reportCardsConfig.map((card) => (
+                  <div key={card.key} className={`report-stat-card ${card.key}`}>
+                    <div className="stat-card-icon-bg">{card.icon}</div>
+                    <div className="stat-card-header">{card.header}</div>
+                    <div className="stat-card-value">{card.value}</div>
+                    <div className="stat-card-footer">{card.footer}</div>
                   </div>
-                </div>
-                <div className="report-stat-card most-used">
-                  <div className="stat-card-icon-bg">🔥</div>
-                  <div className="stat-card-header">Most Used Venue</div>
-                  <div className="stat-card-value">{mostUsedHallName}</div>
-                  <div className="stat-card-footer">
-                    <span>{maxCount > 0 ? `${maxCount} approved allocations` : "No bookings approved"}</span>
-                  </div>
-                </div>
-                <div className="report-stat-card least-used">
-                  <div className="stat-card-icon-bg">❄️</div>
-                  <div className="stat-card-header">Least Used Venue</div>
-                  <div className="stat-card-value">{leastUsedHallName}</div>
-                  <div className="stat-card-footer">
-                    <span>{minCount !== Infinity && minCount > 0 ? `${minCount} approved allocations` : "No bookings approved"}</span>
-                  </div>
-                </div>
-                <div className="report-stat-card peak-time">
-                  <div className="stat-card-icon-bg">⏰</div>
-                  <div className="stat-card-header">Peak Usage Slot</div>
-                  <div className="stat-card-value">{peakBookingTime}</div>
-                  <div className="stat-card-footer">
-                    <span>Most frequent booking timing</span>
-                  </div>
-                </div>
+                ))}
               </div>
 
               {/* Monthly Event List Table */}
