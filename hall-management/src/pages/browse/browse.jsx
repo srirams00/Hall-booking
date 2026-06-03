@@ -175,20 +175,43 @@ const hallsData = [
   },
 ];
 
-const Browse = ({ currentUser, onSubmitBooking, onViewChange, bookings }) => {
+const imageMap = {
+  "jubilee": jubee,
+  "comAV": comAV,
+  "lawley": lawley,
+  "board_room": board_room,
+  "sail": sail,
+  "toulouse": toulouse,
+  "marian": marian,
+  "MCA": MCA,
+  "TV": TV
+};
+
+const getHallImage = (imageName) => {
+  if (!imageName) return sail;
+  if (imageMap[imageName]) return imageMap[imageName];
+  return imageName;
+};
+
+const Browse = ({ currentUser, onSubmitBooking, onViewChange, bookings, halls = [] }) => {
   const [selectedHall, setSelectedHall] = useState(null);
+
+  const activeHalls = halls.length > 0 ? halls : hallsData;
 
   return (
     <div className="browse-container">
       <div className="venue-grid">
-        {hallsData.map((hall) => (
+        {activeHalls.map((hall) => (
           <Box
-            key={hall.id}
-            image={hall.image}
+            key={hall._id || hall.id}
+            image={getHallImage(hall.image)}
             title={hall.title}
             capacity={hall.capacity}
             ac={hall.ac}
-            onViewAvailability={() => setSelectedHall(hall)}
+            onViewAvailability={() => setSelectedHall({
+              ...hall,
+              image: getHallImage(hall.image)
+            })}
           />
         ))}
       </div>

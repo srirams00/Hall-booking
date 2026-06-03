@@ -231,11 +231,32 @@ const allHallsData = [
     },
 ];
 
-const Home = ({ onViewChange, onSubmitBooking, currentUser, bookings }) => {
+const imageMap = {
+    "jubilee": jubee,
+    "comAV": comAV,
+    "lawley": lawley,
+    "board_room": board_room,
+    "sail": sail,
+    "toulouse": toulouse,
+    "marian": marian,
+    "MCA": MCA,
+    "TV": TV
+};
+
+const getHallImage = (imageName) => {
+    if (!imageName) return sail;
+    if (imageMap[imageName]) return imageMap[imageName];
+    return imageName;
+};
+
+const Home = ({ onViewChange, onSubmitBooking, currentUser, bookings, halls = [] }) => {
     const [selectedHall, setSelectedHall] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
     const searchWrapperRef = useRef(null);
+
+    // If halls is empty (e.g. offline/loading), use featuredHalls fallback list
+    const activeHalls = halls.length > 0 ? halls : featuredHalls;
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -251,7 +272,7 @@ const Home = ({ onViewChange, onSubmitBooking, currentUser, bookings }) => {
 
     const filteredHalls = searchQuery.trim() === ''
         ? []
-        : allHallsData.filter(hall => 
+        : activeHalls.filter(hall => 
             hall.title.toLowerCase().includes(searchQuery.toLowerCase())
           );
 
@@ -289,7 +310,11 @@ const Home = ({ onViewChange, onSubmitBooking, currentUser, bookings }) => {
                                 className="search-button"
                                 onClick={() => {
                                     if (filteredHalls.length > 0) {
-                                        setSelectedHall(filteredHalls[0]);
+                                        const hall = filteredHalls[0];
+                                        setSelectedHall({
+                                            ...hall,
+                                            image: getHallImage(hall.image)
+                                        });
                                         setSearchQuery('');
                                         setShowDropdown(false);
                                     }
@@ -303,16 +328,19 @@ const Home = ({ onViewChange, onSubmitBooking, currentUser, bookings }) => {
                                 {filteredHalls.length > 0 ? (
                                     filteredHalls.map((hall) => (
                                         <div 
-                                            key={hall.id} 
+                                            key={hall._id || hall.id} 
                                             className="search-result-item"
                                             onClick={() => {
-                                                setSelectedHall(hall);
+                                                setSelectedHall({
+                                                    ...hall,
+                                                    image: getHallImage(hall.image)
+                                                });
                                                 setSearchQuery('');
                                                 setShowDropdown(false);
                                             }}
                                         >
                                             <div className="result-info">
-                                                <img src={hall.image} alt={hall.title} className="result-image" />
+                                                <img src={getHallImage(hall.image)} alt={hall.title} className="result-image" />
                                                 <div className="result-details">
                                                     <span className="result-title">{hall.title}</span>
                                                     <span className="result-capacity">{hall.capacity}</span>
@@ -334,7 +362,7 @@ const Home = ({ onViewChange, onSubmitBooking, currentUser, bookings }) => {
 
                     <div className="stats">
                         <div className="stat-card">
-                            <h3>12</h3>
+                            <h3>{activeHalls.length}</h3>
                             <p>Venues</p>
                         </div>
                     </div>
@@ -358,14 +386,17 @@ const Home = ({ onViewChange, onSubmitBooking, currentUser, bookings }) => {
                 </div>
                 
                 <div className="venue-grid-home">
-                    {featuredHalls.map((hall) => (
+                    {activeHalls.slice(0, 4).map((hall) => (
                         <Box
-                          key={hall.id}
-                          image={hall.image}
+                          key={hall._id || hall.id}
+                          image={getHallImage(hall.image)}
                           title={hall.title}
                           capacity={hall.capacity}
                           ac={hall.ac}
-                          onViewAvailability={() => setSelectedHall(hall)}
+                          onViewAvailability={() => setSelectedHall({
+                              ...hall,
+                              image: getHallImage(hall.image)
+                          })}
                         />
                     ))}
                 </div>

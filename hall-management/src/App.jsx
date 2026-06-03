@@ -28,6 +28,7 @@ function App() {
   const [bookings, setBookings] = useState([]);
   const [users, setUsers] = useState([]);
   const [loginHistory, setLoginHistory] = useState([]);
+  const [halls, setHalls] = useState([]);
 
   // Loaders with local storage fallbacks
   const loadBookingsFallback = () => {
@@ -80,6 +81,126 @@ function App() {
     }
   };
 
+  const loadHallsFallback = () => {
+    const saved = localStorage.getItem("hall_halls");
+    if (saved) {
+      setHalls(JSON.parse(saved));
+    } else {
+      const initial = [
+        {
+          _id: "hall-1",
+          title: "Jubilee Building",
+          capacity: "500 Guests",
+          ac: true,
+          description: "A magnificent grand hall perfect for large college events, conferences, and celebrations with modern infrastructure.",
+          amenities: ["Projector", "Sound System", "AC", "chair Access"],
+          image: "jubilee"
+        },
+        {
+          _id: "hall-2",
+          title: "ComAV Auditorium",
+          capacity: "150 Guests",
+          ac: true,
+          description: "Intimate auditorium suitable for seminars, workshops, and small-scale events with excellent acoustics.",
+          amenities: ["Projector", "Sound System", "AC", "Stage"],
+          image: "comAV"
+        },
+        {
+          _id: "hall-3",
+          title: "Lawley Hall",
+          capacity: "1000 Guests",
+          ac: false,
+          description: "Spacious open-air venue ideal for outdoor festivals, cultural events, and large gatherings.",
+          amenities: ["Sound System", "Stage", "Open-Air"],
+          image: "lawley"
+        },
+        {
+          _id: "hall-4",
+          title: "Board Room",
+          capacity: "300 Guests",
+          ac: true,
+          description: "Executive meeting space with conference facilities, perfect for corporate events and formal gatherings.",
+          amenities: ["WiFi", "Projector", "Sound System", "AC", "Conference Table"],
+          image: "board_room"
+        },
+        {
+          _id: "hall-5",
+          title: "Sail Auditorium",
+          capacity: "300 Guests",
+          ac: true,
+          description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
+          amenities: ["Projector", "Sound System", "AC", "Display Boards"],
+          image: "sail"
+        },
+        {
+          _id: "hall-6",
+          title: "Toulouse Arena",
+          capacity: "2000 Guests",
+          ac: false,
+          description: "Massive outdoor arena designed for mega events, concerts, and large-scale sports events.",
+          amenities: ["Sound System", "Stage", "Open-Air", "Seating"],
+          image: "toulouse"
+        },
+        {
+          _id: "hall-7",
+          title: "Balam",
+          capacity: "300 Guests",
+          ac: true,
+          description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
+          amenities: ["Projector", "Sound System", "AC", "Display Boards"],
+          image: "sail"
+        },
+        {
+          _id: "hall-8",
+          title: "Marian Hall",
+          capacity: "300 Guests",
+          ac: true,
+          description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
+          amenities: ["Projector", "Sound System", "AC", "Display Boards"],
+          image: "marian"
+        },
+        {
+          _id: "hall-9",
+          title: "MCA AV",
+          capacity: "300 Guests",
+          ac: true,
+          description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
+          amenities: ["Projector", "Sound System", "AC", "Display Boards"],
+          image: "MCA"
+        },
+        {
+          _id: "hall-10",
+          title: "Sequirera",
+          capacity: "300 Guests",
+          ac: true,
+          description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
+          amenities: ["Projector", "Sound System", "AC", "Display Boards"],
+          image: "sail"
+        },
+        {
+          _id: "hall-11",
+          title: "TV.AV Hall",
+          capacity: "300 Guests",
+          ac: true,
+          description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
+          amenities: ["Projector", "Sound System", "AC", "Display Boards"],
+          image: "TV"
+        },
+        {
+          _id: "hall-12",
+          title: "KPJ Hall",
+          capacity: "300 Guests",
+          ac: true,
+          description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
+          amenities: ["Projector", "Sound System", "AC", "Display Boards"],
+          image: "sail"
+        }
+      ];
+      setHalls(initial);
+      localStorage.setItem("hall_halls", JSON.stringify(initial));
+    }
+  };
+
   const loadUsersFallback = () => {
     const saved = localStorage.getItem("hall_users");
     if (saved) {
@@ -124,9 +245,25 @@ function App() {
     }
   };
 
+  const fetchHalls = async () => {
+    try {
+      const hallsRes = await fetch(`${API_URL}/halls`);
+      if (hallsRes.ok) {
+        const data = await hallsRes.json();
+        setHalls(data);
+        localStorage.setItem("hall_halls", JSON.stringify(data));
+      } else {
+        loadHallsFallback();
+      }
+    } catch (err) {
+      loadHallsFallback();
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       await fetchBookings();
+      await fetchHalls();
 
       try {
         const usersRes = await fetch(`${API_URL}/users`);
@@ -390,6 +527,96 @@ function App() {
     localStorage.setItem("hall_users", JSON.stringify(updated));
   };
 
+  const handleAddHall = async (hallData) => {
+    try {
+      const res = await fetch(`${API_URL}/halls`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(hallData)
+      });
+      if (res.ok) {
+        const newHall = await res.json();
+        setHalls(prev => {
+          const updated = [...prev, newHall];
+          localStorage.setItem("hall_halls", JSON.stringify(updated));
+          return updated;
+        });
+      } else {
+        addHallFallback(hallData);
+      }
+    } catch (err) {
+      addHallFallback(hallData);
+    }
+  };
+
+  const addHallFallback = (hallData) => {
+    const newHall = {
+      ...hallData,
+      _id: "hall-" + Math.random().toString(36).substr(2, 6).toUpperCase()
+    };
+    const updated = [...halls, newHall];
+    setHalls(updated);
+    localStorage.setItem("hall_halls", JSON.stringify(updated));
+  };
+
+  const handleEditHall = async (hallId, updatedFields) => {
+    try {
+      const res = await fetch(`${API_URL}/halls/${hallId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedFields)
+      });
+      if (res.ok) {
+        const updatedHall = await res.json();
+        setHalls(prev => {
+          const updated = prev.map(h => h._id === hallId ? updatedHall : h);
+          localStorage.setItem("hall_halls", JSON.stringify(updated));
+          return updated;
+        });
+      } else {
+        editHallFallback(hallId, updatedFields);
+      }
+    } catch (err) {
+      editHallFallback(hallId, updatedFields);
+    }
+  };
+
+  const editHallFallback = (hallId, updatedFields) => {
+    const updated = halls.map(h => {
+      if (h._id === hallId) {
+        return { ...h, ...updatedFields };
+      }
+      return h;
+    });
+    setHalls(updated);
+    localStorage.setItem("hall_halls", JSON.stringify(updated));
+  };
+
+  const handleDeleteHall = async (hallId) => {
+    try {
+      const res = await fetch(`${API_URL}/halls/${hallId}`, {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        setHalls(prev => {
+          const updated = prev.filter(h => h._id !== hallId);
+          localStorage.setItem("hall_halls", JSON.stringify(updated));
+          return updated;
+        });
+      } else {
+        deleteHallFallback(hallId);
+      }
+    } catch (err) {
+      deleteHallFallback(hallId);
+    }
+  };
+
+  const deleteHallFallback = (hallId) => {
+    const updated = halls.filter(h => h._id !== hallId);
+    setHalls(updated);
+    localStorage.setItem("hall_halls", JSON.stringify(updated));
+  };
+
   return (
     <div className="app-container">
       {currentView !== "admin" && currentView !== "admin-dashboard" && currentView !== "login" && (
@@ -410,7 +637,7 @@ function App() {
           onAdminLoginSuccess={handleAdminLogin}
         />
       )}
-
+ 
       {currentView === "admin-dashboard" && (
         <AdminDashboard 
           currentAdmin={currentAdmin}
@@ -420,6 +647,14 @@ function App() {
           onLogout={handleLogout}
           onUpdateBookingStatus={handleUpdateBookingStatus}
           onDeleteUser={handleDeleteUser}
+          halls={halls}
+          onAddHall={handleAddHall}
+          onEditHall={handleEditHall}
+          onDeleteHall={handleDeleteHall}
+          onBackHome={() => {
+            window.history.pushState({}, "", "/");
+            setCurrentView("home");
+          }}
         />
       )}
       
@@ -438,6 +673,7 @@ function App() {
           onSubmitBooking={handleNewBooking} 
           currentUser={currentUser}
           bookings={bookings}
+          halls={halls}
         />
       )}
       
@@ -447,6 +683,7 @@ function App() {
           onSubmitBooking={handleNewBooking} 
           onViewChange={setCurrentView}
           bookings={bookings}
+          halls={halls}
         />
       )}
 
