@@ -8,25 +8,17 @@ const LoginPage = ({ onBackHome, onLoginSuccess }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
-  const validUsers = [
-    { username: 'staff', password: 'sjcstaff123' }
-  ];
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    const matched = validUsers.find(
-      u => u.username.toLowerCase() === userId.trim().toLowerCase() && u.password === password
-    );
-
-    if (matched) {
-      if (onLoginSuccess) {
-        onLoginSuccess(matched.username, matched.password);
+    try {
+      const success = await onLoginSuccess(userId.trim(), password);
+      if (!success) {
+        setError('Invalid User ID or Password. Access denied.');
       }
-    } else {
-      setError('Invalid User ID or Password. Access denied.');
+    } catch (err) {
+      setError('Connection error. Please try again.');
     }
   };
 

@@ -8,25 +8,17 @@ const Adminlogin = ({ onBackHome, onAdminLoginSuccess }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
-  const validAdmins = [
-    { username: 'principal', password: 'Adminsjc123', displayName: 'Fr. Principal' }
-  ];
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    const matched = validAdmins.find(
-      a => a.username.toLowerCase() === userId.trim().toLowerCase() && a.password === password
-    );
-
-    if (matched) {
-      if (onAdminLoginSuccess) {
-        onAdminLoginSuccess(matched.displayName);
+    try {
+      const success = await onAdminLoginSuccess(userId.trim(), password);
+      if (!success) {
+        setError('Invalid Administrator Credentials. Access denied.');
       }
-    } else {
-      setError('Invalid Administrator Credentials. Access denied.');
+    } catch (err) {
+      setError('Connection error. Please try again.');
     }
   };
 

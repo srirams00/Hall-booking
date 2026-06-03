@@ -1,8 +1,10 @@
 import "./UserDashboard.css";
 
 const UserDashboard = ({ currentUser, bookings, onBackHome }) => {
-  // Filter bookings belonging to current user (robust case-insensitive checks)
+  // Filter bookings: if logged in as Moderator (assistant), show all bookings. Otherwise filter by user.
   const myBookings = bookings.filter((b) => {
+    if (currentUser && currentUser.toLowerCase() === "moderator") return true;
+
     if (!b.staffInformation || !b.staffInformation.name) return false;
     const staffName = b.staffInformation.name.toLowerCase();
     const currUser = (currentUser || "").toLowerCase();
