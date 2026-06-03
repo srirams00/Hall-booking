@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import "./AdminDashboard.css";
 import logo from "../assets/logo.png";
 import { jsPDF } from "jspdf";
+import { FaChartBar, FaFire, FaSnowflake, FaClock } from "react-icons/fa";
 import jubee from "../assets/halls/jubilee.JPG";
 import comAV from "../assets/halls/comAV.JPG";
 import lawley from "../assets/halls/lawley.JPG";
@@ -238,7 +239,7 @@ const AdminDashboard = ({
   const reportCardsConfig = [
     {
       key: "total",
-      icon: "📊",
+      icon: <FaChartBar />,
       header: "Total Bookings",
       value: totalBookingsCount,
       footer: (
@@ -251,21 +252,21 @@ const AdminDashboard = ({
     },
     {
       key: "most-used",
-      icon: "🔥",
+      icon: <FaFire />,
       header: "Most Used Venue",
       value: mostUsedHallName,
       footer: <span>{maxCount > 0 ? `${maxCount} approved allocations` : "No bookings approved"}</span>
     },
     {
       key: "least-used",
-      icon: "❄️",
+      icon: <FaSnowflake />,
       header: "Least Used Venue",
       value: leastUsedHallName,
       footer: <span>{minCount !== Infinity && minCount > 0 ? `${minCount} approved allocations` : "No bookings approved"}</span>
     },
     {
       key: "peak-time",
-      icon: "⏰",
+      icon: <FaClock />,
       header: "Peak Usage Slot",
       value: peakBookingTime,
       footer: <span>Most frequent booking timing</span>
