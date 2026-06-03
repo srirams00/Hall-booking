@@ -36,7 +36,13 @@ const Navbar = ({ currentView, onViewChange }) => {
                                 Browse Venues
                             </a>
                         </li>
-                        <li><a href="#">About us</a></li>
+                        <li><a href="#"
+                                className={currentView === 'about' ? 'active' : ''} 
+                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("about"); }}
+                            >
+                                About us
+                            </a>
+                        </li>
                         <li>
                             <a 
                                 href="#" 
@@ -45,6 +51,7 @@ const Navbar = ({ currentView, onViewChange }) => {
                             >
                                 Login
                             </a>
+                            
                         </li>
                     </ul>
                 </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import About from "./pages/About";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home";
 import Browse from "./pages/browse/browse";
@@ -47,6 +48,9 @@ function App() {
       
       {currentView === "browse" && (
         <Browse />
+      )}
+      {currentView === "about" && (
+        <About onViewChange={setCurrentView} />
       )}
     </div>
   );
