@@ -30,6 +30,7 @@
 
 /* Modal Container */
 .booking-modal-container {
+  font-family: 'regular', sans-serif;
   background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
   border-radius: 16px;
   box-shadow: 0 20px 60px rgba(0, 51, 102, 0.15);
@@ -87,6 +88,7 @@
 }
 
 .booking-header h2 {
+  font-family: 'Degular', sans-serif;
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 8px 0;
@@ -126,6 +128,7 @@
 }
 
 .summary-card h3 {
+  font-family: 'Degular', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #007bff;
@@ -236,6 +239,7 @@
 }
 
 .section-title {
+  font-family: 'Degular', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #007bff;
@@ -290,7 +294,7 @@
   border: 1px solid #c5d9ff;
   border-radius: 8px;
   font-size: 14px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'regular', sans-serif;
   transition: all 0.3s ease;
   background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
   color: #003366;
@@ -309,6 +313,13 @@
 
 .form-input-booking:hover:not(:focus) {
   border-color: #a8c8ff;
+}
+
+.form-input-booking.readonly-input {
+  background-color: #f1f5f9;
+  color: #64748b;
+  cursor: not-allowed;
+  border-color: #cbd5e1;
 }
 
 .form-input-booking.error {

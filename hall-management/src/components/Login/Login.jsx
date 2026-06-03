@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
 import { FiLock } from 'react-icons/fi';
 import logo from '../../assets/sjcbanner.png';
 import './Login.css';
 
-const LoginPage = ({ onBackHome }) => {
+const LoginPage = ({ onBackHome, onLoginSuccess }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleSubmit = (e) => {
+  const [error, setError] = useState('');
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ userId, password });
+    setError('');
+
+    try {
+      const success = await onLoginSuccess(userId.trim(), password);
+      if (!success) {
+        setError('Invalid User ID or Password. Access denied.');
+      }
+    } catch (err) {
+      setError('Connection error. Please try again.');
+    }
   };
 
   return (
@@ -24,7 +33,7 @@ const LoginPage = ({ onBackHome }) => {
           left: "30px",
           background: "transparent",
           border: "none",
-          color: "white",
+          color: "#007BFF",
           fontSize: "1.1rem",
           cursor: "pointer",
           display: "flex",
@@ -38,15 +47,14 @@ const LoginPage = ({ onBackHome }) => {
 
       <div className="login-content-wrapper">
         
-        {/* Left Branding Content Column */}
         <div className="branding-section">
           <img src={logo} alt="St. Joseph's College" className="branding-image" />
         </div>
 
-        {/* Right Modular Input Card Layout */}
         <div className="login-card-section">
           <div className="login-card">
             <h2>Welcome Back</h2>
+            {error && <div className="login-error-message">{error}</div>}
     
             <form onSubmit={handleSubmit} className="login-form">
               <div className="input-field-group">

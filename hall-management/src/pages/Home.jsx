@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import './Home.css';
 import Box from '../components/card-for-hall/box';
 import Availability from '../components/avalibility/Availability';
@@ -8,12 +8,17 @@ import jubee from '../assets/halls/jubilee.JPG';
 import comAV from '../assets/halls/comAV.JPG';
 import lawley from '../assets/halls/lawley.JPG';
 import board_room from '../assets/halls/Board-Room.JPG';
+import sail from '../assets/halls/sail.JPG';
+import toulouse from '../assets/halls/toulouse.JPG';
+import marian from '../assets/halls/marian-hall.JPG';
+import MCA from '../assets/halls/MCA.JPG';
+import TV from '../assets/halls/Tv-Av.JPG';
 
 const featuredHalls = [
     {
         id: 1,
         image: jubee,
-        title: "JUBILEE Building",
+        title: "Jubilee Building",
         capacity: "500 Guests",
         ac: true,
         description: "A magnificent grand hall perfect for large college events, conferences, and celebrations with modern infrastructure.",
@@ -27,7 +32,7 @@ const featuredHalls = [
     {
         id: 2,
         image: comAV,
-        title: "COMAV AUDITORIUM",
+        title: "ComAV Auditorium",
         capacity: "150 Guests",
         ac: true,
         description: "Intimate auditorium suitable for seminars, workshops, and small-scale events with excellent acoustics.",
@@ -39,7 +44,7 @@ const featuredHalls = [
     {
         id: 3,
         image: lawley,
-        title: "LAWLEY HALL",
+        title: "Lawley Hall",
         capacity: "1000 Guests",
         ac: false,
         description: "Spacious open-air venue ideal for outdoor festivals, cultural events, and large gatherings.",
@@ -52,7 +57,7 @@ const featuredHalls = [
     {
         id: 4,
         image: board_room,
-        title: "BOARD ROOM",
+        title: "Board Room",
         capacity: "300 Guests",
         ac: true,
         description: "Executive meeting space with conference facilities, perfect for corporate events and formal gatherings.",
@@ -65,8 +70,52 @@ const featuredHalls = [
     },
 ];
 
-const Home = ({ onViewChange }) => {
+const imageMap = {
+    "jubilee": jubee,
+    "comAV": comAV,
+    "lawley": lawley,
+    "board_room": board_room,
+    "sail": sail,
+    "toulouse": toulouse,
+    "marian": marian,
+    "MCA": MCA,
+    "TV": TV
+};
+
+const getHallImage = (imageName) => {
+    if (!imageName) return sail;
+    if (imageMap[imageName]) return imageMap[imageName];
+    return imageName;
+};
+
+const Home = ({ onViewChange, onSubmitBooking, currentUser, bookings, halls = [] }) => {
     const [selectedHall, setSelectedHall] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [showDropdown, setShowDropdown] = useState(false);
+    const searchWrapperRef = useRef(null);
+
+    // If halls is empty (e.g. offline/loading), use featuredHalls fallback list
+    const activeHalls = halls.length > 0 ? halls : featuredHalls;
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchWrapperRef.current && !searchWrapperRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const filteredHalls = useMemo(() => {
+        return searchQuery.trim() === ''
+            ? []
+            : activeHalls.filter(hall => 
+                hall.title.toLowerCase().includes(searchQuery.toLowerCase())
+              );
+    }, [searchQuery, activeHalls]);
 
     return(
         <div className="home-page">
@@ -85,18 +134,76 @@ const Home = ({ onViewChange }) => {
                         Request and manage campus venues with real-time availability tracking.
                     </p>
 
-                    <div className="search-container">
-                        <input 
-                        type="text" 
-                        placeholder="Search for Auditorium, or Lab..." 
-                        className="search-input"
-                        />
-                        <button className="search-button">Search</button>
+                    <div className="search-wrapper" ref={searchWrapperRef}>
+                        <div className="search-container">
+                            <input 
+                                type="text" 
+                                placeholder="Search for Auditorium, or Lab..." 
+                                className="search-input"
+                                value={searchQuery}
+                                onChange={(e) => {
+                                    setSearchQuery(e.target.value);
+                                    setShowDropdown(true);
+                                }}
+                                onFocus={() => setShowDropdown(true)}
+                            />
+                            <button 
+                                className="search-button"
+                                onClick={() => {
+                                    if (filteredHalls.length > 0) {
+                                        const hall = filteredHalls[0];
+                                        setSelectedHall({
+                                            ...hall,
+                                            image: getHallImage(hall.image)
+                                        });
+                                        setSearchQuery('');
+                                        setShowDropdown(false);
+                                    }
+                                }}
+                            >
+                                Search
+                            </button>
+                        </div>
+                        {showDropdown && searchQuery.trim() !== '' && (
+                            <div className="search-dropdown">
+                                {filteredHalls.length > 0 ? (
+                                    filteredHalls.map((hall) => (
+                                        <div 
+                                            key={hall._id || hall.id} 
+                                            className="search-result-item"
+                                            onClick={() => {
+                                                setSelectedHall({
+                                                    ...hall,
+                                                    image: getHallImage(hall.image)
+                                                });
+                                                setSearchQuery('');
+                                                setShowDropdown(false);
+                                            }}
+                                        >
+                                            <div className="result-info">
+                                                <img src={getHallImage(hall.image)} alt={hall.title} className="result-image" />
+                                                <div className="result-details">
+                                                    <span className="result-title">{hall.title}</span>
+                                                    <span className="result-capacity">{hall.capacity}</span>
+                                                </div>
+                                            </div>
+                                            <div className="result-badges">
+                                                <span className={`result-badge ${hall.ac ? 'ac' : 'non-ac'}`}>
+                                                    {hall.ac ? 'AC' : 'Non-AC'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="no-results">No halls found matching "{searchQuery}"</div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     <div className="stats">
                         <div className="stat-card">
-                            <h3>12</h3>
+                            <h3>{activeHalls.length}</h3>
                             <p>Venues</p>
                         </div>
                     </div>
@@ -120,14 +227,17 @@ const Home = ({ onViewChange }) => {
                 </div>
                 
                 <div className="venue-grid-home">
-                    {featuredHalls.map((hall) => (
+                    {activeHalls.slice(0, 4).map((hall) => (
                         <Box
-                          key={hall.id}
-                          image={hall.image}
+                          key={hall._id || hall.id}
+                          image={getHallImage(hall.image)}
                           title={hall.title}
                           capacity={hall.capacity}
                           ac={hall.ac}
-                          onViewAvailability={() => setSelectedHall(hall)}
+                          onViewAvailability={() => setSelectedHall({
+                              ...hall,
+                              image: getHallImage(hall.image)
+                          })}
                         />
                     ))}
                 </div>
@@ -137,6 +247,10 @@ const Home = ({ onViewChange }) => {
                 <Availability
                   hallData={selectedHall}
                   closeModal={() => setSelectedHall(null)}
+                  onSubmitBooking={onSubmitBooking}
+                  currentUser={currentUser}
+                  onViewChange={onViewChange}
+                  bookings={bookings}
                 />
             )}
         </div>

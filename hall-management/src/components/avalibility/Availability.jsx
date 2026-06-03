@@ -1,19 +1,23 @@
 import "./Availability.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import BookingForm from "../BookingForm/BookingForm";
 
-const Availability = ({ hallData, closeModal }) => {
+const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onViewChange, bookings = [] }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [nextDates, setNextDates] = useState([]);
   const [showBookingForm, setShowBookingForm] = useState(false);
 
-  const timeSlots = [
-    "11:00 AM - 12:30 PM",
-    "12:30 PM - 2:00 PM",
-    "2:00 PM - 4:00 PM",
-    "4:00 PM - 6:00 PM",
-  ];
+  // Custom time dropdown selectors state
+  const [fromHour, setFromHour] = useState("09");
+  const [fromMinute, setFromMinute] = useState("30");
+  const [fromAmpm, setFromAmpm] = useState("AM");
+  const [toHour, setToHour] = useState("12");
+  const [toMinute, setToMinute] = useState("30");
+  const [toAmpm, setToAmpm] = useState("PM");
+
+  const hoursList = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+  const minutesList = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"];
 
   useEffect(() => {
     const dates = [];
@@ -25,38 +29,139 @@ const Availability = ({ hallData, closeModal }) => {
       dates.push(date);
     }
     
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNextDates(dates);
     if (dates.length > 0) {
       setSelectedDate(dates[0].toISOString().split("T")[0]);
     }
   }, []);
 
-  const isSlotBooked = (date, slot) => {
-    const bookedDate = hallData.bookedSlots.find(
+  // Update selectedSlots based on custom From/To dropdown changes
+  useEffect(() => {
+    const formattedFrom = `${fromHour}:${fromMinute} ${fromAmpm}`;
+    const formattedTo = `${toHour}:${toMinute} ${toAmpm}`;
+    setSelectedSlots([`${formattedFrom} - ${formattedTo}`]);
+  }, [fromHour, fromMinute, fromAmpm, toHour, toMinute, toAmpm]);
+
+  // Helper: Parse "HH:MM AM/PM" or 24h "HH:MM" into total minutes from midnight
+  const parseTimeToMinutes = (timeStr) => {
+    if (!timeStr) return 0;
+    const cleaned = timeStr.trim();
+    
+    // Check 12-hour AM/PM format
+    const match12 = cleaned.match(/^(\d+):(\d+)\s*(AM|PM)$/i);
+    if (match12) {
+      let hours = parseInt(match12[1], 10);
+      const minutes = parseInt(match12[2], 10);
+      const ampm = match12[3].toUpperCase();
+      if (ampm === 'PM' && hours < 12) hours += 12;
+      if (ampm === 'AM' && hours === 12) hours = 0;
+      return hours * 60 + minutes;
+    }
+    
+    // Check 24-hour format
+    const match24 = cleaned.match(/^(\d+):(\d+)$/);
+    if (match24) {
+      const hours = parseInt(match24[1], 10);
+      const minutes = parseInt(match24[2], 10);
+      return hours * 60 + minutes;
+    }
+    return 0;
+  };
+
+  // Helper: Find conflicting booking (returns booking metadata or null)
+  const getConflictingBooking = (date, fromTime, toTime) => {
+    if (!fromTime || !toTime) return null;
+    
+    const startB = parseTimeToMinutes(fromTime);
+    const endB = parseTimeToMinutes(toTime);
+    
+    if (startB >= endB) return null;
+
+    // 1. Check hardcoded static slots
+    const bookedDate = hallData.bookedSlots && hallData.bookedSlots.find(
       (b) => b.date === date
     );
-    return bookedDate ? bookedDate.slots.includes(slot) : false;
+    if (bookedDate && bookedDate.slots) {
+      for (const slot of bookedDate.slots) {
+        const parts = slot.split(" - ");
+        if (parts.length === 2) {
+          const sA = parseTimeToMinutes(parts[0]);
+          const eA = parseTimeToMinutes(parts[1]);
+          if (sA < endB && startB < eA) {
+            return {
+              date,
+              timeRange: slot,
+              type: "Static Block"
+            };
+          }
+        }
+      }
+    }
+
+    // 2. Check dynamic database bookings that are Approved
+    let conflict = null;
+    bookings.forEach((b) => {
+      if (
+        b.hallName.toLowerCase() === hallData.title.toLowerCase() &&
+        b.date === date &&
+        b.status === "Approved" &&
+        b.timeSlots
+      ) {
+        for (const slot of b.timeSlots) {
+          const parts = slot.split(" - ");
+          if (parts.length === 2) {
+            const sA = parseTimeToMinutes(parts[0]);
+            const eA = parseTimeToMinutes(parts[1]);
+            if (sA < endB && startB < eA) {
+              conflict = {
+                date: b.date,
+                timeRange: slot,
+                type: "Approved Booking"
+              };
+            }
+          }
+        }
+      }
+    });
+    return conflict;
   };
 
   const handleDateSelect = (date) => {
     const dateStr = date.toISOString().split("T")[0];
     setSelectedDate(dateStr);
-    setSelectedSlots([]); // Reset slots when date changes
   };
 
-  // Handle slot selection/deselection
-  const handleSlotSelect = (slot) => {
-    if (isSlotBooked(selectedDate, slot)) return;
+  const fromTimeStr = `${fromHour}:${fromMinute} ${fromAmpm}`;
+  const toTimeStr = `${toHour}:${toMinute} ${toAmpm}`;
+  const startMins = parseTimeToMinutes(fromTimeStr);
+  const endMins = parseTimeToMinutes(toTimeStr);
+  const isTimeOrderInvalid = startMins >= endMins;
 
-    setSelectedSlots((prev) =>
-      prev.includes(slot) ? prev.filter((s) => s !== slot) : [...prev, slot]
-    );
-  };
+  // Retrieve any conflict for selected date & custom range
+  const conflict = useMemo(() => getConflictingBooking(selectedDate, fromTimeStr, toTimeStr), [selectedDate, fromTimeStr, toTimeStr, bookings, hallData]);
+  const isBooked = !!conflict;
 
   // Handle continue booking
   const handleContinueBooking = () => {
-    if (selectedSlots.length === 0) return;
+    if (isTimeOrderInvalid) {
+      alert("⚠️ Invalid time selection: 'From' time must be before 'To' time.");
+      return;
+    }
+
+    if (isBooked) {
+      alert(`Already a user has booked on time and date.\n\nConflict Details:\nDate: ${conflict.date}\nTime Range: ${conflict.timeRange}`);
+      return;
+    }
+    
+    if (!currentUser) {
+      alert("⚠️ Only logged-in faculty and staff members can request hall bookings. Please log in to proceed.");
+      if (onViewChange) {
+        onViewChange("login");
+      }
+      closeModal();
+      return;
+    }
+    
     setShowBookingForm(true);
   };
 
@@ -66,11 +171,14 @@ const Availability = ({ hallData, closeModal }) => {
   };
 
   // Handle booking success
-  const handleBookingSuccess = () => {
+  const handleBookingSuccess = (bookingObject) => {
     setShowBookingForm(false);
     setSelectedDate(null);
     setSelectedSlots([]);
     closeModal();
+    if (onSubmitBooking) {
+      onSubmitBooking(bookingObject);
+    }
   };
 
   return (
@@ -114,6 +222,7 @@ const Availability = ({ hallData, closeModal }) => {
             </div>
           </div>
 
+          {/* Date Selection */}
           <div className="date-selection-section">
             <h4>Select Date</h4>
             <div className="dates-container">
@@ -136,29 +245,63 @@ const Availability = ({ hallData, closeModal }) => {
             </div>
           </div>
 
+          {/* Custom Time Selector Section */}
           <div className="time-slot-section">
-            <h4>Select Time Slot(s)</h4>
-            <div className="slots-container">
-              {timeSlots.map((slot, index) => {
-                const booked = isSlotBooked(selectedDate, slot);
-                const selected = selectedSlots.includes(slot);
+            <h4>Select Booking Custom Time</h4>
+            
+            <div className="custom-time-selectors">
+              <div className="time-select-group">
+                <label>From:</label>
+                <div className="time-dropdowns">
+                  <select value={fromHour} onChange={(e) => setFromHour(e.target.value)}>
+                    {hoursList.map(h => <option key={h} value={h}>{h}</option>)}
+                  </select>
+                  <span>:</span>
+                  <select value={fromMinute} onChange={(e) => setFromMinute(e.target.value)}>
+                    {minutesList.map(m => <option key={m} value={m}>{m}</option>)}
+                  </select>
+                  <select value={fromAmpm} onChange={(e) => setFromAmpm(e.target.value)}>
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                  </select>
+                </div>
+              </div>
 
-                return (
-                  <button
-                    key={index}
-                    className={`slot-btn ${booked ? "booked" : ""} ${selected ? "selected" : ""}`}
-                    onClick={() => handleSlotSelect(slot)}
-                    disabled={booked}
-                  >
-                    <span className="slot-time">{slot}</span>
-                    {booked && <span className="booked-label">Booked</span>}
-                  </button>
-                );
-              })}
+              <div className="time-select-group">
+                <label>To:</label>
+                <div className="time-dropdowns">
+                  <select value={toHour} onChange={(e) => setToHour(e.target.value)}>
+                    {hoursList.map(h => <option key={h} value={h}>{h}</option>)}
+                  </select>
+                  <span>:</span>
+                  <select value={toMinute} onChange={(e) => setToMinute(e.target.value)}>
+                    {minutesList.map(m => <option key={m} value={m}>{m}</option>)}
+                  </select>
+                  <select value={toAmpm} onChange={(e) => setToAmpm(e.target.value)}>
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            {selectedSlots.length > 0 && (
+
+            {isTimeOrderInvalid && (
+              <div className="conflict-warning-banner">
+                <strong>⚠️ Invalid Time Range</strong>
+                <span>Start time must be strictly before end time.</span>
+              </div>
+            )}
+
+            {isBooked && (
+              <div className="conflict-warning-banner">
+                <strong>Already a user has booked on time and date.</strong>
+                <span>Conflict Details: {conflict.date} ({conflict.timeRange})</span>
+              </div>
+            )}
+
+            {!isBooked && !isTimeOrderInvalid && (
               <p className="selected-slots-info">
-                ✓ Selected: {selectedSlots.length} slot(s)
+                ✓ Time Range Selected: {fromTimeStr} - {toTimeStr}
               </p>
             )}
           </div>
@@ -169,11 +312,11 @@ const Availability = ({ hallData, closeModal }) => {
               Close
             </button>
             <button
-              className={`continue-button ${selectedSlots.length === 0 ? "disabled" : ""}`}
+              className={`continue-button ${(isBooked || isTimeOrderInvalid) ? "disabled" : ""}`}
               onClick={handleContinueBooking}
-              disabled={selectedSlots.length === 0}
+              disabled={isBooked || isTimeOrderInvalid}
             >
-              Continue Booking
+              {currentUser ? "Continue Booking" : "Login to Book"}
             </button>
           </div>
         </div>
@@ -187,6 +330,7 @@ const Availability = ({ hallData, closeModal }) => {
           selectedSlots={selectedSlots}
           onClose={handleCloseBookingForm}
           onSuccess={handleBookingSuccess}
+          currentUser={currentUser}
         />
       )}
     </>
