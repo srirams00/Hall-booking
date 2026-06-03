@@ -10,8 +10,7 @@ const LoginPage = ({ onBackHome, onLoginSuccess }) => {
   const [error, setError] = useState('');
 
   const validUsers = [
-    { username: 'silvest7', password: 'sjcpass123' },
-    { username: 'sriram', password: 'sjcpass123' }
+    { username: 'staff', password: 'sjcstaff123' }
   ];
 
   const handleSubmit = (e) => {

@@ -176,8 +176,7 @@ function App() {
 
   const handleUserLogin = async (username, password) => {
     const validUsers = {
-      silvest7: { displayName: 'Silvest', email: 'silvest7@sjc.edu', department: 'Information Technology' },
-      sriram: { displayName: 'Sriram', email: 'sriram@sjc.edu', department: 'Information Technology' }
+      staff: { displayName: 'Moderator', email: 'moderator@sjc.edu', department: 'Staff' }
     };
 
     const localUser = validUsers[username.toLowerCase()];

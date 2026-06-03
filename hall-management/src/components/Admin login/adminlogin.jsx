@@ -10,8 +10,7 @@ const Adminlogin = ({ onBackHome, onAdminLoginSuccess }) => {
   const [error, setError] = useState('');
 
   const validAdmins = [
-    { username: 'principal', password: 'Adminsjc123', displayName: 'Fr. Principal' },
-    { username: 'deputy', password: 'Adminsjc123', displayName: 'Deputy Principal' }
+    { username: 'principal', password: 'Adminsjc123', displayName: 'Fr. Principal' }
   ];
 
   const handleSubmit = (e) => {

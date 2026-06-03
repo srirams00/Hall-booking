@@ -3,19 +3,12 @@ import './BookingForm.css';
 
 const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess, currentUser }) => {
   const userDefaults = {
-    silvest: {
-      staffName: 'Silvest',
-      staffId: 'STF-107',
-      department: 'Information Technology',
-      emailId: 'silvest7@sjc.edu',
-      phoneNumber: '9876543210'
-    },
-    sriram: {
-      staffName: 'Sriram',
-      staffId: 'STF-108',
-      department: 'Information Technology',
-      emailId: 'sriram@sjc.edu',
-      phoneNumber: '9876543211'
+    moderator: {
+      staffName: 'Moderator',
+      staffId: 'STF-MOD-001',
+      department: 'Staff',
+      emailId: 'moderator@sjc.edu',
+      phoneNumber: '9876543212'
     }
   };
 

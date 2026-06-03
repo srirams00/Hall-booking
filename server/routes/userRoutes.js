@@ -21,8 +21,7 @@ router.post('/login', async (req, res) => {
   }
 
   const validUsers = [
-    { username: 'silvest7', password: 'sjcpass123', displayName: 'Silvest', email: 'silvest7@sjc.edu', department: 'Information Technology' },
-    { username: 'sriram', password: 'sjcpass123', displayName: 'Sriram', email: 'sriram@sjc.edu', department: 'Information Technology' }
+    { username: 'staff', password: 'sjcstaff123', displayName: 'Moderator', email: 'moderator@sjc.edu', department: 'Staff' }
   ];
 
   const matched = validUsers.find(
