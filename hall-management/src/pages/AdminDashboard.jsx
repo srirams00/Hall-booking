@@ -166,7 +166,12 @@ const AdminDashboard = ({
   monthlyBookings
     .filter((b) => b.status === "Approved")
     .forEach((b) => {
-      hallCounts[b.hallName] = (hallCounts[b.hallName] || 0) + 1;
+      if (!b.hallName) return;
+      const matchedHall = halls.find(
+        (h) => h.title.trim().toLowerCase() === b.hallName.trim().toLowerCase()
+      );
+      const normalizedName = matchedHall ? matchedHall.title : b.hallName.trim();
+      hallCounts[normalizedName] = (hallCounts[normalizedName] || 0) + 1;
     });
 
   const hallKeys = Object.keys(hallCounts);
