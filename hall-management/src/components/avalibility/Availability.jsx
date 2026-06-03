@@ -1,5 +1,5 @@
 import "./Availability.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import BookingForm from "../BookingForm/BookingForm";
 
 const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onViewChange, bookings = [] }) => {
@@ -138,7 +138,7 @@ const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onVi
   const isTimeOrderInvalid = startMins >= endMins;
 
   // Retrieve any conflict for selected date & custom range
-  const conflict = getConflictingBooking(selectedDate, fromTimeStr, toTimeStr);
+  const conflict = useMemo(() => getConflictingBooking(selectedDate, fromTimeStr, toTimeStr), [selectedDate, fromTimeStr, toTimeStr, bookings, hallData]);
   const isBooked = !!conflict;
 
   // Handle continue booking

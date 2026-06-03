@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import './Home.css';
 import Box from '../components/card-for-hall/box';
 import Availability from '../components/avalibility/Availability';
@@ -70,167 +70,6 @@ const featuredHalls = [
     },
 ];
 
-const allHallsData = [
-    {
-        id: 1,
-        image: jubee,
-        title: "Jubilee Building",
-        capacity: "500 Guests",
-        ac: true,
-        description: "A magnificent grand hall perfect for large college events, conferences, and celebrations with modern infrastructure.",
-        amenities: [ "Projector",  "Sound System", "AC", "chair Access"],
-        bookedSlots: [
-            { date: "2026-05-30", slots: ["11:00 AM - 12:30 PM"] },
-            { date: "2026-05-31", slots: ["2:00 PM - 4:00 PM", "4:00 PM - 6:00 PM"] },
-            { date: "2026-06-02", slots: ["12:30 PM - 2:00 PM"] },
-        ],
-    },
-    {
-        id: 2,
-        image: comAV,
-        title: "ComAV Auditorium",
-        capacity: "150 Guests",
-        ac: true,
-        description: "Intimate auditorium suitable for seminars, workshops, and small-scale events with excellent acoustics.",
-        amenities: [ "Projector", "Sound System", "AC", "Stage"],
-        bookedSlots: [
-            { date: "2026-05-30", slots: ["4:00 PM - 6:00 PM"] },
-        ],
-    },
-    {
-        id: 3,
-        image: lawley,
-        title: "Lawley Hall",
-        capacity: "1000 Guests",
-        ac: false,
-        description: "Spacious open-air venue ideal for outdoor festivals, cultural events, and large gatherings.",
-        amenities: [ "Sound System", "Stage", "Open-Air"],
-        bookedSlots: [
-            { date: "2026-05-29", slots: ["11:00 AM - 12:30 PM", "12:30 PM - 2:00 PM"] },
-            { date: "2026-06-01", slots: ["2:00 PM - 4:00 PM"] },
-        ],
-    },
-    {
-        id: 4,
-        image: board_room,
-        title: "Board Room",
-        capacity: "300 Guests",
-        ac: true,
-        description: "Executive meeting space with conference facilities, perfect for corporate events and formal gatherings.",
-        amenities: ["WiFi", "Projector", "Sound System", "AC", "Conference Table"],
-        bookedSlots: [
-            { date: "2026-05-29", slots: ["11:00 AM - 12:30 PM", "12:30 PM - 2:00 PM", "2:00 PM - 4:00 PM", "4:00 PM - 6:00 PM"] },
-            { date: "2026-05-30", slots: ["11:00 AM - 12:30 PM", "12:30 PM - 2:00 PM", "2:00 PM - 4:00 PM"] },
-            { date: "2026-05-31", slots: ["11:00 AM - 12:30 PM", "2:00 PM - 4:00 PM", "4:00 PM - 6:00 PM"] },
-        ],
-    },
-    {
-        id: 5,
-        image: sail,
-        title: "Sail Auditorium",
-        capacity: "300 Guests",
-        ac: true,
-        description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
-        amenities: ["Projector",  "Sound System", "AC", "Display Boards"],
-        bookedSlots: [
-            { date: "2026-05-31", slots: ["11:00 AM - 12:30 PM"] },
-            { date: "2026-06-02", slots: ["4:00 PM - 6:00 PM"] },
-        ],
-    },
-    {
-        id: 6,
-        image: toulouse,
-        title: "Toulouse Arena",
-        capacity: "2000 Guests",
-        ac: false,
-        description: "Massive outdoor arena designed for mega events, concerts, and large-scale sports events.",
-        amenities: [ "Sound System", "Stage", "Open-Air", "Seating"],
-        bookedSlots: [
-            { date: "2026-05-29", slots: ["11:00 AM - 12:30 PM", "12:30 PM - 2:00 PM", "2:00 PM - 4:00 PM", "4:00 PM - 6:00 PM"] },
-            { date: "2026-05-30", slots: ["12:30 PM - 2:00 PM", "2:00 PM - 4:00 PM", "4:00 PM - 6:00 PM"] },
-            { date: "2026-05-31", slots: ["11:00 AM - 12:30 PM", "12:30 PM - 2:00 PM", "2:00 PM - 4:00 PM", "4:00 PM - 6:00 PM"] },
-        ],
-    },
-    {
-        id: 7,
-        image: sail,
-        title: "Balam",
-        capacity: "300 Guests",
-        ac: true,
-        description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
-        amenities: ["Projector",  "Sound System", "AC", "Display Boards"],
-        bookedSlots: [
-            { date: "2026-05-31", slots: ["11:00 AM - 12:30 PM"] },
-            { date: "2026-06-02", slots: ["4:00 PM - 6:00 PM"] },
-        ],
-    },
-    {
-        id: 8,
-        image: marian,
-        title: "Marian Hall",
-        capacity: "300 Guests",
-        ac: true,
-        description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
-        amenities: ["Projector",  "Sound System", "AC", "Display Boards"],
-        bookedSlots: [
-            { date: "2026-05-31", slots: ["11:00 AM - 12:30 PM"] },
-            { date: "2026-06-02", slots: ["4:00 PM - 6:00 PM"] },
-        ],
-    },
-    {
-        id: 9,
-        image: MCA,
-        title: "MCA AV",
-        capacity: "300 Guests",
-        ac: true,
-        description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
-        amenities: ["Projector",  "Sound System", "AC", "Display Boards"],
-        bookedSlots: [
-            { date: "2026-05-31", slots: ["11:00 AM - 12:30 PM"] },
-            { date: "2026-06-02", slots: ["4:00 PM - 6:00 PM"] },
-        ],
-    },
-    {
-        id: 10,
-        image: sail,
-        title: "Sequirera",
-        capacity: "300 Guests",
-        ac: true,
-        description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
-        amenities: ["Projector",  "Sound System", "AC", "Display Boards"],
-        bookedSlots: [
-            { date: "2026-05-31", slots: ["11:00 AM - 12:30 PM"] },
-            { date: "2026-06-02", slots: ["4:00 PM - 6:00 PM"] },
-        ],
-    },
-    {
-        id: 11,
-        image: TV,
-        title: "TV.AV Hall",
-        capacity: "300 Guests",
-        ac: true,
-        description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
-        amenities: ["Projector",  "Sound System", "AC", "Display Boards"],
-        bookedSlots: [
-            { date: "2026-05-31", slots: ["11:00 AM - 12:30 PM"] },
-            { date: "2026-06-02", slots: ["4:00 PM - 6:00 PM"] },
-        ],
-    },
-    {
-        id: 12,
-        image: sail,
-        title: "KPJ Hall",
-        capacity: "300 Guests",
-        ac: true,
-        description: "Modern venue with state-of-the-art facilities suitable for exhibitions, product launches, and networking events.",
-        amenities: ["Projector",  "Sound System", "AC", "Display Boards"],
-        bookedSlots: [
-            { date: "2026-05-31", slots: ["11:00 AM - 12:30 PM"] },
-            { date: "2026-06-02", slots: ["4:00 PM - 6:00 PM"] },
-        ],
-    },
-];
-
 const imageMap = {
     "jubilee": jubee,
     "comAV": comAV,
@@ -270,11 +109,13 @@ const Home = ({ onViewChange, onSubmitBooking, currentUser, bookings, halls = []
         };
     }, []);
 
-    const filteredHalls = searchQuery.trim() === ''
-        ? []
-        : activeHalls.filter(hall => 
-            hall.title.toLowerCase().includes(searchQuery.toLowerCase())
-          );
+    const filteredHalls = useMemo(() => {
+        return searchQuery.trim() === ''
+            ? []
+            : activeHalls.filter(hall => 
+                hall.title.toLowerCase().includes(searchQuery.toLowerCase())
+              );
+    }, [searchQuery, activeHalls]);
 
     return(
         <div className="home-page">

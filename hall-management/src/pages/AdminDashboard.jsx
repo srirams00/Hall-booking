@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import "./AdminDashboard.css";
 import logo from "../assets/logo.png";
 import { jsPDF } from "jspdf";
@@ -138,74 +138,102 @@ const AdminDashboard = ({
   };
 
   // Monthly Report Calculations
-  const monthlyBookings = bookings.filter((b) => {
-    if (!b.date) return false;
-    const parts = b.date.split("-");
-    if (parts.length < 2) return false;
-    return parts[0] === selectedYear && parts[1] === selectedMonth;
-  });
+  const monthlyBookings = useMemo(() => {
+    return bookings.filter((b) => {
+      if (!b.date) return false;
+      const parts = b.date.split("-");
+      if (parts.length < 2) return false;
+      return parts[0] === selectedYear && parts[1] === selectedMonth;
+    });
+  }, [bookings, selectedYear, selectedMonth]);
 
-  const totalBookingsCount = monthlyBookings.length;
-  const approvedBookingsCount = monthlyBookings.filter((b) => b.status === "Approved").length;
-  const pendingBookingsCount = monthlyBookings.filter((b) => b.status === "Pending").length;
-  const rejectedBookingsCount = monthlyBookings.filter((b) => b.status === "Rejected").length;
+  const stats = useMemo(() => {
+    const total = monthlyBookings.length;
+    const approved = monthlyBookings.filter((b) => b.status === "Approved").length;
+    const pending = monthlyBookings.filter((b) => b.status === "Pending").length;
+    const rejected = monthlyBookings.filter((b) => b.status === "Rejected").length;
 
-  // Most and Least Used Halls calculations
-  let mostUsedHallName = "N/A";
-  let leastUsedHallName = "N/A";
-  let maxCount = -1;
-  let minCount = Infinity;
-  const hallCounts = {};
+    // Most and Least Used Halls calculations
+    let mostUsedName = "N/A";
+    let leastUsedName = "N/A";
+    let max = -1;
+    let min = Infinity;
+    const counts = {};
 
-  // Pre-fill with dynamic halls list
-  halls.forEach((h) => {
-    hallCounts[h.title] = 0;
-  });
-
-  // Calculate approved counts
-  monthlyBookings
-    .filter((b) => b.status === "Approved")
-    .forEach((b) => {
-      if (!b.hallName) return;
-      const matchedHall = halls.find(
-        (h) => h.title.trim().toLowerCase() === b.hallName.trim().toLowerCase()
-      );
-      const normalizedName = matchedHall ? matchedHall.title : b.hallName.trim();
-      hallCounts[normalizedName] = (hallCounts[normalizedName] || 0) + 1;
+    // Pre-fill with dynamic halls list
+    halls.forEach((h) => {
+      counts[h.title] = 0;
     });
 
-  const hallKeys = Object.keys(hallCounts);
-  if (hallKeys.length > 0 && monthlyBookings.filter(b => b.status === "Approved").length > 0) {
-    hallKeys.forEach((name) => {
-      const count = hallCounts[name];
-      if (count > maxCount) {
-        maxCount = count;
-        mostUsedHallName = name;
-      }
-      if (count < minCount) {
-        minCount = count;
-        leastUsedHallName = name;
-      }
-    });
-  }
+    // Calculate approved counts
+    monthlyBookings
+      .filter((b) => b.status === "Approved")
+      .forEach((b) => {
+        if (!b.hallName) return;
+        const matchedHall = halls.find(
+          (h) => h.title.trim().toLowerCase() === b.hallName.trim().toLowerCase()
+        );
+        const normalizedName = matchedHall ? matchedHall.title : b.hallName.trim();
+        counts[normalizedName] = (counts[normalizedName] || 0) + 1;
+      });
 
-  // Peak Booking Time Slots
-  let peakBookingTime = "N/A";
-  let maxSlotCount = 0;
-  const slotCounts = {};
-  monthlyBookings.forEach((b) => {
-    if (b.timeSlots) {
-      b.timeSlots.forEach((slot) => {
-        slotCounts[slot] = (slotCounts[slot] || 0) + 1;
+    const keys = Object.keys(counts);
+    if (keys.length > 0 && monthlyBookings.filter(b => b.status === "Approved").length > 0) {
+      keys.forEach((name) => {
+        const count = counts[name];
+        if (count > max) {
+          max = count;
+          mostUsedName = name;
+        }
+        if (count < min) {
+          min = count;
+          leastUsedName = name;
+        }
       });
     }
-  });
-  Object.keys(slotCounts).forEach((slot) => {
-    if (slotCounts[slot] > maxSlotCount) {
-      maxSlotCount = slotCounts[slot];
-      peakBookingTime = slot;
-    }
-  });
+
+    // Peak Booking Time Slots
+    let peakTime = "N/A";
+    let maxSlot = 0;
+    const slotCounts = {};
+    monthlyBookings.forEach((b) => {
+      if (b.timeSlots) {
+        b.timeSlots.forEach((slot) => {
+          slotCounts[slot] = (slotCounts[slot] || 0) + 1;
+        });
+      }
+    });
+    Object.keys(slotCounts).forEach((slot) => {
+      if (slotCounts[slot] > maxSlot) {
+        maxSlot = slotCounts[slot];
+        peakTime = slot;
+      }
+    });
+
+    return {
+      total,
+      approved,
+      pending,
+      rejected,
+      mostUsedName,
+      leastUsedName,
+      max,
+      min,
+      peakTime
+    };
+  }, [monthlyBookings, halls]);
+
+  const {
+    total: totalBookingsCount,
+    approved: approvedBookingsCount,
+    pending: pendingBookingsCount,
+    rejected: rejectedBookingsCount,
+    mostUsedName: mostUsedHallName,
+    leastUsedName: leastUsedHallName,
+    max: maxCount,
+    min: minCount,
+    peakTime: peakBookingTime
+  } = stats;
 
   const downloadPDFReport = () => {
     const doc = new jsPDF();
