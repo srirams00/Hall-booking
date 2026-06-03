@@ -115,6 +115,7 @@ function App() {
       if (bookingsRes.ok) {
         const data = await bookingsRes.json();
         setBookings(data);
+        localStorage.setItem("hall_bookings", JSON.stringify(data));
       } else {
         loadBookingsFallback();
       }
@@ -264,7 +265,11 @@ function App() {
       });
       if (res.ok) {
         const savedBooking = await res.json();
-        setBookings(prev => [savedBooking, ...prev]);
+        setBookings(prev => {
+          const updated = [savedBooking, ...prev];
+          localStorage.setItem("hall_bookings", JSON.stringify(updated));
+          return updated;
+        });
       } else {
         bookingFallback(newBookingWithDetails);
       }
@@ -288,7 +293,11 @@ function App() {
       });
       if (res.ok) {
         const updatedBooking = await res.json();
-        setBookings(prev => prev.map(b => b.id === bookingId ? updatedBooking : b));
+        setBookings(prev => {
+          const updated = prev.map(b => b.id === bookingId ? updatedBooking : b);
+          localStorage.setItem("hall_bookings", JSON.stringify(updated));
+          return updated;
+        });
       } else {
         updateStatusFallback(bookingId, status, rejectionReason);
       }
