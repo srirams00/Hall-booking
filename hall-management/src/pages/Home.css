@@ -79,7 +79,8 @@
 
 .search-wrapper {
     position: relative;
-    width: fit-content;
+    width: 100%;
+    max-width: 680px;
     margin: 40px auto;
     z-index: 10;
 }
