@@ -50,26 +50,15 @@ const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
                                 Browse Venues
                             </a>
                         </li>
-<<<<<<< HEAD
-                        <li><a href="#"
+                        <li>
+                            <a 
+                                href="#" 
                                 className={currentView === 'about' ? 'active' : ''} 
                                 onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("about"); }}
                             >
                                 About us
                             </a>
                         </li>
-                        <li>
-                            <a 
-                                href="#" 
-                                className={`nav-login ${currentView === 'login' ? 'active' : ''}`}
-                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("login"); }}
-                            >
-                                Login
-                            </a>
-                            
-                        </li>
-=======
-                        <li><a href="#">About us</a></li>
                         {currentUser ? (
                             <li className="nav-user-menu" ref={dropdownRef}>
                                 <button 
@@ -100,7 +89,6 @@ const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
                                 </a>
                             </li>
                         )}
->>>>>>> 6a114587d40e6c5f4eb731daae0665d0e4ca1065
                     </ul>
                 </div>
             </nav>
