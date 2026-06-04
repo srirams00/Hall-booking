@@ -20,14 +20,18 @@ router.post('/login', async (req, res) => {
     return res.status(400).json({ message: 'Username is required' });
   }
 
-  const validUsers = [
-    { username: 'silvest7', password: 'sjcpass123', displayName: 'Silvest', email: 'silvest7@sjc.edu', department: 'Information Technology' },
-    { username: 'sriram', password: 'sjcpass123', displayName: 'Sriram', email: 'sriram@sjc.edu', department: 'Information Technology' }
-  ];
+  const staffUser = process.env.STAFF_USER || 'staff';
+  const staffPass = process.env.STAFF_PASS || 'sjcstaff123';
 
-  const matched = validUsers.find(
-    u => u.username.toLowerCase() === username.toLowerCase() && (!password || u.password === password)
-  );
+  let matched = null;
+  if (username.toLowerCase() === staffUser.toLowerCase() && (!password || password === staffPass)) {
+    matched = {
+      username: staffUser,
+      displayName: 'Moderator',
+      email: 'moderator@sjc.edu',
+      department: 'Staff'
+    };
+  }
 
   if (!matched) {
     return res.status(401).json({ message: 'Invalid credentials. Access denied.' });
@@ -54,6 +58,23 @@ router.post('/login', async (req, res) => {
     res.json({ user, log });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+// Admin login route
+router.post('/admin/login', async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username and password are required' });
+  }
+
+  const adminUser = process.env.ADMIN_USER || 'principal';
+  const adminPass = process.env.ADMIN_PASS || 'Adminsjc123';
+
+  if (username.toLowerCase() === adminUser.toLowerCase() && password === adminPass) {
+    res.json({ displayName: 'Fr. Principal' });
+  } else {
+    res.status(401).json({ message: 'Invalid Administrator credentials. Access denied.' });
   }
 });
 

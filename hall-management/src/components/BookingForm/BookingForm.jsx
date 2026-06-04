@@ -2,50 +2,15 @@ import React, { useState, useCallback } from 'react';
 import './BookingForm.css';
 
 const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess, currentUser }) => {
-  const userDefaults = {
-    silvest: {
-      staffName: 'Silvest',
-      staffId: 'STF-107',
-      department: 'Information Technology',
-      emailId: 'silvest7@sjc.edu',
-      phoneNumber: '9876543210'
-    },
-    sriram: {
-      staffName: 'Sriram',
-      staffId: 'STF-108',
-      department: 'Information Technology',
-      emailId: 'sriram@sjc.edu',
-      phoneNumber: '9876543211'
-    }
-  };
-
   // Form State
-  const [formData, setFormData] = useState(() => {
-    const defaultData = {
-      staffName: '',
-      staffId: '',
-      department: '',
-      emailId: '',
-      phoneNumber: '',
-      eventTitle: '',
-      expectedAudience: '',
-    };
-    if (currentUser) {
-      const key = currentUser.toLowerCase();
-      if (userDefaults[key]) {
-        return {
-          ...defaultData,
-          ...userDefaults[key]
-        };
-      } else {
-        return {
-          ...defaultData,
-          staffName: currentUser,
-          emailId: `${currentUser.toLowerCase().replace(/\s+/g, '')}@sjc.edu`
-        };
-      }
-    }
-    return defaultData;
+  const [formData, setFormData] = useState({
+    staffName: '',
+    staffId: '',
+    department: '',
+    emailId: '',
+    phoneNumber: '',
+    eventTitle: '',
+    expectedAudience: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -269,13 +234,26 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
 
           {/* Right Section - Booking Form */}
           <form className="booking-form" onSubmit={handleSubmit}>
-            {/* Staff Information Section */}
+            {/* Faculty Information Section */}
             <div className="form-section-booking">
-              <h3 className="section-title">Staff Information</h3>
+              <h3 className="section-title">Faculty Information</h3>
+
+              <div className="form-group">
+                <label htmlFor="hallName" className="form-label-booking">
+                  Venue / Hall Name
+                </label>
+                <input
+                  type="text"
+                  id="hallName"
+                  value={hallName}
+                  readOnly
+                  className="form-input-booking readonly-input"
+                />
+              </div>
 
               <div className="form-group">
                 <label htmlFor="staffName" className="form-label-booking">
-                  <span className="required-asterisk">*</span> Staff Name
+                  <span className="required-asterisk">*</span> Faculty Name
                 </label>
                 <input
                   type="text"
@@ -284,7 +262,7 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
                   value={formData.staffName}
                   onChange={handleInputChange}
                   onBlur={handleInputBlur}
-                  placeholder="Enter your full name"
+                  placeholder="Enter Faculty full name"
                   className={`form-input-booking ${errors.staffName ? 'error' : ''}`}
                 />
                 {errors.staffName && <p className="error-message">{errors.staffName}</p>}
@@ -292,7 +270,7 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
 
               <div className="form-group">
                 <label htmlFor="staffId" className="form-label-booking">
-                  <span className="required-asterisk">*</span> Staff ID
+                  <span className="required-asterisk">*</span> Faculty ID
                 </label>
                 <input
                   type="text"
@@ -301,7 +279,7 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
                   value={formData.staffId}
                   onChange={handleInputChange}
                   onBlur={handleInputBlur}
-                  placeholder="e.g., STF-2024-001"
+                  placeholder="e.g., FAC-2026-001"
                   className={`form-input-booking ${errors.staffId ? 'error' : ''}`}
                 />
                 {errors.staffId && <p className="error-message">{errors.staffId}</p>}
@@ -326,7 +304,7 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
 
               <div className="form-group">
                 <label htmlFor="emailId" className="form-label-booking">
-                  <span className="required-asterisk">*</span> Email ID
+                  <span className="required-asterisk">*</span> Faculty Email ID
                 </label>
                 <input
                   type="email"
@@ -335,7 +313,7 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
                   value={formData.emailId}
                   onChange={handleInputChange}
                   onBlur={handleInputBlur}
-                  placeholder="your.email@college.edu"
+                  placeholder="faculty.email@sjc.edu"
                   className={`form-input-booking ${errors.emailId ? 'error' : ''}`}
                 />
                 {errors.emailId && <p className="error-message">{errors.emailId}</p>}
@@ -343,7 +321,7 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
 
               <div className="form-group">
                 <label htmlFor="phoneNumber" className="form-label-booking">
-                  <span className="required-asterisk">*</span> Phone Number
+                  <span className="required-asterisk">*</span> Faculty Phone Number
                 </label>
                 <input
                   type="tel"

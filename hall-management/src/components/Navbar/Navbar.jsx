@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './Navbar.css';
-import logo from '../../assets/logo.png'
+import logo from '../../assets/logo.png';
+import { FaBars, FaTimes } from 'react-icons/fa';
 
 const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
   const handleViewChange = useCallback((view) => {
     onViewChange && onViewChange(view);
   }, [onViewChange]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -34,12 +36,21 @@ const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
                         </div>
                     </div>
                     
-                    <ul className='nav-links'>
+                    {/* Hamburger Menu Toggle Icon */}
+                    <div className="nav-hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                        {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+                    </div>
+
+                    <ul className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
                         <li>
                             <a 
                                 href="#" 
                                 className={currentView === 'home' ? 'active' : ''} 
+<<<<<<< HEAD
                                 onClick={(e) => { e.preventDefault(); handleViewChange("home"); }}
+=======
+                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("home"); setMobileMenuOpen(false); }}
+>>>>>>> a502a62c9accd9c6f9973acf21ac23d178c73529
                             >
                                 Home
                             </a>
@@ -48,12 +59,24 @@ const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
                             <a 
                                 href="#" 
                                 className={currentView === 'browse' ? 'active' : ''} 
+<<<<<<< HEAD
                                 onClick={(e) => { e.preventDefault(); handleViewChange("browse"); }}
+=======
+                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("browse"); setMobileMenuOpen(false); }}
+>>>>>>> a502a62c9accd9c6f9973acf21ac23d178c73529
                             >
                                 Browse Venues
                             </a>
                         </li>
-                        <li><a href="#">About us</a></li>
+                        <li>
+                            <a 
+                                href="#" 
+                                className={currentView === 'about' ? 'active' : ''} 
+                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("about"); setMobileMenuOpen(false); }}
+                            >
+                                About us
+                            </a>
+                        </li>
                         {currentUser ? (
                             <li className="nav-user-menu" ref={dropdownRef}>
                                 <button 
@@ -64,10 +87,10 @@ const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
                                 </button>
                                 {dropdownOpen && (
                                     <ul className="nav-dropdown-menu">
-                                        <li onClick={() => { onViewChange("dashboard"); setDropdownOpen(false); }}>
+                                        <li onClick={() => { onViewChange("dashboard"); setDropdownOpen(false); setMobileMenuOpen(false); }}>
                                             <a>Dashboard</a>
                                         </li>
-                                        <li onClick={() => { onLogout(); setDropdownOpen(false); }} className="dropdown-logout">
+                                        <li onClick={() => { onLogout(); setDropdownOpen(false); setMobileMenuOpen(false); }} className="dropdown-logout">
                                             <a>Logout</a>
                                         </li>
                                     </ul>
@@ -78,7 +101,11 @@ const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
                                 <a 
                                     href="#" 
                                     className={`nav-login ${currentView === 'login' ? 'active' : ''}`}
+<<<<<<< HEAD
                                     onClick={(e) => { e.preventDefault(); handleViewChange("login"); }}
+=======
+                                    onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("login"); setMobileMenuOpen(false); }}
+>>>>>>> a502a62c9accd9c6f9973acf21ac23d178c73529
                                 >
                                     Login
                                 </a>

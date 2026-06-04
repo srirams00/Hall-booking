@@ -1,24 +1,21 @@
 import "./UserDashboard.css";
 
 const UserDashboard = ({ currentUser, bookings, onBackHome }) => {
-  // Filter bookings belonging to current user (robust case-insensitive checks)
+  // Filter bookings: if logged in as Moderator (assistant), show all bookings. Otherwise filter by user.
   const myBookings = bookings.filter((b) => {
+    if (currentUser && currentUser.toLowerCase() === "moderator") return true;
+
     if (!b.staffInformation || !b.staffInformation.name) return false;
     const staffName = b.staffInformation.name.toLowerCase();
     const currUser = (currentUser || "").toLowerCase();
     
-    // Exact match of display name
-    if (staffName === currUser) return true;
-    
-    // Mapping matches (e.g. silvest7 username for silvest display name)
-    if (currUser === "silvest" && (staffName === "silvest7" || staffName.includes("silvest"))) return true;
-    if (currUser === "sriram" && (staffName === "sriram" || staffName.includes("sriram"))) return true;
+    // Exact match or name inclusion match
+    if (staffName === currUser || staffName.includes(currUser) || currUser.includes(staffName)) return true;
     
     // Match by email if exists
     if (b.staffInformation.emailId && typeof b.staffInformation.emailId === 'string') {
       const staffEmail = b.staffInformation.emailId.toLowerCase();
-      if (currUser === "silvest" && (staffEmail.includes("silvest7") || staffEmail.includes("silvest"))) return true;
-      if (currUser === "sriram" && staffEmail.includes("sriram")) return true;
+      if (staffEmail.includes(currUser) || currUser.includes(staffEmail.split('@')[0])) return true;
     }
 
     return false;
