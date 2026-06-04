@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import './Navbar.css';
-import logo from '../../assets/logo.png'
+import logo from '../../assets/logo.png';
+import { FaBars, FaTimes } from 'react-icons/fa';
 
 const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -31,12 +33,17 @@ const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
                         </div>
                     </div>
                     
-                    <ul className='nav-links'>
+                    {/* Hamburger Menu Toggle Icon */}
+                    <div className="nav-hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                        {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+                    </div>
+
+                    <ul className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
                         <li>
                             <a 
                                 href="#" 
                                 className={currentView === 'home' ? 'active' : ''} 
-                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("home"); }}
+                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("home"); setMobileMenuOpen(false); }}
                             >
                                 Home
                             </a>
@@ -45,12 +52,20 @@ const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
                             <a 
                                 href="#" 
                                 className={currentView === 'browse' ? 'active' : ''} 
-                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("browse"); }}
+                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("browse"); setMobileMenuOpen(false); }}
                             >
                                 Browse Venues
                             </a>
                         </li>
-                        <li><a href="#">About us</a></li>
+                        <li>
+                            <a 
+                                href="#" 
+                                className={currentView === 'about' ? 'active' : ''} 
+                                onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("about"); setMobileMenuOpen(false); }}
+                            >
+                                About us
+                            </a>
+                        </li>
                         {currentUser ? (
                             <li className="nav-user-menu" ref={dropdownRef}>
                                 <button 
@@ -61,10 +76,10 @@ const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
                                 </button>
                                 {dropdownOpen && (
                                     <ul className="nav-dropdown-menu">
-                                        <li onClick={() => { onViewChange("dashboard"); setDropdownOpen(false); }}>
+                                        <li onClick={() => { onViewChange("dashboard"); setDropdownOpen(false); setMobileMenuOpen(false); }}>
                                             <a>Dashboard</a>
                                         </li>
-                                        <li onClick={() => { onLogout(); setDropdownOpen(false); }} className="dropdown-logout">
+                                        <li onClick={() => { onLogout(); setDropdownOpen(false); setMobileMenuOpen(false); }} className="dropdown-logout">
                                             <a>Logout</a>
                                         </li>
                                     </ul>
@@ -75,7 +90,7 @@ const Navbar = ({ currentView, onViewChange, currentUser, onLogout }) => {
                                 <a 
                                     href="#" 
                                     className={`nav-login ${currentView === 'login' ? 'active' : ''}`}
-                                    onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("login"); }}
+                                    onClick={(e) => { e.preventDefault(); onViewChange && onViewChange("login"); setMobileMenuOpen(false); }}
                                 >
                                     Login
                                 </a>

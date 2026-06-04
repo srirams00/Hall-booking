@@ -188,3 +188,132 @@
     background-color: #fff2f0;
     color: #ff4d4f !important;
 }
+
+/* Mobile Hamburger styles */
+.nav-hamburger {
+    display: none;
+    font-size: 1.5rem;
+    color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.nav-hamburger:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 850px) {
+    .nav-hamburger {
+        display: block;
+        z-index: 1200;
+    }
+
+    .nav-logo {
+        max-width: 75%;
+        gap: 8px;
+    }
+
+    .nav-logo h4 {
+        font-size: 0.95rem;
+    }
+
+    .nav-logo h6 {
+        font-size: 0.65rem;
+    }
+
+    .nav-image {
+        height: 50px;
+    }
+
+    .nav-name {
+        align-items: flex-start;
+        letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border-bottom: 2px solid #0056b3;
+        flex-direction: column;
+        padding: 0;
+        gap: 0;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 999;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-links.active {
+        max-height: 450px;
+        opacity: 1;
+        visibility: visible;
+        padding: 15px 0;
+    }
+
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+        padding: 8px 0;
+    }
+
+    .nav-links a {
+        display: inline-block;
+        padding: 10px 24px;
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    .nav-login {
+        display: inline-block;
+        width: auto !important;
+        margin: 5px 0;
+        padding: 6px 20px;
+    }
+
+    .nav-user-menu {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .nav-dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-container {
+        width: 95%;
+        padding: 0 5px;
+    }
+
+    .nav-image {
+        height: 42px;
+    }
+
+    .nav-logo h4 {
+        font-size: 0.8rem;
+    }
+
+    .nav-logo h6 {
+        font-size: 0.55rem;
+    }
+
+    .nav-name {
+        letter-spacing: 0.2px;
+    }
+    
+    .nav-links.active {
+        max-height: 480px;
+    }
+}

@@ -278,7 +278,7 @@ const AdminDashboard = ({
     
     // Theme colors
     const primaryColor = "#1e293b"; // Slate Dark
-    const accentColor = "#3b82f6"; // Blue
+    // const accentColor = "#3b82f6"; // Blue
     const textColor = "#0f172a";
     const lightGrey = "#f8fafc";
     const borderGrey = "#cbd5e1";
