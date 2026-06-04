@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaRegUser } from 'react-icons/fa';
+import { FaRegUser, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FiLock } from 'react-icons/fi';
 import logo from '../../assets/sjcbanner.png';
 import './Login.css';
@@ -8,6 +8,7 @@ const LoginPage = ({ onBackHome, onLoginSuccess }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -70,13 +71,22 @@ const LoginPage = ({ onBackHome, onLoginSuccess }) => {
 
               <div className="input-field-group">
                 <input 
-                  type="password" 
+                  type={showPassword ? "text" : "password"} 
                   placeholder="Password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required 
+                  style={{ paddingRight: "45px" }}
                 />
                 <FiLock className="field-icon" />
+                <button
+                  type="button"
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
 
               <button type="submit" className="login-submit-btn">Login</button>
