@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./About.css";
 import lawley from "../assets/halls/lawley.JPG";
 import board_room from "../assets/halls/Board-Room.JPG";
@@ -7,169 +6,74 @@ import jubilee from "../assets/halls/jubilee.JPG";
 import sail from "../assets/halls/sail.JPG";
 
 function About({ onViewChange }) {
-  const [activeTab, setActiveTab] = useState("heritage"); // "heritage" or "landmarks"
-
-  const landmarkHalls = [
+  const halls = [
     {
-      title: "Lawley Hall",
-      est: "1905–1907",
+      title: "Modern Event Spaces",
+      image: board_room,
+      desc: "St. Joseph’s College in Tiruchirappalli (Trichy) is one of the oldest educational institutions in India, established in 1844 by the Jesuits. Over time, as the college expanded, many important halls and buildings were constructed to support academics, research, and student activities. The campus includes facilities such as Marian Hall, Josephine Hall, Auditorium, Conference Halls, and Open Air Theatre with professional infrastructure and spacious seating arrangements."
+    },
+    {
+      title: "Lawley hall (1905–1907)",
       image: lawley,
-      tag: "Heritage Landmark",
-      desc: "Lawley Hall was opened by the Governor of Madras, Sir Arthur Lawley, and completed by 1907. Standing as a symbol of colonial-era architecture, it is one of the landmark structures that earned the college its Special Heritage Status from the Government of India."
+      desc: "Lawley Hall was opened by the Governor of Madras, Sir Arthur Lawley, for whom it is named, and completed by 1907. This is one of the two majestic landmark buildings of the college. From 1939–42, the College witnessed a flurry of construction including a Lawley wing projection (extension to Lawley Hall). Lawley Hall stands as a symbol of colonial-era architecture and the Jesuit commitment to education. In 2016, the college was one of only twelve colleges in India to be given Special Heritage Status by the Government of India. Lawley Hall, as one of the oldest buildings on campus, is very much part of that heritage legacy."
     },
     {
-      title: "Jubilee Building",
-      est: "1997",
+      title: "Jubilee building (1997)",
       image: jubilee,
-      tag: "Academic Hub",
-      desc: "Built to commemorate a century and a half of educational excellence, the Jubilee Building represents modern campus infrastructure, housing department offices, interactive classrooms, and multi-functional resource venues."
+      desc: "The Jubilee Building is part of a long tradition of named heritage structures at SJC. The College completed construction of two majestic buildings Lawley Hall and Digby Hall by 1907. From 1939–42, the College witnessed a flurry of construction activities including the Lawley wing projection, the first two blocks of the New Hostel, the Sacred Heart Hostel, the Brothers Hostel, the boarders' kitchen and dining halls, the Bellarmine Hall and Guest House, and the Bertram Building. This period marked the transformation of the college into a full-fledged campus with multiple functional halls for student life and academics."
     },
     {
-      title: "Toulouse Arena",
-      est: "2023–2024",
+      title: "Toulousee arena (2023–2024)",
       image: toulouse,
-      tag: "Modern Megastructure",
-      desc: "Named in honour of the Toulouse Province of France (from where the founding Jesuit fathers sailed to India in 1844), this modern arena boasts vast seating capacity, advanced acoustic systems, and dynamic event staging."
+      desc: "Rising magnificently within the ancient and hallowed grounds of St. Joseph's College, Trichy, the Toulouse Arena stands as a proud symbol of the institution's leap into the modern era. Named in honour of the Toulouse Province of France, from where the founding Jesuit fathers sailed to India nearly two centuries ago, this grand arena beautifully carries the weight of history in its very name. Its modern architecture features spacious interiors, state-of-the-art acoustics, and a vast seating capacity."
     },
     {
-      title: "Sail Auditorium",
-      est: "Modern Era",
+      title: "Sail hall",
       image: sail,
-      tag: "Executive Venue",
-      desc: "An echo of educational discipline meeting state-of-the-art corporate setups. Sail Hall is designed for keynotes, workshops, and international conferences, carrying the college motto in a highly modern setting."
-    }
-  ];
-
-  const timelineMilestones = [
-    {
-      year: "1844",
-      title: "Foundation of SJC",
-      desc: "Established by Jesuit Fathers in Tiruchirappalli, initiating a long legacy of academic excellence in Southern India."
-    },
-    {
-      year: "1907",
-      title: "Constructing the Landmarks",
-      desc: "Completed construction of the majestic Lawley Hall and Digby Hall, solidifying SJC's heritage presence."
-    },
-    {
-      year: "1939–1942",
-      title: "The Great Expansion",
-      desc: "Witnessed a flurry of construction including hostel blocks, dining halls, Bertram Building, and the Lawley Wing extension."
-    },
-    {
-      year: "2016",
-      title: "Special Heritage Status",
-      desc: "Recognized as one of only twelve colleges in India to receive the prestigious Special Heritage Status from the Government."
-    },
-    {
-      year: "2024",
-      title: "Futuristic Enhancements",
-      desc: "Inaugurated Toulouse Arena, launching SJC into a new era of modernized learning and resource allocation."
+      desc: "The echo of old corridors gives way to the hum of modern acoustics, designed to carry every word of a lecture or keynote with crystal clarity. Yet, even within its contemporary walls, the spirit of the institution lingers — in the Jesuit motto carved near its entrance, in the discipline of the students who fill its seats, and in the values passed down through generations. It is a space where history does not compete with modernity, but rather, inspires it."
     }
   ];
 
   return (
-    <section className="about-page-wrapper animate-fade-in">
-      {/* Hero Banner */}
-      <div className="about-hero-banner" style={{ backgroundImage: `url(${board_room})` }}>
-        <div className="about-hero-overlay"></div>
-        <div className="about-hero-content">
-          <span className="about-hero-badge">Est. 1844</span>
-          <h1>Our Campus & Venues</h1>
-          <p>Discover the rich heritage and modern facilities of St. Joseph's College (Autonomous)</p>
+    <section className="about">
+      <div className="about-header">
+        <h1>About Our Halls</h1>
+        <p>St. Joseph’s College Hall Booking Platform</p>
+      </div>
+
+      <div className="about-container">
+        {/* Intro History (Full-Width) */}
+        <div className="about-intro-section">
+          <h2>Expansion phase (1930s–1940s)</h2>
+          <p>
+            Between 1939 and 1942, the college went through a major construction boom. 
+            During this period, new hostel blocks were built, dining halls and kitchen 
+            facilities were added, and additional halls and buildings supported growing 
+            student strength. This period marked the transformation of the college into 
+            a full-fledged campus with multiple functional halls for student life and academics.
+          </p>
         </div>
-      </div>
 
-      {/* Tabs Selector */}
-      <div className="about-tabs-container">
-        <button 
-          className={`about-tab-btn ${activeTab === "heritage" ? "active" : ""}`}
-          onClick={() => setActiveTab("heritage")}
-        >
-          📜 Our Heritage & History
-        </button>
-        <button 
-          className={`about-tab-btn ${activeTab === "landmarks" ? "active" : ""}`}
-          onClick={() => setActiveTab("landmarks")}
-        >
-          🏰 Majestic Landmarks
-        </button>
-      </div>
-
-      {/* Tab Contents */}
-      <div className="about-tab-content">
-        {/* Heritage Tab */}
-        {activeTab === "heritage" && (
-          <div className="heritage-section animate-fade-in">
-            <div className="heritage-intro">
-              <div className="intro-text">
-                <h2>A Legacy of Educational Excellence</h2>
-                <p>
-                  St. Joseph’s College, Tiruchirappalli (Trichy) is one of the oldest educational institutions in India. Established by the Jesuits in 1844, SJC has nurtured generations of scholars, researchers, and leaders.
-                </p>
-                <p>
-                  Over nearly two centuries, the campus has evolved to merge historical heritage with cutting-edge spaces. With landmarks like Lawley Hall standing alongside modern creations like the Toulouse Arena, the college is a living monument to architectural and academic growth.
-                </p>
+        {/* Halls 2-Column Grid */}
+        <div className="about-halls-grid">
+          {halls.map((hall, idx) => (
+            <div key={idx} className="about-grid-card">
+              <div className="about-card-image">
+                <img src={hall.image} alt={hall.title} />
               </div>
-              <div className="intro-image">
-                <img src={board_room} alt="SJC Board Room" />
-                <span className="image-caption">Executive Board Room</span>
+              <div className="about-card-content">
+                <h3>{hall.title}</h3>
+                <p>{hall.desc}</p>
               </div>
             </div>
+          ))}
+        </div>
 
-            {/* Historical Timeline */}
-            <div className="timeline-container">
-              <h2 className="timeline-title">Historical Milestones</h2>
-              <div className="timeline-tree">
-                {timelineMilestones.map((item, idx) => (
-                  <div key={idx} className="timeline-item">
-                    <div className="timeline-year">{item.year}</div>
-                    <div className="timeline-dot"></div>
-                    <div className="timeline-card">
-                      <h3>{item.title}</h3>
-                      <p>{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Landmarks Tab */}
-        {activeTab === "landmarks" && (
-          <div className="landmarks-section animate-fade-in">
-            <h2>Campus Landmarks & Venues</h2>
-            <p className="landmarks-subtitle">Explore SJC's heritage and modern facilities available for reservation</p>
-
-            <div className="landmarks-grid">
-              {landmarkHalls.map((hall, idx) => (
-                <div key={idx} className="landmark-card">
-                  <div className="card-image-wrapper">
-                    <img src={hall.image} alt={hall.title} />
-                    <span className="card-tag">{hall.tag}</span>
-                  </div>
-                  <div className="card-info">
-                    <div className="card-header-row">
-                      <h3>{hall.title}</h3>
-                      <span className="card-est">{hall.est}</span>
-                    </div>
-                    <p>{hall.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Explore CTA Section */}
-      <div className="about-cta-section">
-        <h2>Ready to book a venue?</h2>
-        <p>Browse our live directory, check real-time availability, and secure allocation for your department events.</p>
-        <button className="about-cta-btn" onClick={() => onViewChange && onViewChange("browse")}>
-          Explore Campus Venues
-        </button>
+        <div className="about-actions">
+          <button className="explore-btn" onClick={() => onViewChange && onViewChange("browse")}>
+            Explore
+          </button>
+        </div>
       </div>
     </section>
   );
