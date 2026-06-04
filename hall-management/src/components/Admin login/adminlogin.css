@@ -233,3 +233,37 @@
 .password-toggle-btn:hover {
   color: #007BFF;
 }
+
+.login-back-btn {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  background: transparent;
+  border: none;
+  color: #007BFF;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'regular', sans-serif;
+  transition: color 0.2s ease;
+  z-index: 1000;
+}
+
+.login-back-btn:hover {
+  color: #0056b3;
+}
+
+@media (max-width: 800px) {
+  .login-back-btn {
+    color: #ffffff;
+    top: 20px;
+    left: 20px;
+    font-size: 1rem;
+  }
+  
+  .login-back-btn:hover {
+    color: #cbd5e1;
+  }
+}

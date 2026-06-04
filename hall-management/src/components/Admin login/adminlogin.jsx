@@ -28,20 +28,7 @@ const Adminlogin = ({ onBackHome, onAdminLoginSuccess }) => {
       {/* Back button */}
       <button 
         onClick={onBackHome} 
-        style={{
-          position: "absolute",
-          top: "30px",
-          left: "30px",
-          background: "transparent",
-          border: "none",
-          color: "#007BFF",
-          fontSize: "1.1rem",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          fontFamily: "'regular', sans-serif"
-        }}
+        className="login-back-btn"
       >
         ← Back to Home
       </button>

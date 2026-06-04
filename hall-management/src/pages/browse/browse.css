@@ -112,5 +112,11 @@ body {
   .search-section {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
+  }
+
+  .search-box {
+    width: 100%;
+    max-width: 320px;
   }
 }
