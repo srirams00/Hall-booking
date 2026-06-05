@@ -438,9 +438,9 @@
 
     .hall-container {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
         gap: 15px;
-        text-align: center;
+        text-align: left;
         padding-bottom: 15px;
         margin-bottom: 20px;
     }

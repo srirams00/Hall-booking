@@ -1,12 +1,34 @@
 import "./Availability.css";
 import { useState, useEffect, useMemo } from "react";
 import BookingForm from "../BookingForm/BookingForm";
+import CustomAlert from "../CustomAlert/CustomAlert";
 
 const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onViewChange, bookings = [] }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [nextDates, setNextDates] = useState([]);
   const [showBookingForm, setShowBookingForm] = useState(false);
+
+  const [alertConfig, setAlertConfig] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info",
+    onClose: null
+  });
+
+  const triggerAlert = (title, message, type = "info", onCloseCallback = null) => {
+    setAlertConfig({
+      isOpen: true,
+      title,
+      message,
+      type,
+      onClose: () => {
+        setAlertConfig(prev => ({ ...prev, isOpen: false }));
+        if (onCloseCallback) onCloseCallback();
+      }
+    });
+  };
 
   // Custom time dropdown selectors state
   const [fromHour, setFromHour] = useState("09");
@@ -144,21 +166,31 @@ const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onVi
   // Handle continue booking
   const handleContinueBooking = () => {
     if (isTimeOrderInvalid) {
-      alert("⚠️ Invalid time selection: 'From' time must be before 'To' time.");
+      triggerAlert("Invalid Time Selection", "The 'From' time must be before the 'To' time.", "warning");
       return;
     }
 
     if (isBooked) {
-      alert(`Already a user has booked on time and date.\n\nConflict Details:\nDate: ${conflict.date}\nTime Range: ${conflict.timeRange}`);
+      triggerAlert(
+        "Conflict Detected",
+        `Already a user has booked on this time and date.\n\nConflict Details:\nDate: ${conflict.date}\nTime Range: ${conflict.timeRange}`,
+        "error"
+      );
       return;
     }
     
     if (!currentUser) {
-      alert("⚠️ Only logged-in faculty and staff members can request hall bookings. Please log in to proceed.");
-      if (onViewChange) {
-        onViewChange("login");
-      }
-      closeModal();
+      triggerAlert(
+        "Authentication Required",
+        "Only logged-in faculty and staff members can request hall bookings. Please log in to proceed.",
+        "warning",
+        () => {
+          if (onViewChange) {
+            onViewChange("login");
+          }
+          closeModal();
+        }
+      );
       return;
     }
     
@@ -333,6 +365,14 @@ const Availability = ({ hallData, closeModal, onSubmitBooking, currentUser, onVi
           currentUser={currentUser}
         />
       )}
+
+      <CustomAlert
+        isOpen={alertConfig.isOpen}
+        onClose={alertConfig.onClose}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+      />
     </>
   );
 };

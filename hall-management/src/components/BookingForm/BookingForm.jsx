@@ -1,7 +1,29 @@
 import { useState } from 'react';
 import './BookingForm.css';
+import CustomAlert from '../CustomAlert/CustomAlert';
 
 const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess, currentUser }) => {
+  const [alertConfig, setAlertConfig] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info",
+    onClose: null
+  });
+
+  const triggerAlert = (title, message, type = "info", onCloseCallback = null) => {
+    setAlertConfig({
+      isOpen: true,
+      title,
+      message,
+      type,
+      onClose: () => {
+        setAlertConfig(prev => ({ ...prev, isOpen: false }));
+        if (onCloseCallback) onCloseCallback();
+      }
+    });
+  };
+
   // Form State
   const [formData, setFormData] = useState({
     staffName: '',
@@ -143,25 +165,29 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
     console.log('================================');
 
     // Success message
-    alert(
-      `✓ Booking submitted successfully!\n\nBooking ID: ${Math.random().toString(36).substr(2, 9).toUpperCase()}\n\nCheck console for booking details.`
+    const bookingId = Math.random().toString(36).substr(2, 9).toUpperCase();
+    triggerAlert(
+      "Booking Submitted",
+      `Booking submitted successfully!\n\nBooking ID: ${bookingId}\n\nCheck console for booking details.`,
+      "success",
+      () => {
+        // Reset form and close
+        setFormData({
+          staffName: '',
+          staffId: '',
+          department: '',
+          emailId: '',
+          phoneNumber: '',
+          eventTitle: '',
+          expectedAudience: '',
+        });
+        setErrors({});
+
+        if (onSuccess) {
+          onSuccess(bookingObject);
+        }
+      }
     );
-
-    // Reset form and close
-    setFormData({
-      staffName: '',
-      staffId: '',
-      department: '',
-      emailId: '',
-      phoneNumber: '',
-      eventTitle: '',
-      expectedAudience: '',
-    });
-    setErrors({});
-
-    if (onSuccess) {
-      onSuccess(bookingObject);
-    }
   };
 
   return (
@@ -395,6 +421,13 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
           </form>
         </div>
       </div>
+      <CustomAlert
+        isOpen={alertConfig.isOpen}
+        onClose={alertConfig.onClose}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+      />
     </div>
   );
 };
