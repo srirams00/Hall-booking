@@ -7,11 +7,11 @@ import jubee from "../assets/halls/jubilee.JPG";
 import comAV from "../assets/halls/comAV.JPG";
 import lawley from "../assets/halls/lawley.JPG";
 import board_room from "../assets/halls/Board-Room.JPG";
-import sail from "../assets/halls/sail.JPG";
-import toulouse from "../assets/halls/toulouse.JPG";
-import marian from "../assets/halls/marian-hall.JPG";
-import MCA from "../assets/halls/MCA.JPG";
-import TV from "../assets/halls/Tv-Av.JPG";
+import sail from "../assets/halls/sail.jpg";
+import toulouse from "../assets/halls/toulouse.jpg";
+import marian from "../assets/halls/marian-hall.jpg";
+import MCA from "../assets/halls/MCA.jpg";
+import TV from "../assets/halls/TV-AV.jpg";
 
 const AdminDashboard = ({
   currentAdmin,

@@ -1,9 +1,9 @@
 import "./About.css";
 import lawley from "../assets/halls/lawley.JPG";
 import board_room from "../assets/halls/Board-Room.JPG";
-import toulouse from "../assets/halls/toulouse.JPG";
+import toulouse from "../assets/halls/toulouse.jpg";
 import jubilee from "../assets/halls/jubilee.JPG";
-import sail from "../assets/halls/sail.JPG";
+import sail from "../assets/halls/sail.jpg";
 
 function About({ onViewChange }) {
   const halls = [
