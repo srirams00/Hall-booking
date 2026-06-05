@@ -314,6 +314,11 @@ function App() {
   }, []);
 
   const handleUserLogin = async (username, password) => {
+    // If logging in with admin credentials, delegate to handleAdminLogin
+    if (username.toLowerCase() === 'principal') {
+      return await handleAdminLogin(username, password);
+    }
+
     const validUsers = {
       staff: { displayName: 'Moderator', email: 'moderator@sjc.edu', department: 'Staff' }
     };
@@ -636,6 +641,9 @@ function App() {
             setCurrentView("home");
           }} 
           onAdminLoginSuccess={handleAdminLogin}
+          onStaffClick={() => {
+            setCurrentView("login");
+          }}
         />
       )}
  
@@ -665,6 +673,9 @@ function App() {
             setCurrentView("home");
           }} 
           onLoginSuccess={handleUserLogin}
+          onAdminClick={() => {
+            setCurrentView("admin");
+          }}
         />
       )}
       

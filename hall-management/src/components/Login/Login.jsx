@@ -4,7 +4,7 @@ import { FiLock } from 'react-icons/fi';
 import logo from '../../assets/sjcbanner.png';
 import './Login.css';
 
-const LoginPage = ({ onBackHome, onLoginSuccess }) => {
+const LoginPage = ({ onBackHome, onLoginSuccess, onAdminClick }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -77,6 +77,9 @@ const LoginPage = ({ onBackHome, onLoginSuccess }) => {
               </div>
 
               <button type="submit" className="login-submit-btn">Login</button>
+              <div className="login-switch-link" onClick={onAdminClick}>
+                Are you an Administrator? Login here
+              </div>
             </form>
           </div>
         </div>
