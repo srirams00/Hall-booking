@@ -82,9 +82,15 @@ const AdminDashboard = ({
       }
     });
 
+    const dd = String(todayObj.getDate()).padStart(2, '0');
+    const mm = String(todayObj.getMonth() + 1).padStart(2, '0');
+    const yyyy = todayObj.getFullYear();
+    const todayDateCard = `${dd}-${mm}-${yyyy}`;
+
     return {
       todayDate: formattedToday,
       yesterdayDate: formattedYesterday,
+      todayDateCard,
       todayBookings,
       yesterdayBookings,
       otherDatesBookings
@@ -580,16 +586,24 @@ const AdminDashboard = ({
         <section className="admin-stats-row-container">
           <section className="admin-stats-row">
             <div className="admin-stat-card pending">
-              <div className="stat-value">{pendingRequests}</div>
-              <div className="stat-label">Pending Requests</div>
+              <div className="stat-card-left">
+                <div className="stat-value">{pendingRequests}</div>
+                <div className="stat-label">Pending Requests</div>
+              </div>
             </div>
             <div 
               className={`admin-stat-card approved clickable ${showApprovedDetails ? "active" : ""}`}
               onClick={() => setShowApprovedDetails(!showApprovedDetails)}
               style={{ cursor: "pointer" }}
             >
-              <div className="stat-value">{approvedBookings}</div>
-              <div className="stat-label">Approved Slots {showApprovedDetails ? "▲" : "▼"}</div>
+              <div className="stat-card-left">
+                <div className="stat-value">{approvalStats.todayBookings.length}</div>
+                <div className="stat-label">APPROVED SLOTS {showApprovedDetails ? "▲" : "▼"}</div>
+              </div>
+              <div className="stat-card-right">
+                <div className="date-today-label">TODAY</div>
+                <div className="date-today-value">{approvalStats.todayDateCard}</div>
+              </div>
             </div>
           </section>
 
