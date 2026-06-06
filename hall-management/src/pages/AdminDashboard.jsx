@@ -53,9 +53,9 @@ const AdminDashboard = ({
       year: "numeric",
     });
 
-    let todayCount = 0;
-    let yesterdayCount = 0;
-    const otherDates = {};
+    const todayBookings = [];
+    const yesterdayBookings = [];
+    const otherDatesBookings = {};
 
     bookings.forEach((b) => {
       if (b.status === "Approved") {
@@ -65,16 +65,19 @@ const AdminDashboard = ({
         const appDateDayStr = appDate.toDateString();
 
         if (appDateDayStr === todayStr) {
-          todayCount++;
+          todayBookings.push(b);
         } else if (appDateDayStr === yesterdayStr) {
-          yesterdayCount++;
+          yesterdayBookings.push(b);
         } else {
           const formattedDate = appDate.toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
             year: "numeric",
           });
-          otherDates[formattedDate] = (otherDates[formattedDate] || 0) + 1;
+          if (!otherDatesBookings[formattedDate]) {
+            otherDatesBookings[formattedDate] = [];
+          }
+          otherDatesBookings[formattedDate].push(b);
         }
       }
     });
@@ -82,9 +85,9 @@ const AdminDashboard = ({
     return {
       todayDate: formattedToday,
       yesterdayDate: formattedYesterday,
-      todayCount,
-      yesterdayCount,
-      otherDates
+      todayBookings,
+      yesterdayBookings,
+      otherDatesBookings
     };
   }, [bookings]);
 
@@ -598,21 +601,65 @@ const AdminDashboard = ({
               </div>
               <div className="drawer-content">
                 <div className="drawer-stat-item today">
-                  <span className="date-label">Today ({approvalStats.todayDate}):</span>
-                  <span className="count-value"><strong>{approvalStats.todayCount}</strong> {approvalStats.todayCount === 1 ? 'hall' : 'halls'} approved</span>
+                  <div className="drawer-stat-header">
+                    <span className="date-label">Today ({approvalStats.todayDate}):</span>
+                    <span className="count-value">
+                      <strong>{approvalStats.todayBookings.length}</strong> {approvalStats.todayBookings.length === 1 ? 'hall' : 'halls'} approved
+                    </span>
+                  </div>
+                  {approvalStats.todayBookings.length > 0 && (
+                    <ul className="drawer-booking-list">
+                      {approvalStats.todayBookings.map((b) => (
+                        <li key={b.id} className="drawer-booking-item">
+                          <span className="drawer-hall-name">{b.hallName}</span>
+                          {b.timeSlots && <span className="drawer-booking-time">({b.timeSlots.join(', ')})</span>}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
+
                 <div className="drawer-stat-item yesterday">
-                  <span className="date-label">Yesterday ({approvalStats.yesterdayDate}):</span>
-                  <span className="count-value"><strong>{approvalStats.yesterdayCount}</strong> {approvalStats.yesterdayCount === 1 ? 'hall' : 'halls'} approved</span>
+                  <div className="drawer-stat-header">
+                    <span className="date-label">Yesterday ({approvalStats.yesterdayDate}):</span>
+                    <span className="count-value">
+                      <strong>{approvalStats.yesterdayBookings.length}</strong> {approvalStats.yesterdayBookings.length === 1 ? 'hall' : 'halls'} approved
+                    </span>
+                  </div>
+                  {approvalStats.yesterdayBookings.length > 0 && (
+                    <ul className="drawer-booking-list">
+                      {approvalStats.yesterdayBookings.map((b) => (
+                        <li key={b.id} className="drawer-booking-item">
+                          <span className="drawer-hall-name">{b.hallName}</span>
+                          {b.timeSlots && <span className="drawer-booking-time">({b.timeSlots.join(', ')})</span>}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                {Object.keys(approvalStats.otherDates).length > 0 && (
+
+                {Object.keys(approvalStats.otherDatesBookings).length > 0 && (
                   <div className="historic-approvals">
                     <h5>Historical Approved Slots</h5>
                     <div className="historic-grid">
-                      {Object.entries(approvalStats.otherDates).map(([dateStr, count]) => (
+                      {Object.entries(approvalStats.otherDatesBookings).map(([dateStr, list]) => (
                         <div key={dateStr} className="drawer-stat-item historic">
-                          <span className="date-label">{dateStr}:</span>
-                          <span className="count-value"><strong>{count}</strong> {count === 1 ? 'hall' : 'halls'} approved</span>
+                          <div className="drawer-stat-header">
+                            <span className="date-label">{dateStr}:</span>
+                            <span className="count-value">
+                              <strong>{list.length}</strong> {list.length === 1 ? 'hall' : 'halls'} approved
+                            </span>
+                          </div>
+                          {list.length > 0 && (
+                            <ul className="drawer-booking-list">
+                              {list.map((b) => (
+                                <li key={b.id} className="drawer-booking-item">
+                                  <span className="drawer-hall-name">{b.hallName}</span>
+                                  {b.timeSlots && <span className="drawer-booking-time">({b.timeSlots.join(', ')})</span>}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                         </div>
                       ))}
                     </div>

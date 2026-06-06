@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home";
 import Browse from "./pages/browse/browse";
 import LoginPage from "./components/Login/Login";
+import Footer from "./components/Footer/Footer";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 
@@ -714,6 +715,10 @@ function App() {
       )}
       {currentView === "about" && (
         <About onViewChange={setCurrentView} />
+      )}
+
+      {currentView !== "admin-dashboard" && (
+        <Footer onViewChange={setCurrentView} currentView={currentView} />
       )}
     </div>
   );
