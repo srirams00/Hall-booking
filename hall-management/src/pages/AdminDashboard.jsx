@@ -32,6 +32,74 @@ const AdminDashboard = ({
   const [rejectionReasonText, setRejectionReasonText] = useState("");
   const [selectedBookingDetails, setSelectedBookingDetails] = useState(null);
 
+  // Dynamic Approved Slots tracking & sequential back navigation states
+  const [showApprovedDetails, setShowApprovedDetails] = useState(false);
+
+  const approvalStats = useMemo(() => {
+    const todayObj = new Date();
+    const todayStr = todayObj.toDateString();
+    const formattedToday = todayObj.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    const yesterdayObj = new Date();
+    yesterdayObj.setDate(yesterdayObj.getDate() - 1);
+    const yesterdayStr = yesterdayObj.toDateString();
+    const formattedYesterday = yesterdayObj.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    let todayCount = 0;
+    let yesterdayCount = 0;
+    const otherDates = {};
+
+    bookings.forEach((b) => {
+      if (b.status === "Approved") {
+        const dateToUse = b.approvalDate || b.bookingDate || b.date;
+        if (!dateToUse) return;
+        const appDate = new Date(dateToUse);
+        const appDateDayStr = appDate.toDateString();
+
+        if (appDateDayStr === todayStr) {
+          todayCount++;
+        } else if (appDateDayStr === yesterdayStr) {
+          yesterdayCount++;
+        } else {
+          const formattedDate = appDate.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          });
+          otherDates[formattedDate] = (otherDates[formattedDate] || 0) + 1;
+        }
+      }
+    });
+
+    return {
+      todayDate: formattedToday,
+      yesterdayDate: formattedYesterday,
+      todayCount,
+      yesterdayCount,
+      otherDates
+    };
+  }, [bookings]);
+
+  const handleBack = () => {
+    if (activeTab === "reports") {
+      setActiveTab("halls");
+    } else if (activeTab === "halls") {
+      setActiveTab("users");
+    } else if (activeTab === "users") {
+      setActiveTab("bookings");
+    } else {
+      onBackHome();
+    }
+  };
+
   // Report States
   const today = new Date();
   const [selectedMonth, setSelectedMonth] = useState(String(today.getMonth() + 1).padStart(2, "0"));
@@ -489,8 +557,8 @@ const AdminDashboard = ({
             </div>
           </div>
           <div className="admin-profile-section">
-            <button className="admin-back-btn" onClick={onBackHome}>
-              ← Back to Home
+            <button className="admin-back-btn" onClick={handleBack}>
+              {activeTab === "bookings" ? "← Back to Home" : "← Back"}
             </button>
             <div className="admin-info">
               <span className="admin-label">Logged in as Administrator</span>
@@ -506,19 +574,53 @@ const AdminDashboard = ({
       {/* Main Layout Container */}
       <main className="admin-dashboard-container">
         {/* Header Stats Row */}
-        <section className="admin-stats-row">
-          <div className="admin-stat-card pending">
-            <div className="stat-value">{pendingRequests}</div>
-            <div className="stat-label">Pending Requests</div>
-          </div>
-          <div className="admin-stat-card approved">
-            <div className="stat-value">{approvedBookings}</div>
-            <div className="stat-label">Approved Slots</div>
-          </div>
-          <div className="admin-stat-card users-count">
-            <div className="stat-value">{totalUsers}</div>
-            <div className="stat-label">Active Users</div>
-          </div>
+        <section className="admin-stats-row-container">
+          <section className="admin-stats-row">
+            <div className="admin-stat-card pending">
+              <div className="stat-value">{pendingRequests}</div>
+              <div className="stat-label">Pending Requests</div>
+            </div>
+            <div 
+              className={`admin-stat-card approved clickable ${showApprovedDetails ? "active" : ""}`}
+              onClick={() => setShowApprovedDetails(!showApprovedDetails)}
+              style={{ cursor: "pointer" }}
+            >
+              <div className="stat-value">{approvedBookings}</div>
+              <div className="stat-label">Approved Slots {showApprovedDetails ? "▲" : "▼"}</div>
+            </div>
+          </section>
+
+          {showApprovedDetails && (
+            <div className="approved-slots-details-drawer">
+              <div className="drawer-header">
+                <h4>Approved Slots Summary</h4>
+                <button className="drawer-close-btn" onClick={() => setShowApprovedDetails(false)}>✖</button>
+              </div>
+              <div className="drawer-content">
+                <div className="drawer-stat-item today">
+                  <span className="date-label">Today ({approvalStats.todayDate}):</span>
+                  <span className="count-value"><strong>{approvalStats.todayCount}</strong> {approvalStats.todayCount === 1 ? 'hall' : 'halls'} approved</span>
+                </div>
+                <div className="drawer-stat-item yesterday">
+                  <span className="date-label">Yesterday ({approvalStats.yesterdayDate}):</span>
+                  <span className="count-value"><strong>{approvalStats.yesterdayCount}</strong> {approvalStats.yesterdayCount === 1 ? 'hall' : 'halls'} approved</span>
+                </div>
+                {Object.keys(approvalStats.otherDates).length > 0 && (
+                  <div className="historic-approvals">
+                    <h5>Historical Approved Slots</h5>
+                    <div className="historic-grid">
+                      {Object.entries(approvalStats.otherDates).map(([dateStr, count]) => (
+                        <div key={dateStr} className="drawer-stat-item historic">
+                          <span className="date-label">{dateStr}:</span>
+                          <span className="count-value"><strong>{count}</strong> {count === 1 ? 'hall' : 'halls'} approved</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Navigation Tabs */}

@@ -4,7 +4,6 @@ import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home";
 import Browse from "./pages/browse/browse";
 import LoginPage from "./components/Login/Login";
-import Adminlogin from "./components/Admin login/adminlogin";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 
@@ -304,7 +303,7 @@ function App() {
   useEffect(() => {
     const handleLocationChange = () => {
       if (window.location.pathname === "/admin") {
-        setCurrentView(localStorage.getItem("hall_current_admin") ? "admin-dashboard" : "admin");
+        setCurrentView(localStorage.getItem("hall_current_admin") ? "admin-dashboard" : "login");
       } else {
         setCurrentView("home");
       }
@@ -312,6 +311,16 @@ function App() {
     window.addEventListener("popstate", handleLocationChange);
     return () => window.removeEventListener("popstate", handleLocationChange);
   }, []);
+
+  const handleUnifiedLogin = async (username, password) => {
+    // Try admin login first
+    const isAdmin = await handleAdminLogin(username, password);
+    if (isAdmin) {
+      return true;
+    }
+    // Fall back to user login
+    return await handleUserLogin(username, password);
+  };
 
   const handleUserLogin = async (username, password) => {
     // If logging in with admin credentials, delegate to handleAdminLogin
@@ -468,16 +477,24 @@ function App() {
   };
 
   const handleUpdateBookingStatus = async (bookingId, status, rejectionReason = "") => {
+    const patchBody = { status, rejectionReason };
+    if (status === "Approved") {
+      patchBody.approvalDate = new Date().toISOString();
+    }
+
     try {
       const res = await fetch(`${API_URL}/bookings/${bookingId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status, rejectionReason })
+        body: JSON.stringify(patchBody)
       });
       if (res.ok) {
         const updatedBooking = await res.json();
         setBookings(prev => {
-          const updated = prev.map(b => b.id === bookingId ? updatedBooking : b);
+          const updated = prev.map(b => b.id === bookingId 
+            ? { ...updatedBooking, ...(status === "Approved" ? { approvalDate: patchBody.approvalDate } : {}) } 
+            : b
+          );
           localStorage.setItem("hall_bookings", JSON.stringify(updated));
           return updated;
         });
@@ -492,7 +509,12 @@ function App() {
   const updateStatusFallback = (bookingId, status, rejectionReason) => {
     const updated = bookings.map(b => {
       if (b.id === bookingId) {
-        return { ...b, status, rejectionReason };
+        return { 
+          ...b, 
+          status, 
+          rejectionReason, 
+          ...(status === "Approved" ? { approvalDate: new Date().toISOString() } : {}) 
+        };
       }
       return b;
     });
@@ -634,19 +656,6 @@ function App() {
         />
       )}
       
-      {currentView === "admin" && (
-        <Adminlogin 
-          onBackHome={() => {
-            window.history.pushState({}, "", "/");
-            setCurrentView("home");
-          }} 
-          onAdminLoginSuccess={handleAdminLogin}
-          onStaffClick={() => {
-            setCurrentView("login");
-          }}
-        />
-      )}
- 
       {currentView === "admin-dashboard" && (
         <AdminDashboard 
           currentAdmin={currentAdmin}
@@ -666,16 +675,13 @@ function App() {
           }}
         />
       )}
-      
+
       {currentView === "login" && (
         <LoginPage 
           onBackHome={() => {
             setCurrentView("home");
           }} 
-          onLoginSuccess={handleUserLogin}
-          onAdminClick={() => {
-            setCurrentView("admin");
-          }}
+          onLoginSuccess={handleUnifiedLogin}
         />
       )}
       
