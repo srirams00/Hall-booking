@@ -167,8 +167,8 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
     // Success message
     const bookingId = Math.random().toString(36).substr(2, 9).toUpperCase();
     triggerAlert(
-      "Booking Submitted",
-      `Booking submitted successfully!\n\nBooking ID: ${bookingId}\n\nCheck console for booking details.`,
+      "Booking Confirmed",
+      `Booking confirmed successfully!\n\nBooking ID: ${bookingId}\n\nCheck console for booking details.`,
       "success",
       () => {
         // Reset form and close

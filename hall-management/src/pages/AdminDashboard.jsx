@@ -585,10 +585,10 @@ const AdminDashboard = ({
         {/* Header Stats Row */}
         <section className="admin-stats-row-container">
           <section className="admin-stats-row">
-            <div className="admin-stat-card pending">
+            <div className="admin-stat-card approved">
               <div className="stat-card-left">
-                <div className="stat-value">{pendingRequests}</div>
-                <div className="stat-label">Pending Requests</div>
+                <div className="stat-value">{approvedBookings}</div>
+                <div className="stat-label">Total Bookings</div>
               </div>
             </div>
             <div 
@@ -690,7 +690,7 @@ const AdminDashboard = ({
             className={`tab-nav-btn ${activeTab === "bookings" ? "active" : ""}`}
             onClick={() => setActiveTab("bookings")}
           >
-             Request Booking ({pendingRequests} Pending)
+             Hall Booking Database
           </button>
           <button
             className={`tab-nav-btn ${activeTab === "users" ? "active" : ""}`}
@@ -717,7 +717,7 @@ const AdminDashboard = ({
           {/* TAB 1: BOOKING REQUESTS */}
           {activeTab === "bookings" && (
             <div className="admin-tab-section">
-              <h3 className="section-title">Campus Venue Booking Requests</h3>
+              <h3 className="section-title">Hall Booking Database</h3>
               {bookings.length === 0 ? (
                 <div className="admin-empty-state">No bookings found in database.</div>
               ) : (
@@ -730,7 +730,6 @@ const AdminDashboard = ({
                         <th>Applicant Details</th>
                         <th>Event Description</th>
                         <th>Date & Slots</th>
-                        <th>Status / Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -781,70 +780,6 @@ const AdminDashboard = ({
                                 ))}
                               </div>
                             </div>
-                          </td>
-                          <td>
-                            {b.status === "Pending" ? (
-                              <div className="actions-wrapper" onClick={(e) => e.stopPropagation()}>
-                                <button
-                                  className="approve-action-btn"
-                                  onClick={(e) => { e.stopPropagation(); onUpdateBookingStatus(b.id, "Approved"); }}
-                                >
-                                  ✓ Approve
-                                </button>
-                                <div className="reject-container" onClick={(e) => e.stopPropagation()}>
-                                  <button
-                                    className="reject-action-btn"
-                                    onClick={(e) => { e.stopPropagation(); handleRejectClick(b.id); }}
-                                  >
-                                    ✗ Reject
-                                  </button>
-                                  {showRejectReasonFor === b.id && (
-                                    <div className="rejection-reasons-dropdown custom-rejection-box" onClick={(e) => e.stopPropagation()}>
-                                      <p className="reject-dropdown-header">Rejection Description:</p>
-                                      <textarea
-                                        className="reject-reason-input"
-                                        placeholder="Enter rejection reason..."
-                                        value={rejectionReasonText}
-                                        onChange={(e) => setRejectionReasonText(e.target.value)}
-                                        rows={3}
-                                      />
-                                      <div className="reject-dropdown-actions">
-                                        <button
-                                          className="confirm-reject-btn"
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            submitRejection(b.id, rejectionReasonText.trim() || "Rejected by Administrator");
-                                          }}
-                                        >
-                                          Reject
-                                        </button>
-                                        <button
-                                          className="cancel-reject-btn"
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            setShowRejectReasonFor(null);
-                                            setRejectionReasonText("");
-                                          }}
-                                        >
-                                          Cancel
-                                        </button>
-                                      </div>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="status-display-admin">
-                                <span className={`status-badge-admin ${b.status.toLowerCase()}`}>
-                                  {b.status}
-                                </span>
-                                {b.status === "Rejected" && b.rejectionReason && (
-                                  <span className="rejection-reason-text">
-                                    ({b.rejectionReason})
-                                  </span>
-                                )}
-                              </div>
-                            )}
                           </td>
                         </tr>
                       ))}

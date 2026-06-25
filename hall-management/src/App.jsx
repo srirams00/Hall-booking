@@ -21,7 +21,7 @@ function App() {
 
   const [currentView, setCurrentView] = useState(() => {
     if (window.location.pathname === "/admin") {
-      return localStorage.getItem("hall_current_admin") ? "admin-dashboard" : "admin";
+      return localStorage.getItem("hall_current_admin") ? "admin-dashboard" : "login";
     }
     return "home";
   });
@@ -412,12 +412,14 @@ function App() {
         const data = await res.json();
         setCurrentAdmin(data.displayName);
         localStorage.setItem("hall_current_admin", data.displayName);
+        window.history.pushState({}, "", "/admin");
         setCurrentView("admin-dashboard");
         return true;
       } else {
         if (username.toLowerCase() === 'principal' && password === 'Adminsjc123') {
           setCurrentAdmin('Fr. Principal');
           localStorage.setItem("hall_current_admin", 'Fr. Principal');
+          window.history.pushState({}, "", "/admin");
           setCurrentView("admin-dashboard");
           return true;
         }
@@ -427,6 +429,7 @@ function App() {
       if (username.toLowerCase() === 'principal' && password === 'Adminsjc123') {
         setCurrentAdmin('Fr. Principal');
         localStorage.setItem("hall_current_admin", 'Fr. Principal');
+        window.history.pushState({}, "", "/admin");
         setCurrentView("admin-dashboard");
         return true;
       }
@@ -439,6 +442,7 @@ function App() {
     setCurrentAdmin(null);
     localStorage.removeItem("hall_current_user");
     localStorage.removeItem("hall_current_admin");
+    window.history.pushState({}, "", "/");
     setCurrentView("home");
   };
 
@@ -447,7 +451,7 @@ function App() {
     const newBookingWithDetails = {
       ...booking,
       id: tempId,
-      status: "Pending"
+      status: "Approved"
     };
 
     try {

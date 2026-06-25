@@ -93,7 +93,6 @@ const UserDashboard = ({ currentUser, bookings, onBackHome }) => {
                   <th>Event Title</th>
                   <th>Date Requested</th>
                   <th>Selected Slots</th>
-                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -120,18 +119,6 @@ const UserDashboard = ({ currentUser, bookings, onBackHome }) => {
                             {slot}
                           </span>
                         ))}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="status-badge-container">
-                        <span className={`status-badge ${b.status.toLowerCase()}`}>
-                          {b.status}
-                        </span>
-                        {b.status === "Rejected" && b.rejectionReason && (
-                          <span className="rejection-reason-tooltip" title={b.rejectionReason}>
-                             {b.rejectionReason}
-                          </span>
-                        )}
                       </div>
                     </td>
                   </tr>

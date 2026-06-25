@@ -77,7 +77,7 @@ router.post('/', async (req, res) => {
       timeSlots: req.body.timeSlots,
       staffInformation: req.body.staffInformation,
       eventInformation: req.body.eventInformation,
-      status: 'Pending'
+      status: 'Approved'
     });
 
     const newBooking = await booking.save();

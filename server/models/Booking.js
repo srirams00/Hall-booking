@@ -17,7 +17,7 @@ const BookingSchema = new mongoose.Schema({
     expectedAudience: { type: Number, required: true }
   },
   bookingDate: { type: Date, default: Date.now },
-  status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
+  status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Approved' },
   rejectionReason: { type: String, default: '' }
 });
 
