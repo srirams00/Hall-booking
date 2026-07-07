@@ -159,10 +159,6 @@ const BookingForm = ({ hallName, selectedDate, selectedSlots, onClose, onSuccess
       bookingDate: new Date().toISOString(),
     };
 
-    // Console log the booking object
-    console.log('=== HALL BOOKING CONFIRMATION ===');
-    console.log(bookingObject);
-    console.log('================================');
 
     // Success message
     const bookingId = Math.random().toString(36).substr(2, 9).toUpperCase();

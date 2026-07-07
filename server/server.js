@@ -123,8 +123,22 @@ connectDB().then(() => {
 });
 
 // Init Middleware
-app.use(cors());
-app.use(express.json());
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:5173', 'http://localhost:3000'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // allow server-to-server (no origin) or listed origins
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+app.use(express.json({ limit: '50kb' }));
 
 // Define API Routes
 app.use('/api/bookings', require('./routes/bookingRoutes'));
